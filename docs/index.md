@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
+# Welcome to TSAOpy
 
-You can use the [editor on GitHub](https://github.com/tsaopy/tsaopy.github.io/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+A Python library developed to fit user defined differential equations, with the form of anharmonic oscillators, to time series data that show a roughly periodic behaviour.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Set Up guide
 
-### Markdown
+In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+The next step is to make sure `gfortran` is installed in your PC. If it's not, the `sudo apt-get install gfortran` should do the trick. Note: while the end user should be only concerned with Python, there is some Fortran code used by the backend, and hence why this is necessary.
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tsaopy/tsaopy.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+At this point you may download the library's files, and then run the 'f2py' script. This will build the module used by the backend. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
