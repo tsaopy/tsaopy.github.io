@@ -8,7 +8,7 @@ In order to make `tsaopy` work you should first be using a Linux PC, specificall
 
 The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. [^1]
 
-You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the next more specific dependencies, `multiprocessing`, `emcee`, and `corner`. You may install this in the Python console using `pip install` or with an enviroment manager such as Anaconda.
+You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the more specific dependencies `multiprocessing`, `emcee`, and `corner`. You may install this in the Python console using `pip install` or with an enviroment manager such as Anaconda.
 
 After all this is done you may download the library's files, and then run the 'f2py' script. This will build the module used by the backend. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
 
