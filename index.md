@@ -1,6 +1,8 @@
 # Welcome to TSAOpy
 
-A Python library developed to fit user defined differential equations, with the form of anharmonic oscillators, to time series data that show a roughly periodic behaviour. The repository is found at https://github.com/tsaopy/tsaopy. 
+A Python library developed to fit user defined differential equations, with the form of anharmonic oscillators, to time series data that show a roughly periodic behaviour. 
+
+$$ \ddot{x} + x = 0 $$
 
 ## Set Up guide
 
