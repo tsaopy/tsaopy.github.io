@@ -205,6 +205,7 @@ The only difference between samples and flat samples is that samples stores each
 Now we will make three plots to show the results. The first one will be a corner plot which goes as follows
 
 `bend.cornerplots(flat_samples,label_list)`
+
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="500">
 
 Here we get the posterior distribution for each parameter, and plots of the posteriors for each pair of parameters showing possible correlations.
@@ -212,9 +213,25 @@ Here we get the posterior distribution for each parameter, and plots of the post
 The next two plots will be useful to analyze wether the method has converged or not. The following plot is called the trace plot and will show the value of each parameter for each walker at each time step. 
 
 `bend.traceplots(samples,label_list)`
+
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="500">
 
-A first diagnose the trace plot gives is that if any of the parameters 
+A first diagnose the trace plot gives is that if for any of the parameters the 'cloud' is not exacly horizontal and uniform but it's bent, or shows thinning or thickening, then when can't say for sure the chain converged. A first attempt at fixing this is running another chain with a longer burn in phase. Another problem we may encounter is finding single perfectly horizontal lines (as in individual lines, not the cloud). This means that this walker did not change it's value at all, perhaps because it got stuck in a local extrema, or because we didn't define priors properly. We will talk more about these problems later on. 
 
+The next plot is the autocorrelation plot. It's very simple. If all of the walkers for a parameter converged then the function quickly drops from 1 to 0 and remains oscillating around 0. If it doesn't drop to 0 quicky, let's say before the first third of the chain, then we can't say for sure it converged. Again the first attempt to fix this should be running a longer burn in. 
+
+It goes like this
 `bend.autocplots(flat_samples,label_list)`
+
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="500">
+
+Now given what we just said about the trace and autocorrelation plots, and the plots we got, we can assume that the chain has indeed converged. 
+
+Finally we will plot a simulation using as values the mean of the posterior for each parameter, and compare it to the data we had. 
+
+```
+solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
+model1.plot_simulation(solutions)
+```
+
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic7.png" width="500">
