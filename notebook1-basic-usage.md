@@ -40,7 +40,7 @@ def solve_ivp(f,x0,t0tf,dt):
 
 Now for the next step we are running the simulation. The model we will be simulating is
 
-$$ \ddot{x} + a_1\dot{x} + b_1x = 0\,; \qquad x_0=1 \qquad v_0=0 $$
+$$ \ddot{x} + a_1\dot{x} + b_1x = 0\quad; \qquad x_0=1 \qquad v_0=0 $$
 
 ```
 # simulation
