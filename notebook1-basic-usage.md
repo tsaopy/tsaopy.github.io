@@ -132,6 +132,7 @@ plt.scatter(data_t, data_x, color = 'tab:red', s=0.5, label='x(t)')
 plt.legend()
 plt.show()
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic3.png" width="400">
 
-Now we need to know the uncertainty of our measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way in your lab, have a unique uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for each measurement or an array with the exact uncertainty for each variable. In this case we will just use a rough estimate for a global uncertainty and just define `data_x_sigma = 0.3`.
+Now we need to know the uncertainty of our measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way in your lab, have a unique uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for each measurement or an array with the exact uncertainty for each variable. In this case we will just use a rough estimate for a global uncertainty and just define `data_x_sigma = 0.3`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
 
