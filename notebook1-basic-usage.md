@@ -140,6 +140,23 @@ Before we move ahead we have to decide which will be our model. Inspecting the m
 
 $$ \ddot{x} + a_1\dot{x} + b_1x = 0\quad; \qquad x_0=1 \qquad v_0=0 $$ 
 
-We ended up with the original model that we used for the simulation, and some readers may say "well it's obviously going to work if you know the right model beforehand and choose that one", and while this is true, it is also true that we didn't pick this model because we knew the solution beforehand, but because it is the simplest model that one can infer from the plot. If you are still unconvinced by hold with me, we'll see some more examples in the following notebooks that may change your mind. That being said, let's move on.
+We ended up with the original model that we used for the simulation, and some readers may say "well it's obviously going to work if you know the right model beforehand and choose that one", and while this is true, it is also true that we didn't pick this model because we knew the solution beforehand, but because it is the simplest model that one can infer from the plot. If you are still unconvinced by this, hang on, we'll see some more examples in the following notebooks that may change your mind. That being said, let's move on.
 
 The next thing we need is to define our parameters, for that we will be defining some parameter objects implemented speciffically for this. `TSAOpy` works with two parameter classes `FixedParameter` and `FittingParameter`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a type, and an index. I'll talk more about those last two later on. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter. 
+
+Defining parameters will be something like this
+
+```
+import backend as bend
+p_fixed = bend.FixedParameter(1.0,'a',1)
+p_variable = bend.FittingParameter(1.0,'a',1,p_prior)
+```
+When calling the parameter classes, the arguments are like this
+
+1. The value. In fixed parameters this is the value we assume correct and will ALWAYS be used in simulations. In fitting parameters it will be the initial value and will be updated as the MCMC chain runs. We will tipically set the value for fitting parameters as 0, unless it's $x_0$ or $v_0$ for which we may use the first values of the time series. Another exception will be $b_1$, which corresponds to the usual harmonic potential, the linear potential term. We usually assume it's a positive number so we may set it up as 1, or some other positive value that one may infer from the plot. 
+2. The type. The next argument is the parameter type which will always be a string. It's value is 'x0' and 'v0' for $x_0$ and $v_0$ respectively, 'a' for the damping terms, 'b' for the potential terms, 'c' for the mixed terms, and 'f' for the external force parameters. Don't mess these up or you will get tons of errors. 
+3. The index. Indexes will be integers assigned as follows:
+    1. It's always 1 for 'x0' and 'v0' parameters.
+    2. For parameters 'a' and 'b' it will be the order of the term. Example, for the term $b_1x$ it will be 1, and for the term $a_3\dot{x}^3$ it will be 3.
+    3. For parameters 'c' it will be a pair of indices in the form of a touple. The first value will be the order of the position factor, and the second value will be the order of the velocity factor. Example, if the term is $c_{21}x^2\dot{c}$ the indices will be (2,1), and if the term is $c_{23}x^2\dot{c}^3$ the indices will be (2,3).
+    4. Finally for the external or driving force parameters we use 1 for $F_0$, 2 for $\omega$, and 3 for $\phi$. 
