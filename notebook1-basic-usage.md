@@ -79,3 +79,28 @@ plt.legend()
 plt.show()
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic1.png" width="400">
+
+Now we will add some noise to the data and plot the results.
+
+```
+# aux noise function
+np.random.seed(205)
+u_noise,n_noise = 1e-1,1e-1
+noise = lambda : np.random.uniform(-u_noise,u_noise) +\
+    np.random.normal(0,n_noise)
+
+# add noise
+for i in range(n_out):
+    x[i] = x[i] + noise()*0.3
+    v[i] = v[i] + noise()*0.2
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic2.png" width="400">
+
+Now we are set up and we can save the data for testing `TSAOpy`. I'll do it with
+
+```
+# save results
+np.savetxt('experiment_data.txt', [[t[_], x[_], v[_]] for _ in range(n_out)])
+```
+
+## Fitting the model with `TSAOpy`
