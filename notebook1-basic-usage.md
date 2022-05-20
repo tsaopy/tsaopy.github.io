@@ -205,11 +205,16 @@ The only difference between samples and flat samples is that samples stores each
 Now we will make three plots to show the results. The first one will be a corner plot which goes as follows
 
 `bend.cornerplots(flat_samples,label_list)`
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="700">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="500">
 
+Here we get the posterior distribution for each parameter, and plots of the posteriors for each pair of parameters showing possible correlations.
+
+The next two plots will be useful to analyze wether the method has converged or not. The following plot is called the trace plot and will show the value of each parameter for each walker at each time step. 
 
 `bend.traceplots(samples,label_list)`
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="700">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="500">
+
+A first diagnose the trace plot gives is that if any of the parameters 
 
 `bend.autocplots(flat_samples,label_list)`
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="700">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="500">
