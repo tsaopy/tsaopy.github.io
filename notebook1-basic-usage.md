@@ -187,3 +187,26 @@ notice that I also saved them on a list. So now we have our model, our data, and
 
 `model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)`
 
+This object will have some QOL methods such as `model.plot_measurements()` to plot your data and check that it was correctly loaded, `model.update_initvals(p0)` which allows you to enter a new set of initial values in case you made a mistake, and others which will probably be described in a future API. During the development of the notebooks I will be mentioning the most useful ones anyways. 
+
+Now once we defined the `TSAOpy` Model, we will use an intrinsic method of this class to build an `emcee` Sampler to use the MCMC method, and start running it. The line will be something like
+
+`sampler,_,_,_ = model1.setup_sampler(200, 300, 300)`
+
+The first argument is the number of walkers, the second one the number of burn in steps, and the third one the number of production steps. Running this line will also get MCMC running so you are in for a little wait until it's finished. After the `emcee` run is finished we will call the next line which will extract the sample chains from the sampler. We will run
+
+```
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model1.params_labels
+```
+
+The only difference between samples and flat samples is that samples stores each step of the chain separatedly for each walker, and flat samples will just throw all samples together regardless of which walker it came from. The diffence is that some of the plots that we will make know take different sample formats as arguments. The labels call is just to store the name of each parameter. 
+
+Now we will make three plots to show the results. The first one will be a corner plot which goes as follows
+
+`bend.cornerplots(flat_samples,label_list)`
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="700">
+
+
+bend.traceplots(samples,label_list)
+bend.autocplots(flat_samples,label_list)`
