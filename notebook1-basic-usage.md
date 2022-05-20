@@ -38,7 +38,9 @@ def solve_ivp(f,x0,t0tf,dt):
     return np.array(result)
 ```
 
-Now for the next step I'm running the simulation, and we get as result 3 arrays with the t, x, and v data. Then I'm going run the "fix time series length" blocks in order to set a specific number of points for the time series. 
+Now for the next step I'm running the simulation. The model we will be simulating is
+
+$$ \ddot{x} + a_1\dot{x} + b_1x = 0 $$
 
 ```
 # simulation
@@ -50,7 +52,11 @@ X0 = np.array([1.0,0.0])
 result = solve_ivp(deriv,X0,(0,30),0.01)
 
 t,x,v = result[:,0],result[:,1],result[:,2]
+```
 
+We get as result 3 arrays with the t, x, and v data. Then I'm going run the "fix time series length" blocks in order to set a specific number of points for the time series. 
+
+```
 # fix time series length
 n_data = len(t)
 n_out = 1000
@@ -61,7 +67,7 @@ while len(t) > n_out:
     x, v, t = x[:-1], v[:-1], t[:-1]
 ```
 
-Now let's take a moment to plot the results and see what we get
+Now let's take a moment to plot the results and see what we have so far
 
 
 ```
