@@ -2,7 +2,7 @@
 
 A Python library developed to fit user defined differential equations (with the form of anharmonic oscillators) to time series data that show a roughly periodic behaviour. 
 
-## What does it do?
+## What it does
 
 Let's assume we have a set of $(t,x(t))$ points making up a time series such as the following
 
