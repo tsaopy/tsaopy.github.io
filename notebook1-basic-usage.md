@@ -93,6 +93,13 @@ noise = lambda : np.random.uniform(-u_noise,u_noise) +\
 for i in range(n_out):
     x[i] = x[i] + noise()*0.3
     v[i] = v[i] + noise()*0.2
+    
+# plot
+plt.figure(figsize=(7, 5), dpi=150)
+plt.plot(t, x, color = 'tab:red', label='position')
+plt.plot(t, v, color='tab:purple', label='velocity')
+plt.legend()
+plt.show()
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic2.png" width="400">
 
@@ -104,3 +111,24 @@ np.savetxt('experiment_data.txt', [[t[_], x[_], v[_]] for _ in range(n_out)])
 ```
 
 ## Fitting the model with `TSAOpy`
+
+Now let's forget about everything we did above. Imagine you just finished running some experiment, and you ended up with some time series that now you want to analyze. 
+
+The first thing we need to do is to load the data. Ideally your data will be a `numpy` array, however if you want to push your luck native lists and tuples should work. To load the data I'm using 
+
+```
+import numpy as np
+
+# load data
+data = np.loadtxt('experiment_data.txt')
+data_t,data_x = data[:,0],data[:,1]
+```
+
+Let's make a plot to see what we have to work with. 
+```
+# plot
+plt.figure(figsize=(7, 5), dpi=150)
+plt.plot(t, x, color = 'tab:red', label='position')
+plt.legend()
+plt.show()
+```
