@@ -4,7 +4,11 @@ A Python library developed to fit user defined differential equations, with the 
 
 ## What does it do?
 
-Let's assume we have a set of $(t,x(t))$ points making up a time series. This library will allow you to model the dynamics of the $x(t)$ function as satisfying a differential equation of the form
+Let's assume we have a set of $(t,x(t))$ points making up a time series such as the following
+
+![alt text]([https://github.com/tsaopy/[reponame]/blob/[branch]/image.jpg?raw=true](https://github.com/tsaopy/tsaopy.github.io/blob/main/assets/ex_timeseries.png?w=600))
+
+This library will allow you to model the dynamics of the $x(t)$ function as satisfying a differential equation of the form
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
 
