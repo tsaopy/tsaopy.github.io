@@ -134,7 +134,7 @@ plt.show()
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic3.png" width="400">
 
-Now we need to know the uncertainty of our measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way in your lab, have a unique uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for each measurement or an array with the exact uncertainty for each variable. In this case we will just use a rough estimate for a global uncertainty and just define `data_x_sigma = 0.3`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
+Now we need to know the uncertainty of our measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way in your lab, have a unique uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for each measurement or an array with the exact uncertainty for each variable. In this case we will just use a rough estimate for a global uncertainty and just define `data_x_sigma = 0.15`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
 
 Before we move ahead we have to decide which will be our model. Inspecting the measurement plots one sees that we have something that looks like a sinusoidal wave whose amplitud decays over time. We can also see from the graph that $x_0\approx 1$, and that since we are near an amplitude maximum near the start, then $v_0\approx 0$. Naturally in this case we will be proposing
 
@@ -160,3 +160,30 @@ When calling the parameter classes, the arguments are like this
     2. For parameters 'a' and 'b' it will be the order of the term. Example, for the term $b_1x$ it will be 1, and for the term $a_3\dot{x}^3$ it will be 3.
     3. For parameters 'c' it will be a pair of indices in the form of a touple. The first value will be the order of the position factor, and the second value will be the order of the velocity factor. Example, if the term is $c_{21}x^2\dot{c}$ the indices will be (2,1), and if the term is $c_{23}x^2\dot{c}^3$ the indices will be (2,3).
     4. Finally for the external or driving force parameters we use 1 for $F_0$, 2 for $\omega$, and 3 for $\phi$. 
+
+A somewhat obvious remark at this point should be that in all models we should have at least 2 parameters corresponding to the initial conditions, and at least one term in the ODE, otherwise we will always get straight lines as a result. 
+
+Now, back at the problem, our model has 4 parameters, $x_0$, $v_0$, $a_1$, and $v_1$. We will not fix any of them so we need a prior for each of them. We have some prior classes in the backend, in this case I'll use the uniform prior, which takes the min and max values as argument to create the object. The code is going to be
+
+```
+# priors
+x0_prior = bend.uniform_prior(0.7,1.3)
+v0_prior = bend.uniform_prior(-1.0,1.0)
+a1_prior = bend.uniform_prior(-5.0,5.0)
+b1_prior = bend.uniform_prior(0.0,5.0)
+```
+We know that $x_0$ and $v_0$ are roughly 1 and 0 respectively, so we just take an interval centered at the value we think it's correct. For $a_1$ we know nothing so we just make a larger interval centered at 0. And finally for $b_1$ we know that it is possitive so we take an interval starting from 0. Now we can define out parameter objects and we have
+
+```
+# parameters
+x0 = bend.FittingParameter(1.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
+a1 = bend.FittingParameter(0.0, 'a', 1, a1_prior)
+b1 = bend.FittingParameter(0.5,'b',1,b1_prior)
+
+parameters = [x0,v0,a1,b1]
+```
+notice that I also saved them on a list. So now we have our model, our data, and our priors, and we wraped it as required by `TSAOpy`. The next step is building the `TSAOpy` Model object which will condense everything in a single object. We call it with 
+
+`model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)`
+
