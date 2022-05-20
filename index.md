@@ -12,7 +12,7 @@ This library will allow you to model the dynamics of the $x(t)$ function as sati
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
 
-along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once you define your model by choosing which terms you will consider, the program will fit the model to the data finding the most likely values for each parameter (including initial conditions). This is done using the MCMC method, implemented on the `emcee` library. 
+along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once you define your model by choosing which terms  in the ODE you will consider, the program will fit the model to the data finding the most likely values for each parameter (including initial conditions). This is done using the MCMC method, implemented on the `emcee` library. 
 
 A more detailed explanation can be found at method page.
 
