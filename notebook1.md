@@ -1,4 +1,5 @@
 ---
+layout: custompage
 permalink: /notebook1/
 ---
 
