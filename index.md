@@ -16,6 +16,14 @@ along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to so
 
 A more detailed explanation can be found at method page.
 
+## Why doing this?
+
+Running this analysis will allow you to find an ODE that your time series roughly obeys. Some interesting things that you can do with the ODE are
+ 
+1. Modelling of damping forces or potentials. One may associate each term of the ODE with a certain term of the polynomial expansion of a potential or damping force, and thus getting approximations of the behaviour of your system's potential or drag effects.
+2. Non linear dynamic analysis. Finding the ODE (or an approximation of it) that your system obeys allows you to use some theoretical tools such as plotting phase portraits and phase space trajectories.
+
+
 ## Set Up guide
 
 In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
