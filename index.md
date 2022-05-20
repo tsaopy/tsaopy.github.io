@@ -6,7 +6,7 @@ A Python library developed to fit user defined differential equations, with the 
 
 Let's assume we have a set of $(t,x(t))$ points making up a time series such as the following
 
-<img src="https://github.com/tsaopy/tsaopy.github.io/blob/main/assets/ex_timeseries.png" width="600">
+<img src="https://github.com/tsaopy/tsaopy.github.io/blob/main/assets/ex_timeseries.png" width="400">
 
 This library will allow you to model the dynamics of the $x(t)$ function as satisfying a differential equation of the form
 
