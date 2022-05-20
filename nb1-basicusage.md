@@ -1,6 +1,6 @@
 ---
 layout: custompage
-permalink: /notebook1/
+permalink: /basic-usage/
 ---
 
 # Notebook 1: Basic Usage
