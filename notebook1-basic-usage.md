@@ -208,5 +208,8 @@ Now we will make three plots to show the results. The first one will be a corner
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="700">
 
 
-bend.traceplots(samples,label_list)
-bend.autocplots(flat_samples,label_list)`
+`bend.traceplots(samples,label_list)`
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="700">
+
+`bend.autocplots(flat_samples,label_list)`
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="700">
