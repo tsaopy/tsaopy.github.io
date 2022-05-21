@@ -65,7 +65,7 @@ A possible Bibtex citation is
 @misc{tsaopy,
       doi = {10.5281/ZENODO.6569849},
       url = {https://tsaopy.github.io/},
-      author = {{Scozziero, Sofía A.},
+      author = {Scozziero, Sofía A.},
       title = {TSAOpy},
       publisher = {Zenodo},
       year = {2022},
