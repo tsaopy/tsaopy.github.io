@@ -188,7 +188,7 @@ Unexpectedly I found some noisy behavior for the $x_0$ and $v_0$ posteriors, so 
 
 ```
 x0_prior = bend.uniform_prior(1.9,2.1)
-v0_prior = bend.uniform_prior(-0.2,0.2)
+v0_prior = bend.uniform_prior(-0.75,0.75)
 
 x0 = bend.FittingParameter(2.0,'x0',1,x0_prior)
 v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
