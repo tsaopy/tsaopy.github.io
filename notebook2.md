@@ -1,9 +1,9 @@
 ---
 layout: custompage
-permalink: /notebook2/
+permalink: /harder-problem/
 ---
 
-# Notebook 2: 
+# Notebook 2: A harder problem
 
 Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook2.
 
