@@ -11,7 +11,7 @@ Remember that files summing up the work on this notebook can be found at https:/
 
 For this next problem we have the following data
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1" width="600">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="600">
 
 From the plots we can't say much more than that the initial conditions are roughly $x_0\approx2$ and $v_0\approx-0.3$. I'm also going to estimate the uncertainties as
 
@@ -147,3 +147,24 @@ samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 bend.cornerplots(flat_samples,label_list)
 bend.traceplots(samples,label_list)
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic8.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic9.png" width="900">
+
+Now this looks much better. Notice that $b_2$, $c_{11}$, $c_{12}$, and $c_{22}$, are practically 0. Their posteriors all have means close to 0, and have SDs of absolute magnitud bigger than the mean itself, that's why we really can't distinguish this value from 0. So we will try running another chain, this time dropping those parameters. 
+
+I'll reduce walkers a bit since we have simplified the model, and will use a burn in phase and see if we could get a chain converging to a good looking posterior.
+
+```
+parameters = [x0,v0,a1,a2,b1,c21]
+
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+
+sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+
+bend.cornerplots(flat_samples,label_list)
+bend.traceplots(samples,label_list)
+```
+
+The next thing to notice is how badly $a_1$ and $a_2$ are correlated. Because of this I also want to drop one of them. We are going to drop $a_2$ since it's of higher order. Dropping those parameters, I'm running another chain using the same previous priors.
