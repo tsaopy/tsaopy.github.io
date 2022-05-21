@@ -166,7 +166,34 @@ sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
 bend.cornerplots(flat_samples,label_list)
-bend.traceplots(samples,label_list)
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic10.png" width="900">
 
-The next thing to notice is how badly $a_1$ and $a_2$ are correlated. Because of this I also want to drop one of them. We are going to drop $a_2$ since it's of higher order. Dropping those parameters, I'm running another chain using the same previous priors.
+Now we got a set of posteriors that look from a chain that has indeed converged. The next thing to notice is how badly $a_2$ is correlated to $a_1$ and $b_1$. We also point out that it's mean value went from roughly 0.26 to 0.05, and now it's very similar to 0. Because of this I also want to drop $a_2$ and see what we get. 
+
+```
+parameters = [x0,v0,a1,b1,c21]
+
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+
+sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+
+bend.cornerplots(flat_samples,label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic11.png" width="900">
+
+Unexpectedly I found some noisy bimodal sort of behavior for the $x_0$ and $v_0$ posteriors, so we try again after updating their priors
+
+```
+parameters = [x0,v0,a1,b1,c21]
+
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+
+sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+
+bend.cornerplots(flat_samples,label_list)
+```
