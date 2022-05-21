@@ -40,7 +40,9 @@ At this point `tsaopy` should be working, and you may head to the 'maketestdata'
 
 If your want to keep the notebook files in a lower level directory as provided in the repository, then in the solution file replace
 
-`import backend as bend`
+```
+import backend as bend
+```
 
 for
 ```
