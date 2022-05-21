@@ -59,6 +59,19 @@ We have a Zenodo DOI set up for the repository for the time being
 
 And this is [my personal ORCID](https://orcid.org/0000-0002-1007-8229)
 
+A possible Bibtex citation is
+
+```
+@misc{tsaopy,
+      doi = {10.5281/ZENODO.6569849},
+      url = {https://tsaopy.github.io/},
+      author = {{Scozziero, Sofía A.},
+      title = {TSAOpy},
+      publisher = {Zenodo},
+      year = {2022},
+      copyright = {Open Access}}
+```
+
 I will probably write an article or something of the sort in the near future. 
 
 [^1]: while the end user should be only concerned with Python, there is some Fortran code used by the backend, and hence why this is necessary.
