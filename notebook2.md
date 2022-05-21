@@ -212,3 +212,9 @@ solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
 model2.plot_simulation(solutions)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic13.png" width="900">
+
+### Some takeaways
+
+1. In many problems a single model and much less a single chain won't work. You will have to keep updating priors, adding or removing parameters, and running one chain after the next one before you arrive to a solution.
+2. In most cases is suggested to use normal priors, but as you've seen here uniform priors may work very well to restrict your samples to certain values which you trust are correct. 
+3. A good set of priors and a good model, plus running a long enough chain, will probably give you a good result, so it's important to put in all your prior knowledge to help things run smoothly
