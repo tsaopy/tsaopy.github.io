@@ -51,4 +51,14 @@ sys.path.append('..')
 import backend as bend
 ```
 
+## Referencing TSAOpy
+
+We have a Zenodo DOI set up for the repository for the time being
+
+[![DOI](https://zenodo.org/badge/427913804.svg)](https://zenodo.org/badge/latestdoi/427913804)
+
+And this is [my personal ORCID](https://orcid.org/0000-0002-1007-8229)
+
+I will probably write an article or something of the sort in the near future. 
+
 [^1]: while the end user should be only concerned with Python, there is some Fortran code used by the backend, and hence why this is necessary.
