@@ -184,9 +184,15 @@ bend.cornerplots(flat_samples,label_list)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic11.png" width="900">
 
-Unexpectedly I found some noisy bimodal sort of behavior for the $x_0$ and $v_0$ posteriors, so we try again after updating their priors
+Unexpectedly I found some noisy behavior for the $x_0$ and $v_0$ posteriors, so we try again after changing their normal priors for uniform priors centered at the peak. This should work preventing the sampler from accepting outliers. 
 
 ```
+x0_prior = bend.uniform_prior(1.9,2.1)
+v0_prior = bend.uniform_prior(-0.2,0.2)
+
+x0 = bend.FittingParameter(2.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
+
 parameters = [x0,v0,a1,b1,c21]
 
 model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
