@@ -7,7 +7,7 @@ permalink: /harder-problem/
 
 Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook2.
 
-### Note: for some reason the page layout wouldn't let me to show bigger pictures so you may want to right click some of them and look them at full size. 
+### Note: for some reason the page layout wouldn't let me show bigger pictures so you may want to right click some of them and look them at full size. 
 
 ## Sketch of the problem
 
