@@ -11,4 +11,4 @@ Remember that files summing up the work on this notebook can be found at https:/
 
 For this next problem we have the following data
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1" width="400">
