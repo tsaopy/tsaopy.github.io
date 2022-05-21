@@ -66,7 +66,7 @@ A possible Bibtex citation is
       doi = {10.5281/ZENODO.6569849},
       url = {https://tsaopy.github.io/},
       author = {Scozziero, Sofía A.},
-      title = {TSAOpy},
+      title = {The TSAOpy library},
       publisher = {Zenodo},
       year = {2022},
       copyright = {Open Access}}
