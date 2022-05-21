@@ -187,8 +187,8 @@ bend.cornerplots(flat_samples,label_list)
 Unexpectedly I found some noisy behavior for the $x_0$ and $v_0$ posteriors, so we try again after changing their normal priors for uniform priors centered at the peak. This should work preventing the sampler from accepting outliers. 
 
 ```
-x0_prior = bend.uniform_prior(1.9,2.1)
-v0_prior = bend.uniform_prior(-0.75,0.75)
+x0_prior = bend.uniform_prior(1.8,2.2)
+v0_prior = bend.uniform_prior(-0.9,0.9)
 
 x0 = bend.FittingParameter(2.0,'x0',1,x0_prior)
 v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
@@ -203,3 +203,12 @@ samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
 bend.cornerplots(flat_samples,label_list)
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic12.png" width="900">
+
+Finally we get clean corner plots without outliers, and single well defined peaks. We plot the solution we got with
+
+```
+solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
+model2.plot_simulation(solutions)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic13.png" width="900">
