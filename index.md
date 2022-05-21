@@ -62,14 +62,16 @@ And this is [my personal ORCID](https://orcid.org/0000-0002-1007-8229)
 A possible Bibtex citation is
 
 ```
-@misc{tsaopy,
-      doi = {10.5281/ZENODO.6569849},
-      url = {https://tsaopy.github.io/},
-      author = {Scozziero, Sofía A.},
-      title = {The TSAOpy library},
-      publisher = {Zenodo},
-      year = {2022},
-      copyright = {Open Access}}
+@software{tsaopy,
+  author       = {Scozziero, Sofía Anna},
+  title        = {The TSAOpy library},
+  month        = may,
+  year         = 2022,
+  publisher    = {Zenodo},
+  version      = {v0.1.0-alpha},
+  doi          = {10.5281/zenodo.6569849},
+  url          = {https://doi.org/10.5281/zenodo.6569849}
+}
 ```
 
 I will probably write an article or something of the sort in the near future. 
