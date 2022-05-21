@@ -80,3 +80,16 @@ bend.traceplots(samples,label_list)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic2.png" width="900">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic3.png" width="900">
+
+Notice the following
+1. In the trace plots we are seeing the dreaded problem of many walkers being stuck. Remember that we want each individual walker to be constantly changing, and a group behaviour of oscillating around a value, but we don't want individual walkers to show a straight horizontal line in the trace plot. That means things aren't going anywhere. 
+2. This also can be seen in the corner plots where we have points spreaded all over the place instead of being centered on a high density zone. What's happening is that many walkers are converging to a value of their own and not following the others.
+
+With that in mind, we are going to try running another chain, longer, and with more walkers. So now we try this
+
+```
+sampler,_,_,_ = model2.setup_sampler(1000, 50, 1000)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+bend.cornerplots(flat_samples,label_list)
+bend.traceplots(samples,label_list)
+```
