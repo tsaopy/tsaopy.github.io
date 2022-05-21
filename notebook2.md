@@ -55,3 +55,28 @@ c22 = bend.FittingParameter(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
+Now we can build our model object. `TSAOpy` comes with a second type of model which also fits parameters to $v(t)$ measurements. We set it up like this
+
+```
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+```
+
+Now it is time to begin running chains. Since this problem is considerably more complex than the one on the previous notebook, I'll begin by starting with a higher number of walkers. Using a higher number of walkers helps the chain converge in less steps, and sometimes helps prevents some problems like some walkers not moving, or converging to a different value than the rest of the walkers. 
+
+About the chain steps, let's remember that burn in steps are thrown away. This is important because if you have some intuition about the number of steps your chain will need to converge, you can just set that length, plus some extra just in case, for your burn in phase, and then for the production phase your chain already converged so you are really just drawing samples from your correct solution. So if your burn in phase is long enough for your chain to already have converged by it's end, and your production phase is long enough for you to collect enough samples according to your criteria, then in just one run you will get the correct result. 
+
+Now, what if you have no clue about how long will take for your chain to converge? Remember that we don't even know if this a good model at all. So now we don't want to drop samples, we want to see what the walkers are doing. So we will run a very short burn in and have a longer production so we can see where the chain is going. I'm setting up the sampler as
+
+```
+sampler,_,_,_ = model2.setup_sampler(500, 50, 500)
+```
+And after the run is finished the results we care about are
+```
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model2.params_labels
+bend.cornerplots(flat_samples,label_list)
+bend.traceplots(samples,label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic2.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic3.png" width="400">
