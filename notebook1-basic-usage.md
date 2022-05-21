@@ -243,4 +243,4 @@ model1.plot_simulation(solutions)
 3. Run more chains with different sets of fixed initial conditions and check what you get. 
 4. Try reducing the length of the burn in phase to find the minimum length for which the chain has converged.
 5. Run a chain, and use the results as priors and initial values for a new chain (you should use the bend.normal_prior(x0,sigma) object for the new priors). Check that this will allow you to run a shorter burn in phase in the new chain.
-6. Run a chain with more free parameters and check the corner plots for correlations. Is the chain converging as easily as before?
+6. Run a chain with more free parameters and check the corner plots for correlations. Is the chain converging as easily as before? What value are the free parameters converging to? Note: I added the $a_2$ and $b_2$ terms and with 200 walkers now it takes roughly 500 steps for the chain to converge. 
