@@ -34,7 +34,7 @@ You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `m
 
 After all this is done you may download the library's files, and then run the 'f2py' script. This will build the module used by the backend. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
 
-At this point `tsaopy` should be working, and you may head to the 'maketestdata' file to create mock time series, or pick up your own data, and then go to the 'notebook' file to check the basic usage and fit some models. 
+At this point `tsaopy` should be working, and you may head to the 'maketestdata' file to create mock time series, or pick up your own data, and then go to [basic usage](https://tsaopy.github.io/basic-usage/) to check how everything works and fit some models. 
 
 ## Note: the solution and data files must be in the same directory as the backend files 
 
