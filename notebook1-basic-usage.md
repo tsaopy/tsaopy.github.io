@@ -193,7 +193,7 @@ Now once we defined the `TSAOpy` Model, we will use an intrinsic method of this 
 
 `sampler,_,_,_ = model1.setup_sampler(200, 300, 300)`
 
-The first argument is the number of walkers, the second one the number of burn in steps, and the third one the number of production steps. Running this line will also get MCMC running so you are in for a little wait until it's finished. After the `emcee` run is finished we will call the next line which will extract the sample chains from the sampler. We will run
+The first argument is the number of walkers, the second one the number of burn in steps, and the third one the number of production steps. The number of walkers is tipically set at few hundreds, the more you use the faster the chain may converge, but it will also take more function evaluations per step and will take longer per step. The number of burn in steps is the ammount of steps that you think the chain will take to converge. Running this line will also get MCMC running so you are in for a little wait until it's finished. After the `emcee` run is finished we will call the next line which will extract the sample chains from the sampler. We will run
 
 ```
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
@@ -218,7 +218,7 @@ The next two plots will be useful to analyze wether the method has converged or 
 
 A first diagnose the trace plot gives is that if for any of the parameters the 'cloud' is not exacly horizontal and uniform but it's bent, or shows thinning or thickening, then when can't say for sure the chain converged. A first attempt at fixing this is running another chain with a longer burn in phase. Another problem we may encounter is finding single perfectly horizontal lines (as in individual lines, not the cloud). This means that this walker did not change it's value at all, perhaps because it got stuck in a local extrema, or because we didn't define priors properly. We will talk more about these problems later on. 
 
-The next plot is the autocorrelation plot. It's very simple. If all of the walkers for a parameter converged then the function quickly drops from 1 to 0 and remains oscillating around 0. If it doesn't drop to 0 quicky, let's say before the first third of the chain, then we can't say for sure it converged. Again the first attempt to fix this should be running a longer burn in. 
+The next plot is the autocorrelation plot. It's very simple. If all of the walkers for a parameter converged then the function quickly drops from 1 to 0 and remains oscillating around 0. If it doesn't drop to 0 quicky, let's say before the first third of the chain, then we can't say for sure it converged. Again the first attempt to fix this should be running a longer chain (this time take longer burn in and production phases). 
 
 It goes like this
 `bend.autocplots(flat_samples,label_list)`
@@ -235,3 +235,12 @@ model1.plot_simulation(solutions)
 ```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic7.png" width="500">
+
+### Practice ideas
+
+1. Run another chain with only one step of burn in and check how the corner plots and trace plots look. This will show you how the parameter space is explored during the burn in.
+2. Run more chains with different values for the data uncertainty and check what you get.
+3. Run more chains with different sets of fixed initial conditions and check what you get. 
+4. Try reducing the length of the burn in phase to find the minimum length for which the chain has converged.
+5. Run a chain, and use the results as priors and initial values for a new chain (you should use the bend.normal_prior(x0,sigma) object for the new priors). Check that this will allow you to run a shorter burn in phase in the new chain.
+6. Run a chain with more free parameters and check the corner plots for correlations. Is the chain converging as easily as before?
