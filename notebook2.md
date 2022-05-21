@@ -83,7 +83,7 @@ bend.traceplots(samples,label_list)
 
 Notice the following
 1. In the trace plots we are seeing the dreaded problem of many walkers being stuck. Remember that we want each individual walker to be constantly changing, and a group behaviour of oscillating around a value, but we don't want individual walkers to show a straight horizontal line in the trace plot. That means things aren't going anywhere. 
-2. This also can be seen in the corner plots where we have points spreaded all over the place instead of being centered on a high density zone. What's happening is that many walkers are converging to a value of their own and not following the others.
+2. This also can be seen in the corner plots where we have points spreaded all over the place instead of being centered on a high density zone. What's happening is that many walkers are stuck in a value of their own and not following the others.
 
 With that in mind, we are going to try running another chain, longer, and with more walkers. So now we try this
 
