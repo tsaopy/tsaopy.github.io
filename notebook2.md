@@ -1,9 +1,9 @@
 ---
 layout: custompage
-permalink: /harder-problem/
+permalink: /van-der-pol/
 ---
 
-# Notebook 2: A harder problem
+# Notebook 2: A Van der Pol oscillator
 
 Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook2.
 
@@ -11,7 +11,7 @@ Remember that files summing up the work on this notebook can be found at https:/
 
 ## Sketch of the problem
 
-For this next problem we have the following data
+For this next problem we have the following data which I simulated from a Van der Pol model (which in principle we shouldn't know)
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="600">
 
