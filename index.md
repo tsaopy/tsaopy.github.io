@@ -36,6 +36,17 @@ After all this is done you may download the library's files, and then run the 'f
 
 At this point `tsaopy` should be working, and you may head to the 'maketestdata' file to create mock time series, or pick up your own data, and then go to [basic usage](https://tsaopy.github.io/basic-usage/) to check how everything works and fit some models. 
 
-## Note: the solution and data files must be in the same directory as the backend files 
+### Note: the solution and data files must be in the same directory as the backend files
+
+If your want to keep the notebook files in a lower level directory as provided in the repository, then in the solution file replace
+
+`import backend as bend`
+
+for
+```
+import sys
+sys.path.append('..')
+import backend as bend
+```
 
 [^1]: while the end user should be only concerned with Python, there is some Fortran code used by the backend, and hence why this is necessary.
