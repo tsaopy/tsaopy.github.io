@@ -185,13 +185,17 @@ parameters = [x0,v0,a1,b1]
 ```
 notice that I also saved them on a list. So now we have our model, our data, and our priors, and we wraped it as required by `TSAOpy`. The next step is building the `TSAOpy` Model object which will condense everything in a single object. We call it with 
 
-`model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)`
+```
+model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+```
 
 This object will have some QOL methods such as `model.plot_measurements()` to plot your data and check that it was correctly loaded, `model.update_initvals(p0)` which allows you to enter a new set of initial values in case you made a mistake, and others which will probably be described in a future API. During the development of the notebooks I will be mentioning the most useful ones anyways. 
 
 Now once we defined the `TSAOpy` Model, we will use an intrinsic method of this class to build an `emcee` Sampler to use the MCMC method, and start running it. The line will be something like
 
-`sampler,_,_,_ = model1.setup_sampler(200, 300, 300)`
+```
+sampler,_,_,_ = model1.setup_sampler(200, 300, 300)
+```
 
 The first argument is the number of walkers, the second one the number of burn in steps, and the third one the number of production steps. The number of walkers is tipically set at few hundreds, the more you use the faster the chain may converge, but it will also take more function evaluations per step and will take longer per step. The number of burn in steps is the ammount of steps that you think the chain will take to converge. Running this line will also get MCMC running so you are in for a little wait until it's finished. After the `emcee` run is finished we will call the next line which will extract the sample chains from the sampler. We will run
 
@@ -204,7 +208,9 @@ The only difference between samples and flat samples is that samples stores each
 
 Now we will make three plots to show the results. The first one will be a corner plot which goes as follows
 
-`bend.cornerplots(flat_samples,label_list)`
+```
+bend.cornerplots(flat_samples,label_list)
+```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="500">
 
@@ -212,7 +218,9 @@ Here we get the posterior distribution for each parameter, and plots of the post
 
 The next two plots will be useful to analyze wether the method has converged or not. The following plot is called the trace plot and will show the value of each parameter for each walker at each time step. 
 
-`bend.traceplots(samples,label_list)`
+```
+bend.traceplots(samples,label_list)
+```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="500">
 
@@ -221,7 +229,9 @@ A first diagnose the trace plot gives is that if for any of the parameters the '
 The next plot is the autocorrelation plot. It's very simple. If all of the walkers for a parameter converged then the function quickly drops from 1 to 0 and remains oscillating around 0. If it doesn't drop to 0 quicky, let's say before the first third of the chain, then we can't say for sure it converged. Again the first attempt to fix this should be running a longer chain (this time take longer burn in and production phases). 
 
 It goes like this
-`bend.autocplots(flat_samples,label_list)`
+```
+bend.autocplots(flat_samples,label_list)
+```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="500">
 
