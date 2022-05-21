@@ -106,3 +106,44 @@ bend.traceplots(samples[700:],label_list)
 
 We can see that many parameters have very sharp peaks around a value, but there are still many walkers that aren't converging there. So now we can try something different. We will build another model, but we will update the priors to use this results. We have
 
+```
+# priors
+x0_prior = bend.normal_prior(1.9,0.2)
+v0_prior = bend.normal_prior(0.3,0.4)
+a1_prior = bend.normal_prior(-1.9,2.0)
+a2_prior = bend.normal_prior(0.25,0.3)
+b1_prior = bend.normal_prior(0.9,0.3)
+b2_prior = bend.normal_prior(0.0,1.0)
+c11_prior = bend.normal_prior(0.0,1.0)
+c12_prior = bend.normal_prior(0.0,1.0)
+c21_prior = bend.normal_prior(1.6,1.5)
+c22_prior = bend.normal_prior(0.0,1.0)
+
+# parameters
+x0 = bend.FittingParameter(1.9,'x0',1,x0_prior)
+v0 = bend.FittingParameter(0.3,'v0',1,v0_prior)
+a1 = bend.FittingParameter(-1.9, 'a', 1, a1_prior)
+a2 = bend.FittingParameter(0.25, 'a', 2, a2_prior)
+b1 = bend.FittingParameter(0.9,'b',1,b1_prior)
+b2 = bend.FittingParameter(0.0,'b',2,b2_prior)
+c11 = bend.FittingParameter(0.0,'c',(1,1),c11_prior)
+c12 = bend.FittingParameter(0.0,'c',(1,2),c12_prior)
+c21 = bend.FittingParameter(1.6,'c',(2,1),c21_prior)
+c22 = bend.FittingParameter(0.0,'c',(2,2),c22_prior)
+
+parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
+```
+Notice that some parameters had a posterior like $0.07\pm0.15$. A posterior like that is practically impossible to distinguish from 0, it's very likely that those parameters do not correspond to the model and may converge to zero, so I'll keep them as zero but reduce the standard deviation since they weren't spread over so thich intervals.
+
+And now we build the model again, and run another chain
+
+```
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+
+sampler,_,_,_ = model2.setup_sampler(1000, 50, 1000)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+
+bend.cornerplots(flat_samples,label_list)
+bend.traceplots(samples,label_list)
+```
