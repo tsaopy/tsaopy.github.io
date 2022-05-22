@@ -47,3 +47,10 @@ p = bend.FittingParameter(0.0,'f',3,p_prior)
 
 parameters = [x0,v0,a1,b1,f,w,p]
 ```
+
+Now I'll set up the model and start a chain. We have 7 parameters and very noisy data so I will start with a number of walkers on the larger side. As usual, we don't have a clue of what to expect from the chain converge rate so it's better to use a short burn in so we can see what happens
+
+```
+model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+sampler,_,_,_ = model1.setup_sampler(500, 100, 1000)
+```
