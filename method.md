@@ -19,7 +19,7 @@ Now I'll make some remarks about the models.
 
 The terms proportional to $x$ can be associated with the potential energy, we may think of them as a polynomial expansion of the force caused by the potential, as if the potential has a series expansion and we truncated it at some degree.
 
-The same applies to the $\dot{x}$ terms which we associate to a damping or drag force. Notice that these terms are written as $\dot{x} |\dot{x}| ^{n-1}$ instead of $\dot{x}^n$. The purpose of this tweak is that the absolute value of the damping force will always be proportional to some power of the absolute value of the velocity, and will have a direction opposite to the velocity, as we'd tipically expect from a drag force. 
+The same applies to the $\dot{x}$ terms which we associate to a damping or drag force. Notice that these terms are written as $\dot{x} \mid\dot{x}\mid ^{n-1}$ instead of $\dot{x}^n$. The purpose of this tweak is that the absolute value of the damping force will always be proportional to some power of the absolute value of the velocity, and will have a direction opposite to the velocity, as we'd tipically expect from a drag force. 
 
 We included the possibility of adding a sinusoidal driving force to the model. It is not possible to add driving forces with a different law at the moment. 
 
