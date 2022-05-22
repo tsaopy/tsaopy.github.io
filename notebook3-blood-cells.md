@@ -100,6 +100,83 @@ So we will change the strategy and will try to find a GOOD set of initial values
 from scipy.optimize import differential_evolution
 target_function = model1.neg_ll
 ```
+Differential evolution requires a set of bounds for your parameters which we'll define ad hoc from our results so far. It also gives you some optional parameters such as a seed, and two parameters concerning the foundation of this genetic algorithm the crossover (or recombination) and the mutation. We will set those as follows
+
+```
+bounds = [(-300,0),(750,2500),(-100,100),(-500,500),(1000,50000),(0,50),(-np.pi,np.pi)]
+p0 = [-150,1500,2,90,5800,9.5,0.8]
+rc,mut = 0.9,(1.0,1.9)
+```
+
+That set up, we can run the algorithm. I'm also using the 'workers' parameter which parallelizes the algorithm
+
+```
+diffev_solution = differential_evolution(target_function,bounds,x0=p0,mutation=mut,recombination=rc,workers=10)
+```
+And extract the results with
+
+```
+dev_params = diffev_solution.x
+```
+
+I got the values
+
+```
+[-1.73150188e+02,  2.27920572e+03,  1.48960440e+01,  1.81006661e+02,
+         3.50990661e+04,  9.36130043e+00,  1.70851383e-01]
+```
+
+Now plotting a simulation with those parameters we get
+
+```
+model1.plot_simulation(dev_params)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic7.png" width="900">
+
+Now this looks much more like what we are looking for. 
+
+Back to MCMC I'll restart the chain from 0, using everything we had so far plus the results of the differential evolution algorithm. 
+
+We have
+
+```
+# priors
+x0_prior = bend.uniform_prior(-300,0)
+v0_prior = bend.uniform_prior(1000.0,3000.0)
+a1_prior = bend.normal_prior(0.0,1000.0)
+b1_prior = bend.normal_prior(0.0,1000.0)
+f_prior = bend.uniform_prior(5000.0,75000.0)
+w_prior = bend.uniform_prior(0.0,30.0)
+p_prior = bend.uniform_prior(-np.pi,np.pi)
+
+# parameters
+x0 = bend.FittingParameter(-173.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(2280.0,'v0',1,v0_prior)
+a1 = bend.FittingParameter(14.9, 'a', 1, a1_prior)
+b1 = bend.FittingParameter(181.0,'b',1,b1_prior)
+f = bend.FittingParameter(35100.0,'f',1,f_prior)
+w = bend.FittingParameter(9.36,'f',2,w_prior)
+p = bend.FittingParameter(0.171,'f',3,p_prior)
+
+parameters = [x0,v0,a1,b1,f,w,p]
+
+# build model
+model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+
+# run chain
+
+# extract and plot results
+
+sampler,_,_,_ = model1.setup_sampler(500, 1000, 500)
+
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model1.params_labels
+
+bend.cornerplots(flat_samples,label_list)
+
+solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
+model1.plot_simulation(solutions)
+```
 
 [^1]: notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
 
