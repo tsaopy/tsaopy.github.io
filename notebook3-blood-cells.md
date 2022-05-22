@@ -84,6 +84,14 @@ sampler,_,_,_ = model1.setup_sampler(500, 1000, 500)
 
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 label_list = model1.params_labels
-bend.traceplots(samples,label_list)
 bend.cornerplots(flat_samples,label_list)
+
+solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
+model1.plot_simulation(solutions)
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic5.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic6.png" width="900">
+
+Corner plots don't look good at all. And if you see the simulation with the means[^1]
+
+[^1] : notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
