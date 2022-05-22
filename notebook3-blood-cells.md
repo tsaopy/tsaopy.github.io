@@ -53,4 +53,37 @@ Now I'll set up the model and start a chain. We have 7 parameters and very noisy
 ```
 model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
 sampler,_,_,_ = model1.setup_sampler(500, 100, 1000)
+
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model1.params_labels
+bend.traceplots(samples,label_list)
+bend.cornerplots(flat_samples,label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic2.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic3.png" width="900">
+
+We get a mess, but we can start cleaning things up. Notice that we get multiple peaks for the initial conditions which is terribly bad, however if we keep only the last 30% of the samples
+
+```
+bend.cornerplots(flat_samples[500*700,:],label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic4.png" width="900">
+
+We find that they are indeed approaching a single peak distribution. So we will run another chain using new priors for the initial conditions that use this result. We have 
+
+```
+x0_prior = bend.uniform_prior(-200,0)
+v0_prior = bend.uniform_prior(750.0,2500.0)
+x0 = bend.FittingParameter(-150.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(1500.0,'v0',1,v0_prior)
+
+parameters = [x0,v0,a1,b1,f,w,p]
+
+model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+sampler,_,_,_ = model1.setup_sampler(500, 100, 1000)
+
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model1.params_labels
+bend.traceplots(samples,label_list)
+bend.cornerplots(flat_samples,label_list)
 ```
