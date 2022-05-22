@@ -132,3 +132,22 @@ label_list = model1.params_labels
 
 bend.cornerplots(flat_samples,label_list)
 ```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic6.png" width="900">
+
+And we get a good final result for the classical driven oscillator model. Let's make trace and autocorrelation plots to confirm everything is in order
+
+```
+bend.traceplots(samples,label_list)
+bend.autocplots(flat_samples,label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic7.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic8.png" width="900">
+
+Those two are OK so we finally plot our solution against the data
+
+
+```
+solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
+model1.plot_simulation(solutions)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic8.png" width="900">
