@@ -26,4 +26,24 @@ a1_prior = bend.normal_prior(0.0,1000.0)
 b1_prior = bend.normal_prior(0.0,1000.0)
 ```
 
-With respect to the driving force, $F_0$ and $\omega$ are sctrictly positive numbers, and $\phi\in[-\pi,\pi]$
+With respect to the driving force, $F_0$ and $\omega$ are strictly positive, and $\phi\in[-\pi,\pi]$, so I'll use uniform priors for those. If you look at the graph the oscillation seems to have period of around $T\approx0.6$, so we can try assuming a frequency around $\omega=2\pi f=2\pi/\omega\approx10$. So, for $\omega$ we will start the chain at 10, and will be using a uniform prior between 0 and, let's say, 50 so we give it some room to walk. The oscillation seems to have an amplitude of around 500, so $F_0$ could be expected to sit around $5000$ since $A\propto F_0/\omega$, and again let's allow it to walk over an order of magnitude. So, we will start with the next priors for the driving force
+
+```
+f_prior = bend.uniform_prior(0.0,50000.0)
+w_prior = bend.uniform_prior(0.0,100.0)
+p_prior = bend.uniform_prior(-np.pi,np.pi)
+```
+
+And then we set up the parameters as
+
+```
+x0 = bend.FittingParameter(-100.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(100.0,'v0',1,v0_prior)
+a1 = bend.FittingParameter(0.0, 'a', 1, a1_prior)
+b1 = bend.FittingParameter(0.0,'b',1,b1_prior)
+f = bend.FittingParameter(5000.0,'f',1,f_prior)
+w = bend.FittingParameter(10.0,'f',2,w_prior)
+p = bend.FittingParameter(0.0,'f',3,p_prior)
+
+parameters = [x0,v0,a1,b1,f,w,p]
+```
