@@ -92,6 +92,6 @@ model1.plot_simulation(solutions)
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic5.png" width="900">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic6.png" width="900">
 
-Corner plots don't look good at all. And if you see the simulation with the means[^1]
+Corner plots don't look good at all. And if you see the simulation with the means[^1] we can see that our damped driven oscillator is still in the initial transient state. We want our results to look like a steady state, so our chain is not going where we want.  
 
 [^1] : notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
