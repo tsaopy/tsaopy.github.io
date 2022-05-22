@@ -135,7 +135,7 @@ c22 = bend.FittingParameter(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
-Notice that some parameters had a posterior like $0.07\pm0.15$. A posterior like that is practically impossible to distinguish from 0, it's very likely that those parameters do not correspond to the model and may converge to zero, so I'll keep them as zero but reduce the standard deviation since they weren't spread over so thich intervals.
+Notice that some parameters had a posterior like $0.07\pm0.15$. A posterior like that is practically impossible to distinguish from 0, it's very likely that those parameters aren't relevant to model this system and may converge to zero. For the time being, I'll keep them as zero but reduce the standard deviation since they aren't really spreading over a large region.
 
 And now we build the model again, and run another chain
 
@@ -154,7 +154,7 @@ bend.traceplots(samples,label_list)
 
 Now this looks much better. Notice that $b_2$, $c_{11}$, $c_{12}$, and $c_{22}$, are practically 0. Their posteriors all have means close to 0, and have SDs of absolute magnitude bigger than the mean itself, that's why we really can't distinguish this value from 0. So we will try running another chain, this time dropping those parameters. 
 
-I'll reduce walkers a bit since we have simplified the model, and will use a burn in phase and see if we could get a chain converging to a good looking posterior.
+I'll reduce walkers a bit since we have simplified the model, and will use a burn in phase and see if we can get a chain converging to a good looking posterior.
 
 ```
 parameters = [x0,v0,a1,a2,b1,c21]
