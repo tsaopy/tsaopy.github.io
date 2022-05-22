@@ -13,4 +13,6 @@ I've been given this and some more datasets by professor Castellini at my home f
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic1.png" width="600">
 
-I don't have any more information about this particular set of data points rather than the fact that there was a driving force. I don't 
+I don't have any more information about this particular set of data points rather than the fact that there was a driving force. Judging from the plot, the oscilation was not near an equilibrium point at the beggining of the time series, so there must be a non zero initial velocity. I'm going to begin the analysis with the simplest physical oscillator with a driving force, the ODE will be
+
+$$ \ddot{x} + a_1\dot{x} + b_1x = F_0\sin{(\omega t+\phi)} $$
