@@ -101,7 +101,7 @@ bend.cornerplots(flat_samples,label_list)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic5.png" width="900">
 
-Now we are getting overall good posteriors. However, notice how there's a tail in the $a_1$ vs $F_0$ corner plot. We want to get rid of that and focus on th peaks, and for that we will try running yet another chain with updated priors. 
+Now we are getting considerably better posteriors. However, notice how there's a tail in the $a_1$ vs $F_0$ corner plot, and there's still some outliers scattered on the other plots. We want to get rid of that and focus on the good looking peaks we got, and for that we will try running yet another chain with updated priors. 
 
 
 ```
