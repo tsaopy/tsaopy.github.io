@@ -92,6 +92,15 @@ model1.plot_simulation(solutions)
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic5.png" width="900">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic6.png" width="900">
 
-Corner plots don't look good at all. And if you see the simulation with the means[^1] we can see that our damped driven oscillator is still in the initial transient state. We want our results to look like a steady state, so our chain is not going where we want.  
+Corner plots don't look good at all. And if you see the simulation with the means[^1] we can see that our damped driven oscillator is still in the initial transient state. We want our results to give an oscillator in steady state, so our chain is not going where we want it to. It's probably getting stuck in local extremas.
 
-[^1] : notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
+So we will change the strategy and will try to find a GOOD set of initial values for MCMC to begin. In order to do this we are going to try using an optimization method on our likelihood function[^2]. When we first build our MCMC model we get a function called likelihood that tells us how likely is a set of parameters for our model given the observations. When we run MCMC we try to maximize this function. But we will try a different route and see what we get. We'll begin by defining our working tools
+
+```
+from scipy.optimize import differential_evolution
+target_function = model1.neg_ll
+```
+
+[^1]: notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
+
+[^2]: in our model we actually have the logarithm of this function, it's implemented this way so we don't get larger numbers and prevent overflows(some overflows do still happen but without this it would be worse). Also note that the function we will be optimizing is the negative log likelihood, since the optimization methods we use search for minimums. 
