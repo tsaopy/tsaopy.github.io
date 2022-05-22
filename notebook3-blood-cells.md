@@ -69,115 +69,33 @@ bend.cornerplots(flat_samples[500*700,:],label_list)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic4.png" width="900">
 
-We find that they are indeed approaching a single peak distribution. So we will run another chain using new priors for the initial conditions that use this result. We have 
+We find that they are indeed approaching single peak distributions but there is a lot of noise and outliers. So I will start another chain with some new priors and initial values using this result. I will not update $a_1$, $b_1$, and $F_0$ priors at this point because I want to allow those parameters to run all over the place. We have 
 
 ```
-x0_prior = bend.uniform_prior(-300,0)
-v0_prior = bend.uniform_prior(750.0,2500.0)
-x0 = bend.FittingParameter(-150.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(1500.0,'v0',1,v0_prior)
-
-parameters = [x0,v0,a1,b1,f,w,p]
-
-model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
-sampler,_,_,_ = model1.setup_sampler(500, 1000, 500)
-
-samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
-label_list = model1.params_labels
-bend.cornerplots(flat_samples,label_list)
-
-solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
-model1.plot_simulation(solutions)
-```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic5.png" width="900">
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic6.png" width="900">
-
-Corner plots don't look good at all. And if you see the simulation with the means[^1] we can see that our damped driven oscillator is still in the initial transient state. We want our results to give an oscillator in steady state, so our chain is not going where we want it to. It's probably getting stuck in local extremas.
-
-So we will change the strategy and will try to find a GOOD set of initial values for MCMC to begin. In order to do this we are going to try using an optimization method on our likelihood function[^2]. When we first build our MCMC model we get a function called likelihood that tells us how likely is a set of parameters for our model given the observations. When we run MCMC we try to maximize this function. But we will try a different route and see what we get. We'll begin by defining our working tools
-
-```
-from scipy.optimize import differential_evolution
-target_function = model1.neg_ll
-```
-Differential evolution requires a set of bounds for your parameters which we'll define ad hoc from our results so far. It also gives you some optional parameters such as a seed, and two parameters concerning the foundation of this genetic algorithm the crossover (or recombination) and the mutation. We will set those as follows
-
-```
-bounds = [(-300,0),(750,2500),(-100,100),(-500,500),(1000,50000),(0,50),(-np.pi,np.pi)]
-p0 = [-150,1500,2,90,5800,9.5,0.8]
-rc,mut = 0.9,(1.0,1.9)
-```
-
-That set up, we can run the algorithm. I'm also using the 'workers' parameter which parallelizes the algorithm
-
-```
-diffev_solution = differential_evolution(target_function,bounds,x0=p0,mutation=mut,recombination=rc,workers=10)
-```
-And extract the results with
-
-```
-dev_params = diffev_solution.x
-```
-
-I got the values
-
-```
-[-1.73150188e+02,  2.27920572e+03,  1.48960440e+01,  1.81006661e+02,
-         3.50990661e+04,  9.36130043e+00,  1.70851383e-01]
-```
-
-Now plotting a simulation with those parameters we get
-
-```
-model1.plot_simulation(dev_params)
-```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic7.png" width="900">
-
-Now this looks much more like what we are looking for. 
-
-Back to MCMC I'll restart the chain from 0, using everything we had so far plus the results of the differential evolution algorithm. 
-
-We have
-
-```
-# priors
-x0_prior = bend.uniform_prior(-300,0)
-v0_prior = bend.uniform_prior(1000.0,3000.0)
+x0_prior = bend.uniform_prior(-300,-20)
+v0_prior = bend.uniform_prior(750,3000.0)
 a1_prior = bend.normal_prior(0.0,1000.0)
 b1_prior = bend.normal_prior(0.0,1000.0)
-f_prior = bend.uniform_prior(5000.0,75000.0)
-w_prior = bend.uniform_prior(0.0,30.0)
-p_prior = bend.uniform_prior(-np.pi,np.pi)
+f_prior = bend.uniform_prior(0.0,50000.0)
+w_prior = bend.normal_prior(9.5,1.0)
+p_prior = bend.normal_prior(0.75,0.3)
 
-# parameters
-x0 = bend.FittingParameter(-173.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(2280.0,'v0',1,v0_prior)
-a1 = bend.FittingParameter(14.9, 'a', 1, a1_prior)
-b1 = bend.FittingParameter(181.0,'b',1,b1_prior)
-f = bend.FittingParameter(35100.0,'f',1,f_prior)
-w = bend.FittingParameter(9.36,'f',2,w_prior)
-p = bend.FittingParameter(0.171,'f',3,p_prior)
+x0 = bend.FittingParameter(-160.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(1550.0,'v0',1,v0_prior)
+a1 = bend.FittingParameter(2.0, 'a', 1, a1_prior)
+b1 = bend.FittingParameter(90.0,'b',1,b1_prior)
+f = bend.FittingParameter(5900.0,'f',1,f_prior)
+w = bend.FittingParameter(9.4,'f',2,w_prior)
+p = bend.FittingParameter(0.75,'f',3,p_prior)
 
 parameters = [x0,v0,a1,b1,f,w,p]
 
-# build model
+# model
 model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
-
-# run chain
-
-# extract and plot results
-
 sampler,_,_,_ = model1.setup_sampler(500, 1000, 500)
 
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 label_list = model1.params_labels
 
 bend.cornerplots(flat_samples,label_list)
-
-solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
-model1.plot_simulation(solutions)
 ```
-
-[^1]: notice that in each corner plot the red line doesn't show the mean but the 50/50 quantile, so to get the means we calculate them from the samples using `numpy`.
-
-[^2]: in our model we actually have the logarithm of this function, it's implemented this way so we don't get larger numbers and prevent overflows(some overflows do still happen but without this it would be worse). Also note that the function we will be optimizing is the negative log likelihood, since the optimization methods we use search for minimums. 
