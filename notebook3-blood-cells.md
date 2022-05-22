@@ -150,4 +150,4 @@ Those two are OK so we finally plot our solution against the data
 solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
 model1.plot_simulation(solutions)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic8.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic9.png" width="900">
