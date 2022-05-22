@@ -21,7 +21,7 @@ A more detailed explanation can be found at [method page](https://tsaopy.github.
 Running this analysis will allow you to find an ODE that your time series roughly obeys. Some interesting things that you can do with the ODE are
  
 1. Modelling of damping forces or potentials. One may associate each term of the ODE with a certain term of the polynomial expansion of a potential or damping force, and thus getting approximations of the behaviour of your system's potential or drag effects.
-2. Non linear dynamics analysis. Finding the ODE (or an approximation of it) that your system obeys allows you to use some theoretical tools such as plotting phase portraits and phase space trajectories, finding limit  cylces, analyzing stability, energy conservation, etc.
+2. Non linear dynamics analysis. Finding the ODE that your system obeys allows you to use some theoretical tools such as plotting phase portraits and phase space trajectories, finding limit  cylces, analyzing stability, energy conservation, etc.
 
 
 ## Set Up guide
