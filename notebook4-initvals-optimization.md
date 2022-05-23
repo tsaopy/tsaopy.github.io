@@ -9,7 +9,7 @@ On this notebook I want to show an extra feature that `TSAOpy` has, which is fin
 
 [^1]: here's the problem, optimizers aren't sentient enough to be able to tell which parameters in your model are relevant or not (although MCMC is a great tool for you to figure that out), so if you just drop a bunch of parameters that may not be relevent, the optimizer may easily fall for problems like getting stuck due to correlations, getting stuck at local minimums, give you a solution that doesn't work anymore once you drop unnecessary terms, etc. 
 
-$$ \ddot{x} -k\, \sin{(x)}\cos{(x)} + g\,\sin{(x)} = 0 $$
+$$ \ddot{x} -k \sin{(x)}\cos{(x)} + g \sin{(x)} = 0 $$
 
 I'm using $k=1$, $g=0.5$, $x_0=1$, and $v_0=0.5$. The resulting data looks like this
 
@@ -17,7 +17,7 @@ I'm using $k=1$, $g=0.5$, $x_0=1$, and $v_0=0.5$. The resulting data looks like 
 
 Now, back to the ODE, I'll use the following polynomial expansion of the terms above
 
-$$ \ddot{x} + \sin{(x)}\left(g-k\,cos{(x)}\right) = 0 $$
+$$ \ddot{x} + \sin{(x)}\left(g-k cos{(x)}\right) = 0 $$
 
 $$ \ddot{x} + (g-k)x + \frac{4k-g}{6} x^3 = 0 $$
 
