@@ -135,4 +135,32 @@ from scipy.optimize import differential_evolution
 bounds = [(0.7,1.3),(0.3,0.7),(-30,30),(-30,30)]
 ```
 
-Differential Evolution has many parameters, I'm mainly interested in the mutation, population size, and max number of iterations. 
+Differential Evolution has many parameters, of which I'm mostly interested in mutation, population size, and max number of iterations. Mutation and population size are typical parameters of any genetic algorithm, in this case I'm picking values that, compared with the defaults, will make the optimizer more stable and consistent but slower. I will allow the algorithm to run for a larger number of iterations, since for this kind of problem the default maximum is not enough. You can also use the workers parameter to parallelize the computations.
+
+Summing up, this is what we have
+
+```
+diffev_solution = differential_evolution(neg_ll,bounds=bounds,popsize=50,
+                              mutation=(1.0,1.9),maxiter=2000,workers=6)
+
+new_initvals = diffev_solution.x
+```
+We can try plotting a simulation with the new values that we just found
+
+```
+model2.plot_simulation(new_initvals)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb4_pic6.png" width="600">
+
+The results look very good, so we are going to update the model's initial values and do the MCMC run
+
+```
+model2.update_initvals(new_initvals)
+sampler,_,_,_ = model2.setup_sampler(300, 100, 500)
+samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+label_list = model2.params_labels
+bend.cornerplots(flat_samples,label_list)
+```
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb4_pic7.png" width="600">
+
+And we get identical posteriors than what we got before, but now we only had to run one chain with a small burn in. 
