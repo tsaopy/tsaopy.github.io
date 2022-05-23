@@ -17,7 +17,7 @@ I'm using $k=1$, $g=0.5$, $x_0=1$, and $v_0=0.5$. The resulting data looks like 
 
 Now, back to the ODE, I'll use the following polynomial expansion of the terms above
 
-$$ \ddot{x} + \sin{(x)}\left(g-k cos{(x)}\right) = 0 $$
+$$ \ddot{x} + \sin{(x)}\left(g-k \cos{(x)}\right) = 0 $$
 
 $$ \ddot{x} + (g-k)x + \frac{4k-g}{6} x^3 = 0 $$
 
