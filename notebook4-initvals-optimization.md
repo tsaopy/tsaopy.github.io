@@ -68,16 +68,16 @@ So we update priors and start a new chain like this
 
 ```
 # priors
-x0_prior = bend.uniform_prior(0.7,1.3)
-v0_prior = bend.uniform_prior(0.3,0.7)
-b1_prior = bend.normal_prior(0.0,10.0)
-b3_prior = bend.normal_prior(0.0,10.0)
+x0_prior = bend.normal_prior(1.0,0.1)
+v0_prior = bend.normal_prior(0.44,0.8)
+b1_prior = bend.normal_prior(-0.32,0.2)
+b3_prior = bend.normal_prior(0.26,0.2)
     
 # parameters
 x0 = bend.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(0.5,'v0',1,v0_prior)
-b1 = bend.FittingParameter(0.0,'b',1,b1_prior)
-b3 = bend.FittingParameter(0.0,'b',3,b3_prior)
+v0 = bend.FittingParameter(0.44,'v0',1,v0_prior)
+b1 = bend.FittingParameter(-0.32,'b',1,b1_prior)
+b3 = bend.FittingParameter(0.26,'b',3,b3_prior)
 
 parameters = [x0,v0,b1,b3]
 
