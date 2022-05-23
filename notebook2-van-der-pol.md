@@ -1,5 +1,5 @@
 ---
-layout: custompage
+layout: sidepage
 permalink: /van-der-pol/
 ---
 
