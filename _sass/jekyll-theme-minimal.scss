@@ -56,7 +56,7 @@ a:hover small {
 }
 
 .wrapper {
-  width:1060px;
+  width:1300px;
   margin:0 auto;
 }
 
@@ -121,6 +121,13 @@ kbd {
 header {
   width:270px;
   float:left;
+  position:fixed;
+  -webkit-font-smoothing:subpixel-antialiased;
+}
+
+rightheader {
+  width:330px;
+  float:right;
   position:fixed;
   -webkit-font-smoothing:subpixel-antialiased;
 }
