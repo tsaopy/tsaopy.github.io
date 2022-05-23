@@ -96,6 +96,34 @@ bend.traceplots(samples,label_list)
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb4_pic4.png" width="600">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb4_pic5.png" width="600">
 
-And we got the job done by running at least 2 500 steps chains (you'd probably need more chains if you don't choose adequate walker and step numbers).
+And we got the job done by running at least 3 chains of 500 steps each (you may need more chains if you don't choose adequate walker and step numbers).
 
-Now, let's go back to square one and try an alternative procedure. 
+Now, let's go back to square one and try the alternative procedure. We have our model
+
+```
+# priors
+x0_prior = bend.uniform_prior(0.7,1.3)
+v0_prior = bend.uniform_prior(0.3,0.7)
+b1_prior = bend.normal_prior(0.0,10.0)
+b3_prior = bend.normal_prior(0.0,10.0)
+    
+# parameters
+x0 = bend.FittingParameter(1.0,'x0',1,x0_prior)
+v0 = bend.FittingParameter(0.5,'v0',1,v0_prior)
+b1 = bend.FittingParameter(0.0,'b',1,b1_prior)
+b3 = bend.FittingParameter(0.0,'b',3,b3_prior)
+
+parameters = [x0,v0,b1,b3]
+
+# model 2
+model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+                            data_x_sigma,data_v_sigma)
+```
+
+We want to optimize the initial values before running any chains. For that we have to optimize the negative logarithmic likelihood function[^3], which we get from the model object as
+
+[^3]: the likelihood function is a function that, given a model and a set of parameters, tells you how likely it is that those parameters explain some data. Finding the maximum of the likelihood function gives you the "best fitting" or more likely parameters, and this is what MCMC does. However one may try to maximize this function by any other means and this is what we are about to do. However, notice that I mentioned negative logarithmic likelihood. First of all we work with the logarithm of the likelihood function because statisticians say it has some nice properties that make things work better. We accept it with no arguments and move on. Then, we work with the negative log likelihood because we need to maximize it, and most optimizers search for minimums.
+
+```
+neg_ll = model2.neg_ll
+```
