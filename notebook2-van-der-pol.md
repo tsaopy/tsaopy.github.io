@@ -13,7 +13,7 @@ Remember that files summing up the work on this notebook can be found at https:/
 
 For this next problem we have the following data which I simulated from a Van der Pol model (which in principle we shouldn't know)
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="600">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="700">
 
 From the plots we can't say much more than that the initial conditions are roughly $x_0\approx2$ and $v_0\approx-0.3$. I'm also going to estimate the uncertainties as
 
