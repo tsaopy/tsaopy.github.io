@@ -1,5 +1,5 @@
 ---
-layout: custompage
+layout: sidepage
 permalink: /basic-usage/
 ---
 
