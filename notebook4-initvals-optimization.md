@@ -128,9 +128,11 @@ We want to optimize the initial values before running any chains. For that we ha
 neg_ll = model2.neg_ll
 ```
 
-Now, I will use `scipy.optimize.differential_evolution` for the optimization. You can pick any other optimizer that you like but I found this one to work OK. This function has some parameters, no need to use all of them, but it is necessary to pass at least some bounds to restrict the space the algorithm explores. . I run it like this
+Now, I will use `scipy.optimize.differential_evolution` for the optimization. You can pick any other optimizer that you like but I found this one to work OK. For this method we need a set of bounds for the parameters, I'll pick some bounds to roughly mimic the priors
 
 ```
 from scipy.optimize import differential_evolution
 bounds = [(0.7,1.3),(0.3,0.7),(-30,30),(-30,30)]
 ```
+
+Differential Evolution has many parameters, I'm mainly interested in the mutation, population size, and max number of iterations. 
