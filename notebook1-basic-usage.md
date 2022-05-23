@@ -78,7 +78,7 @@ plt.plot(t, v, color='tab:purple', label='velocity')
 plt.legend()
 plt.show()
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic1.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic1.png" width="700">
 
 Now we will add some noise to the data and plot the results.
 
@@ -101,7 +101,7 @@ plt.plot(t, v, color='tab:purple', label='velocity')
 plt.legend()
 plt.show()
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic2.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic2.png" width="700">
 
 Now we are set up and we can save the data for testing `TSAOpy`. I'll do it with
 
@@ -132,7 +132,7 @@ plt.scatter(data_t, data_x, color = 'tab:red', s=0.5, label='x(t)')
 plt.legend()
 plt.show()
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic3.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic3.png" width="700">
 
 Now we need to know the uncertainty of our $x$ measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way to do it in your lab, save a unique value of uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for all measurements or an array with a unique value for each point. In this case we will just use a rough estimate for all points and just define `data_x_sigma = 0.15`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
 
@@ -212,7 +212,7 @@ Now we will make three plots to show the results. The first one will be a corner
 bend.cornerplots(flat_samples,label_list)
 ```
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="500">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="700">
 
 Here we get the posterior distribution for each parameter, and plots of the posteriors for each pair of parameters showing possible correlations.
 
@@ -222,7 +222,7 @@ The next two plots will be useful to analyze wether the method has converged or 
 bend.traceplots(samples,label_list)
 ```
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="500">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="700">
 
 A first diagnose the trace plot gives is that if for any of the parameters the 'cloud' is not exacly horizontal and uniform but it's bent, or shows thinning or thickening, then when can't say for sure the chain converged. A first attempt at fixing this is running another chain with a longer burn in phase. Another problem we may encounter is finding single perfectly horizontal lines (as in individual lines, not the cloud). This means that this walker did not change it's value at all, perhaps because it got stuck in a local extrema, or because we didn't define priors properly. We will talk more about these problems later on. 
 
@@ -233,7 +233,7 @@ It goes like this
 bend.autocplots(flat_samples,label_list)
 ```
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="500">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="700">
 
 Now given what we just said about the trace and autocorrelation plots, and the plots we got, we can assume that the chain has indeed converged. 
 
@@ -244,7 +244,7 @@ solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
 model1.plot_simulation(solutions)
 ```
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic7.png" width="500">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic7.png" width="700">
 
 ### Practice ideas
 
