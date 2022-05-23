@@ -9,7 +9,7 @@ permalink: /method/
 
 Picking up from where we left, we assumed that we have a set of $(t,x(t))$ points that make up a time series, like this one which we showed earlier
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="400">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="700">
 
 We also proposed that the $x(t)$ function satisfies a differential equation of the form
 
