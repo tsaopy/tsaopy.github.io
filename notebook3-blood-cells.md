@@ -152,7 +152,7 @@ model1.plot_simulation(solutions)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic9.png" width="900">
 
-After getting the results for the classical driven model, I repetead the process for a new model similar to the Duffing oscillator
+After getting the results for the classical driven model, I repeated the process for a new model similar to the Duffing oscillator
 
 $$ \ddot{x} + a_1\dot{x} + b_1x + b_2x^2 + b_3x^3 = F_0\sin{(\omega t+\phi)} $$
 
@@ -161,4 +161,4 @@ And got the following results
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic10.png" width="900">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3_pic11.png" width="900">
 
-This model has a logarithmic likelihood of roughly -1150, when compared with the classical model which has a log likelihood of roughly -1170, it turns out to be a better fit. What I find interesting here is that the damping term goes to zero and the driving force amplitude is an order of magnitude smaller, while the frequency stays the same.
+This model has a logarithmic likelihood of roughly -1150, when compared with the classical model which has a log likelihood of roughly -1170, it turns out to be a better fit. What I find interesting here is that the damping term goes to zero, the linear potential term changed signs, the driving force amplitude is an order of magnitude smaller, and the frequency stays the same. 
