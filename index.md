@@ -28,17 +28,17 @@ Running this analysis will allow you to find an ODE that your time series roughl
 2. Non linear dynamics analysis. Finding the ODE that your system obeys allows you to use some theoretical tools such as plotting phase portraits and phase space trajectories, finding limit  cylces, analyzing stability, energy conservation, etc.
 
 
-## Set Up guide
+## Set Up
 
-In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
+- In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the more specific dependencies `multiprocessing`, `emcee`, and `corner`. You may install this in the Python console using `pip install` or with an enviroment manager such as Anaconda.
+- You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the more specific dependencies `multiprocessing`, `emcee`, and `corner`. 
 
-The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. 
+- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have `gfortran` installed. If it's not, then `sudo apt-get install gfortran` should do the trick. 
 
-After all this is done you may download the library's files, and then run the 'f2py' script. This will build a module used by the backend files. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
+- After making sure that you have all required Python dependencies, and that the Fortran compiler is installed, you may download `tsaopy` files. Once you are all set up go to the installation directory and head over the 'tsaopy' folder, there's a Python script inside named 'integrator_f2py.py', you have to run this script to build the Fortran module that the backend needs. If everything is in order a new file (a CPython module to be precise) should have been created.
 
-At this point `tsaopy` should be working, and you may head to the 'maketestdata' file to create mock time series, or pick up your own data, and then go to [basic usage](https://tsaopy.github.io/basic-usage/) to check how everything works and fit some models. 
+At this point `tsaopy` should be working, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works and begin fitting some models. 
 
 ## Referencing TSAOpy
 
