@@ -32,28 +32,13 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. [^1]
+The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. 
 
 You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the more specific dependencies `multiprocessing`, `emcee`, and `corner`. You may install this in the Python console using `pip install` or with an enviroment manager such as Anaconda.
 
-After all this is done you may download the library's files, and then run the 'f2py' script. This will build the module used by the backend. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
+After all this is done you may download the library's files, and then run the 'f2py' script. This will build a module used by the backend files. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
 
 At this point `tsaopy` should be working, and you may head to the 'maketestdata' file to create mock time series, or pick up your own data, and then go to [basic usage](https://tsaopy.github.io/basic-usage/) to check how everything works and fit some models. 
-
-### Note: the solution and data files must be in the same directory as the backend files
-
-If your want to keep the notebook files in a lower level directory as provided in the repository, then in the solution file replace
-
-```
-import backend as bend
-```
-
-for
-```
-import sys
-sys.path.append('..')
-import backend as bend
-```
 
 ## Referencing TSAOpy
 
@@ -79,5 +64,3 @@ A possible Bibtex citation is
 ```
 
 I will probably write an article or something of the sort in the near future. 
-
-[^1]: while the end user should be only concerned with Python, there is some Fortran code used by the backend, and hence why this is necessary.
