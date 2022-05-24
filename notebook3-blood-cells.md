@@ -3,9 +3,9 @@ layout: sidepage
 permalink: /blood-cells/
 ---
 
-# Notebook 3: Blood cells experiment
-
 Remember that the experiment data file, and other files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook3.
+
+# Notebook 3: Blood cells experiment
 
 ## Sketch of the problem
 
