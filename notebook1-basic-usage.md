@@ -7,7 +7,7 @@ permalink: /basic-usage/
 
 ## Making some data
 
-In this first notebook we will define a simple model, make a simulation with it, add some noise to the data, and see how to recover the original model using `TSAOpy`.
+In this first notebook we will define a simple model, make a simulation with it, add some noise to the data, and see how to recover the original model using `tsaopy`.
 
 
 I'll start by setting up the numerical integrator (I'm gonna skip the details since I'm assuming you are familiar with writing a simple Runge-Kutta integrator). I implemented this as
@@ -101,7 +101,7 @@ plt.show()
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic2.png" width="700">
 
-Now we are set up and we can save the data for testing `TSAOpy`. I'll do it with
+Now we are set up and we can save the data for testing `tsaopy`. I'll do it with
 
 ```
 # save results
@@ -129,7 +129,7 @@ plt.figure(figsize=(7, 5), dpi=150)
 plt.scatter(data_t, data_x, color = 'tab:red', s=0.5, label='x(t)')
 plt.legend()
 plt.show()
-```
+
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic3.png" width="700">
 
 Now we need to know the uncertainty of our $x$ measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way to do it in your lab, save a unique value of uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for all measurements or an array with a unique value for each point. In this case we will just use a rough estimate for all points and just define `data_x_sigma = 0.15`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
@@ -145,11 +145,11 @@ The next thing we need is to define our parameters, for that we will be defining
 Defining parameters will be something like this
 
 ```
-import backend as bend
-p_fixed = bend.FixedParameter(1.0,'a',1)
-p_variable = bend.FittingParameter(1.0,'a',1,p_prior)
+import tsaopy
+p_fixed = tsaopy.parameters.FixedParameter(1.0,'a',1)
+p_variable = tsaopy.parameters.FittingParameter(1.0,'a',1,p_prior)
 ```
-When calling the parameter classes, the arguments are like this
+When calling the parameter classes, these are the arguments
 
 1. The value. In fixed parameters this is the value we assume correct and will ALWAYS be used in simulations. In fitting parameters it will be the initial value and will be updated as the MCMC chain runs. We will tipically set the value for fitting parameters as 0, unless it's $x_0$ or $v_0$ for which we may use the first values of the time series. Another exception will be $b_1$, which corresponds to the usual harmonic potential, the linear potential term. We usually assume it's a positive number so we may set it up as 1, or some other positive value that one may infer from the plot. 
 2. The type. The next argument is the parameter type which will always be a string. It's value is 'x0' and 'v0' for $x_0$ and $v_0$ respectively, 'a' for the damping terms, 'b' for the potential terms, 'c' for the mixed terms, and 'f' for the external force parameters. Don't mess these up or you will get tons of errors. 
@@ -165,31 +165,31 @@ Now, back at the problem, our model has 4 parameters, $x_0$, $v_0$, $a_1$, and $
 
 ```
 # priors
-x0_prior = bend.uniform_prior(0.7,1.3)
-v0_prior = bend.uniform_prior(-1.0,1.0)
-a1_prior = bend.uniform_prior(-5.0,5.0)
-b1_prior = bend.uniform_prior(0.0,5.0)
+x0_prior = tsaopy.tools.uniform_prior(0.7,1.3)
+v0_prior = tsaopy.tools.uniform_prior(-1.0,1.0)
+a1_prior = tsaopy.tools.uniform_prior(-5.0,5.0)
+b1_prior = tsaopy.tools.uniform_prior(0.0,5.0)
 ```
 We know that $x_0$ and $v_0$ are roughly 1 and 0 respectively, so we just take an interval centered at the value we think it's correct. For $a_1$ we know nothing so we just make a larger interval centered at 0. And finally for $b_1$ we know that it is possitive so we take an interval starting from 0. Now we can define out parameter objects and we have
 
 ```
 # parameters
-x0 = bend.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
-a1 = bend.FittingParameter(0.0, 'a', 1, a1_prior)
-b1 = bend.FittingParameter(0.5,'b',1,b1_prior)
+x0 = tsaopy.parameters.FittingParameter(1.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.FittingParameter(0.0,'v0',1,v0_prior)
+a1 = tsaopy.parameters.FittingParameter(0.0, 'a', 1, a1_prior)
+b1 = tsaopy.parameters.FittingParameter(0.5,'b',1,b1_prior)
 
 parameters = [x0,v0,a1,b1]
 ```
-notice that I also saved them on a list. So now we have our model, our data, and our priors, and we wraped it as required by `TSAOpy`. The next step is building the `TSAOpy` Model object which will condense everything in a single object. We call it with 
+notice that I also saved them on a list. So now we have our model, our data, and our priors, and we wraped it as required by `TSAOpy`. The next step is building the `tsaopy` model object which will condense everything in a single object. We call it with 
 
 ```
-model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+model1 = tsaopy.models.Model(parameters,data_t,data_x,data_x_sigma)
 ```
 
-This object will have some QOL methods such as `model.plot_measurements()` to plot your data and check that it was correctly loaded, `model.update_initvals(p0)` which allows you to enter a new set of initial values in case you made a mistake, and others which will probably be described in a future API. During the development of the notebooks I will be mentioning the most useful ones anyways. 
+This object will have some QOL methods such as `model.plot_measurements()` to plot your data and check that it was correctly loaded, `model.update_initvals(p0)` which allows you to enter a new set of initial values in case you want to, and others which will probably be described in a future API. During the development of the notebooks I will be mentioning the most useful ones anyways. 
 
-Now once we defined the `TSAOpy` Model, we will use an intrinsic method of this class to build an `emcee` Sampler to use the MCMC method, and start running it. The line will be something like
+Now once we defined the `tsaopy` Model, we will use an intrinsic method of this class to build an `emcee` Sampler to use the MCMC method, and start running it. The line will be something like
 
 ```
 sampler,_,_,_ = model1.setup_sampler(200, 300, 300)
@@ -207,7 +207,7 @@ The only difference between samples and flat samples is that samples stores each
 Now we will make three plots to show the results. The first one will be a corner plot which goes as follows
 
 ```
-bend.cornerplots(flat_samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
 ```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic4.png" width="700">
@@ -217,7 +217,7 @@ Here we get the posterior distribution for each parameter, and plots of the post
 The next two plots will be useful to analyze wether the method has converged or not. The following plot is called the trace plot and will show the value of each parameter for each walker at each time step. 
 
 ```
-bend.traceplots(samples,label_list)
+tsaopy.tools.traceplots(samples,label_list)
 ```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic5.png" width="700">
@@ -228,7 +228,7 @@ The next plot is the autocorrelation plot. It's very simple. If all of the walke
 
 It goes like this
 ```
-bend.autocplots(flat_samples,label_list)
+tsaopy.tools.autocplots(flat_samples,label_list)
 ```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1_pic6.png" width="700">
