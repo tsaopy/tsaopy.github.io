@@ -3,11 +3,9 @@ layout: sidepage
 permalink: /van-der-pol/
 ---
 
-# Notebook 2: A Van der Pol oscillator
-
 Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook2.
 
-### Note: for some reason the page layout wouldn't let me show bigger pictures so you may want to right click and look at full size some of them. 
+# Notebook 2: A Van der Pol oscillator
 
 ## Sketch of the problem
 
