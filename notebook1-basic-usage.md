@@ -3,9 +3,9 @@ layout: sidepage
 permalink: /basic-usage/
 ---
 
-# Notebook 1: Basic Usage
-
 Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook1.
+
+# Notebook 1: Basic Usage
 
 ## Making some data
 
