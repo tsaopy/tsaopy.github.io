@@ -56,7 +56,7 @@ a:hover small {
 }
 
 .wrapper {
-  width:1010px;
+  width:1550px;
   margin:0 auto;
 }
 
@@ -119,14 +119,14 @@ kbd {
 }
 
 header {
-  width:250px;
+  width:300px;
   float:left;
   position:fixed;
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
 rightheader {
-  width:300px;
+  width:350px;
   float:right;
   position:fixed;
   -webkit-font-smoothing:subpixel-antialiased;
@@ -139,11 +139,11 @@ ul.downloads {
   background: #f4f4f4;
   border-radius:5px;
   border:1px solid #e0e0e0;
-  width:270px;
+  width:300px;
 }
 
 .downloads li {
-  width:89px;
+  width:99px;
   float:left;
   border-right:1px solid #e0e0e0;
   height:40px;
@@ -164,7 +164,7 @@ ul.downloads {
   display:block;
   text-align:center;
   padding-top:6px;
-  height:34px;
+  height:40px;
 }
 
 .downloads a:hover, .downloads a:focus {
@@ -193,10 +193,10 @@ strong {
 }
 
 section {
-  width:200px;
+  width:700px;
   float:left;
-  margin-left:280px;
-  margin-right:30px;
+  margin-left:350px;
+  margin-right:50px;
   padding-bottom:50px;
 }
 
@@ -212,7 +212,7 @@ hr {
 }
 
 footer {
-  width:250px;
+  width:300px;
   float:left;
   position:fixed;
   bottom:50px;
@@ -233,7 +233,7 @@ footer {
   }
 
   header {
-    padding-right:280px;
+    padding-right:0px;
   }
 
   section {
