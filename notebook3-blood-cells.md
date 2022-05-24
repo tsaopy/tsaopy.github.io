@@ -1,5 +1,5 @@
 ---
-layout: sidepage
+layout: notebook
 permalink: /blood-cells/
 ---
 
