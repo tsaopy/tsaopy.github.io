@@ -41,3 +41,4 @@ When we set up the MCMC sampler we will have to specify three values, which we c
 These are explained in `emcee` docs but, summing up, walkers are the number of chains that we are running at the same time. So, if we have 10 walkers, at each step we are proposing 10 new samples, if we have 50 walkers we propose 50 new samples at each step and so on. 
 
 Now, burn in and production steps are the number of steps that the sampler will do at burn in stage and production stage, respectively. Ideally, during burn in stage the sampler will be drawing samples while exploring the possible values for your parameters until it finds a region where the likelihood is at a maximum, and we are accepting a lot of the newly drawn samples. In the production stage, assuming the chain has converged, we will simply be drawing samples that will belong to the posterior distribution we were looking for, and we will run it for as long as we need to get the number of samples we want. 
+
