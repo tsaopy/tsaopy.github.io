@@ -9,7 +9,7 @@ permalink: /van-der-pol/
 
 For this next problem we have the following data which I simulated from a Van der Pol model (which in principle we shouldn't know)
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic1.png" width="700">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic1.png" width="700">
 
 From the plots we can't say much more than that the initial conditions are roughly $x_0\approx2$ and $v_0\approx-0.3$. I'm also going to estimate the uncertainties as
 
@@ -25,38 +25,38 @@ We don't know anything about the parameters besides rough estimations of the ini
 
 ```
 # priors
-x0_prior = bend.normal_prior(2.0,5.0)
-v0_prior = bend.normal_prior(-0.3,5.0)
-a1_prior = bend.normal_prior(0.0,10.0)
-a2_prior = bend.normal_prior(0.0,10.0)
-b1_prior = bend.normal_prior(0.0,10.0)
-b2_prior = bend.normal_prior(0.0,10.0)
-c11_prior = bend.normal_prior(0.0,10.0)
-c12_prior = bend.normal_prior(0.0,10.0)
-c21_prior = bend.normal_prior(0.0,10.0)
-c22_prior = bend.normal_prior(0.0,10.0)
+x0_prior = tsaopy.tools.normal_prior(2.0,5.0)
+v0_prior = tsaopy.tools.normal_prior(-0.3,5.0)
+a1_prior = tsaopy.tools.normal_prior(0.0,10.0)
+a2_prior = tsaopy.tools.normal_prior(0.0,10.0)
+b1_prior = tsaopy.tools.normal_prior(0.0,10.0)
+b2_prior = tsaopy.tools.normal_prior(0.0,10.0)
+c11_prior = tsaopy.tools.normal_prior(0.0,10.0)
+c12_prior = tsaopy.tools.normal_prior(0.0,10.0)
+c21_prior = tsaopy.tools.normal_prior(0.0,10.0)
+c22_prior = tsaopy.tools.normal_prior(0.0,10.0)
 ```
 Then I will define the parameter objects and the list of parameters as follows
 
 ```
 # parameters
-x0 = bend.FittingParameter(2.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(-0.3,'v0',1,v0_prior)
-a1 = bend.FittingParameter(0.0, 'a', 1, a1_prior)
-a2 = bend.FittingParameter(0.0, 'a', 2, a2_prior)
-b1 = bend.FittingParameter(0.0,'b',1,b1_prior)
-b2 = bend.FittingParameter(0.0,'b',2,b2_prior)
-c11 = bend.FittingParameter(0.0,'c',(1,1),c11_prior)
-c12 = bend.FittingParameter(0.0,'c',(1,2),c12_prior)
-c21 = bend.FittingParameter(0.0,'c',(2,1),c21_prior)
-c22 = bend.FittingParameter(0.0,'c',(2,2),c22_prior)
+x0 = tsaopy.parameters.FittingParameter(2.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.FittingParameter(-0.3,'v0',1,v0_prior)
+a1 = tsaopy.parameters.FittingParameter(0.0, 'a', 1, a1_prior)
+a2 = tsaopy.parameters.FittingParameter(0.0, 'a', 2, a2_prior)
+b1 = tsaopy.parameters.FittingParameter(0.0,'b',1,b1_prior)
+b2 = tsaopy.parameters.FittingParameter(0.0,'b',2,b2_prior)
+c11 = tsaopy.parameters.FittingParameter(0.0,'c',(1,1),c11_prior)
+c12 = tsaopy.parameters.FittingParameter(0.0,'c',(1,2),c12_prior)
+c21 = tsaopy.parameters.FittingParameter(0.0,'c',(2,1),c21_prior)
+c22 = tsaopy.parameters.FittingParameter(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
-Now we can build our model object. `TSAOpy` comes with a second type of model which also fits parameters to $v(t)$ measurements. We set it up like this
+Now we can build our model object. `tsaopy` comes with a second type of model which also fits parameters to $v(t)$ measurements. We set it up like this
 
 ```
-model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 ```
 
@@ -73,11 +73,11 @@ And after the run is finished the results we care about are
 ```
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 label_list = model2.params_labels
-bend.cornerplots(flat_samples,label_list)
-bend.traceplots(samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
+tsaopy.tools.traceplots(samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic2.png" width="900">
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic3.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic2.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic3.png" width="900">
 
 Notice the following
 1. In the trace plots we are seeing the dreaded problem of many walkers being stuck. Remember that we want each individual walker to be constantly changing, and a group behaviour of oscillating around a value, but we don't want individual walkers to show a straight horizontal line in the trace plot. That means things aren't going anywhere. 
@@ -88,46 +88,46 @@ With that in mind, we are going to try running another chain, longer, and with m
 ```
 sampler,_,_,_ = model2.setup_sampler(1000, 50, 1000)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
-bend.cornerplots(flat_samples,label_list)
-bend.traceplots(samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
+tsaopy.tools.traceplots(samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic4.png" width="900">
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic5.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic4.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic5.png" width="900">
 
 We get more of the same. Let's see what happens if we plot only the last 300 steps
 ```
-bend.cornerplots(flat_samples[1000*700:],label_list)
-bend.traceplots(samples[700:],label_list)
+tsaopy.tools.cornerplots(flat_samples[1000*700:],label_list)
+tsaopy.tools.traceplots(samples[700:],label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic6.png" width="900">
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic7.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic6.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic7.png" width="900">
 
 We can see that many parameters have very sharp peaks around a value, but there are still many walkers that aren't converging there. So now we can try something different. We will build another model, but we will update the priors to use this results. We have
 
 ```
 # priors
-x0_prior = bend.normal_prior(1.9,0.2)
-v0_prior = bend.normal_prior(0.3,0.4)
-a1_prior = bend.normal_prior(-1.9,2.0)
-a2_prior = bend.normal_prior(0.25,0.3)
-b1_prior = bend.normal_prior(0.9,0.3)
-b2_prior = bend.normal_prior(0.0,1.0)
-c11_prior = bend.normal_prior(0.0,1.0)
-c12_prior = bend.normal_prior(0.0,1.0)
-c21_prior = bend.normal_prior(1.6,1.5)
-c22_prior = bend.normal_prior(0.0,1.0)
+x0_prior = tsaopy.tools.normal_prior(1.9,0.2)
+v0_prior = tsaopy.tools.normal_prior(0.3,0.4)
+a1_prior = tsaopy.tools.normal_prior(-1.9,2.0)
+a2_prior = tsaopy.tools.normal_prior(0.25,0.3)
+b1_prior = tsaopy.tools.normal_prior(0.9,0.3)
+b2_prior = tsaopy.tools.normal_prior(0.0,1.0)
+c11_prior = tsaopy.tools.normal_prior(0.0,1.0)
+c12_prior = tsaopy.tools.normal_prior(0.0,1.0)
+c21_prior = tsaopy.tools.normal_prior(1.6,1.5)
+c22_prior = tsaopy.tools.normal_prior(0.0,1.0)
 
 # parameters
-x0 = bend.FittingParameter(1.9,'x0',1,x0_prior)
-v0 = bend.FittingParameter(0.3,'v0',1,v0_prior)
-a1 = bend.FittingParameter(-1.9, 'a', 1, a1_prior)
-a2 = bend.FittingParameter(0.25, 'a', 2, a2_prior)
-b1 = bend.FittingParameter(0.9,'b',1,b1_prior)
-b2 = bend.FittingParameter(0.0,'b',2,b2_prior)
-c11 = bend.FittingParameter(0.0,'c',(1,1),c11_prior)
-c12 = bend.FittingParameter(0.0,'c',(1,2),c12_prior)
-c21 = bend.FittingParameter(1.6,'c',(2,1),c21_prior)
-c22 = bend.FittingParameter(0.0,'c',(2,2),c22_prior)
+x0 = tsaopy.parameters.FittingParameter(1.9,'x0',1,x0_prior)
+v0 = tsaopy.parameters.FittingParameter(0.3,'v0',1,v0_prior)
+a1 = tsaopy.parameters.FittingParameter(-1.9, 'a', 1, a1_prior)
+a2 = tsaopy.parameters.FittingParameter(0.25, 'a', 2, a2_prior)
+b1 = tsaopy.parameters.FittingParameter(0.9,'b',1,b1_prior)
+b2 = tsaopy.parameters.FittingParameter(0.0,'b',2,b2_prior)
+c11 = tsaopy.parameters.FittingParameter(0.0,'c',(1,1),c11_prior)
+c12 = tsaopy.parameters.FittingParameter(0.0,'c',(1,2),c12_prior)
+c21 = tsaopy.parameters.FittingParameter(1.6,'c',(2,1),c21_prior)
+c22 = tsaopy.parameters.FittingParameter(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
@@ -136,17 +136,17 @@ Notice that some parameters had a posterior like $0.07\pm0.15$. A posterior like
 And now we build the model again, and run another chain
 
 ```
-model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(1000, 50, 1000)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
-bend.cornerplots(flat_samples,label_list)
-bend.traceplots(samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
+tsaopy.tools.traceplots(samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic8.png" width="900">
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic9.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic8.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic9.png" width="900">
 
 Now this looks much better. Notice that $b_2$, $c_{11}$, $c_{12}$, and $c_{22}$, are practically 0. Their posteriors all have means close to 0, and have SDs of absolute magnitude bigger than the mean itself, that's why we really can't distinguish this value from 0. So we will try running another chain, this time dropping those parameters. 
 
@@ -155,51 +155,51 @@ I'll reduce walkers a bit since we have simplified the model, and will use a bur
 ```
 parameters = [x0,v0,a1,a2,b1,c21]
 
-model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
-bend.cornerplots(flat_samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic10.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic10.png" width="900">
 
 Now we got a set of posteriors that look from a chain that has indeed converged. The next thing to notice is how badly $a_2$ is correlated to $a_1$ and $b_1$. We also point out that it's mean value went from roughly 0.26 to 0.05, and now it's very similar to 0. Because of this I also want to drop $a_2$ and see what we get. 
 
 ```
 parameters = [x0,v0,a1,b1,c21]
 
-model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
-bend.cornerplots(flat_samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic11.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic11.png" width="900">
 
 Unexpectedly I found some noisy behavior for the $x_0$ and $v_0$ posteriors, so we try again after changing their normal priors for uniform priors centered at the peak. This should work preventing the sampler from accepting outliers. 
 
 ```
-x0_prior = bend.uniform_prior(1.8,2.2)
-v0_prior = bend.uniform_prior(-0.9,0.9)
+x0_prior = tsaopy.tools.uniform_prior(1.8,2.2)
+v0_prior = tsaopy.tools.uniform_prior(-0.9,0.9)
 
-x0 = bend.FittingParameter(2.0,'x0',1,x0_prior)
-v0 = bend.FittingParameter(0.0,'v0',1,v0_prior)
+x0 = tsaopy.parameters.FittingParameter(2.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.FittingParameter(0.0,'v0',1,v0_prior)
 
 parameters = [x0,v0,a1,b1,c21]
 
-model2 = bend.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
 
-bend.cornerplots(flat_samples,label_list)
+tsaopy.tools.cornerplots(flat_samples,label_list)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic12.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic12.png" width="900">
 
 Finally we get clean corner plots without outliers, and single well defined peaks. We plot the solution we got with
 
@@ -207,7 +207,7 @@ Finally we get clean corner plots without outliers, and single well defined peak
 solutions = [np.mean(flat_samples[:,_]) for _ in range(len(parameters))]
 model2.plot_simulation(solutions)
 ```
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2_pic13.png" width="900">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb2/nb2_pic13.png" width="900">
 
 ### Some takeaways
 
