@@ -35,12 +35,12 @@ h3, h4, h5, h6 {
 }
 
 a {
-  color:#267CB9;
+  color:#9064b3;
   text-decoration:none;
 }
 
 a:hover, a:focus {
-  color:#069;
+  color:#6f4391;
   font-weight: bold;
 }
 
@@ -56,7 +56,7 @@ a:hover small {
 }
 
 .wrapper {
-  width:860px;
+  width:1470px;
   margin:0 auto;
 }
 
@@ -125,6 +125,13 @@ header {
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
+rightheader {
+  width:330px;
+  float:right;
+  position:fixed;
+  -webkit-font-smoothing:subpixel-antialiased;
+}
+
 ul.downloads {
   list-style:none;
   height:40px;
@@ -186,8 +193,10 @@ strong {
 }
 
 section {
-  width:500px;
-  float:right;
+  width:700px;
+  float:left;
+  margin-left:320px;
+  margin-right:50px;
   padding-bottom:50px;
 }
 
