@@ -3,8 +3,6 @@ layout: sidepage
 permalink: /initvals-optimization/
 ---
 
-Remember that files summing up the work on this notebook can be found at https://github.com/tsaopy/tsaopy/tree/main/notebook2.
-
 # Notebook 4: Initial values optimization
 
 On this notebook I want to show an extra feature that `TSAOpy` has, which is finding good initial values for the MCMC chain by using an exteral optimizer. This will work best with models that you know are correct[^1] (or good enough) and you want to quickly fit the parameters to the data. To do the demonstration I simulated the following ODE which I found very interesting
