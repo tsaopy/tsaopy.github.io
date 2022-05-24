@@ -32,9 +32,9 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. 
-
 You will need some basic Python dependencies like `sys`, `math`, `numpy`, and `matplotlib`. You will also need the more specific dependencies `multiprocessing`, `emcee`, and `corner`. You may install this in the Python console using `pip install` or with an enviroment manager such as Anaconda.
+
+The next step is to make sure `gfortran` is installed in your PC. If it's not, then `sudo apt-get install gfortran` should do the trick. 
 
 After all this is done you may download the library's files, and then run the 'f2py' script. This will build a module used by the backend files. It should take a few seconds and if everything worked a new file should have been created in the working directory. 
 
