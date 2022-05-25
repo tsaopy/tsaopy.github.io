@@ -10,7 +10,7 @@ Time Series by Anharmonic Oscillators is a Python library developed to fit user 
 
 Let's assume we have a set of $(t,x(t))$ points making up a time series such as the following
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="700">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="600">
 
 This library will allow you to model the dynamics of the $x(t)$ function as satisfying a differential equation of the form
 
