@@ -36,9 +36,11 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 - `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have `gfortran` installed. If it's not, then `sudo apt-get install gfortran` should do the trick. 
 
-- After making sure that you have all required Python dependencies, and that the Fortran compiler is installed, you may download `tsaopy` files. Once you are all set up go to the installation directory and head over the 'tsaopy' folder, there's a Python script inside named 'integrator_f2py.py', you have to run this script to build the Fortran module that the backend needs. If everything is in order a new file (a CPython module to be precise) should have been created.
+- Now you can install `tsaopy` using `pip install tsaopy`. 
 
 At this point `tsaopy` should be working, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works and begin fitting some models. 
+
+### Note: the first time you import TSAOpy the backend will build some necessary modules and run other auxiliary scripts. If you run into any trouble please let me know by opening an issue.
 
 ## Referencing TSAOpy
 
