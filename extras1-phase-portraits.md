@@ -11,4 +11,4 @@ So I picked the original ODE and then approximated it using two different scheme
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex1/pic.png" width="700">
 
-Notice that the 3rd order `tsaopy` model gives a rough approximation of the phase portrait of the original ODE, however in the 5th order model it looks almost identical.
+Notice that in this region of the phase space the 3rd order `tsaopy` model gives a rough approximation of the portrait of the original ODE, however in the 5th order model it looks almost identical.
