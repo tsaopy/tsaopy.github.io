@@ -50,7 +50,7 @@ We have a Zenodo DOI set up for the repository for the time being
 
 And this is [my personal ORCID](https://orcid.org/0000-0002-1007-8229)
 
-A possible Bibtex citation is
+I recommend the following Bibtex citation
 
 ```
 @software{tsaopy,
