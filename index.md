@@ -59,7 +59,7 @@ A possible Bibtex citation is
   month        = may,
   year         = 2022,
   publisher    = {Zenodo},
-  version      = {v0.1.0-alpha},
+  version      = {v0.0.2a4},
   doi          = {10.5281/zenodo.6569849},
   url          = {https://doi.org/10.5281/zenodo.6569849}
 }
