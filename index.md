@@ -32,7 +32,7 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 - In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-- You will need the following Python dependencies`numpy`, `matplotlib`, `emcee`, and `corner`. 
+- You will need the Python dependencies `numpy`, `matplotlib`, `emcee`, and `corner`. 
 
 - `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have `gfortran` installed. If it's not, then `sudo apt-get install gfortran` should do the trick. 
 
