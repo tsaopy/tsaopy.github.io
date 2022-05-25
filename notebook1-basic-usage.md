@@ -129,6 +129,7 @@ plt.figure(figsize=(7, 5), dpi=150)
 plt.scatter(data_t, data_x, color = 'tab:red', s=0.5, label='x(t)')
 plt.legend()
 plt.show()
+```
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1/nb1_pic3.png" width="700">
 
