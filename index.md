@@ -40,7 +40,9 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 At this point `tsaopy` should be working, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works and begin fitting some models. 
 
-### Note: the first time you import TSAOpy the backend will build some necessary modules and run other auxiliary scripts. If you run into any trouble please let me know by opening an issue.
+### Note 1: the first time you import TSAOpy the backend will build some necessary modules and run some other auxiliary scripts. If have any problems please let me know by opening an issue.
+
+### Note 2: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you just install things in a new conda enviroment. 
 
 ## Referencing TSAOpy
 
