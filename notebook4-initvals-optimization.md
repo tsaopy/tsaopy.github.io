@@ -7,7 +7,7 @@ permalink: /initvals-optimization/
 
 On this notebook I want to show an extra feature that `tsaopy` has, which is finding good initial values for the MCMC chain by using an exteral optimizer. This will work best with models that you know are correct[^1] (or good enough) and you want to quickly fit the parameters to the data. To do the demonstration I simulated the following ODE which I found very interesting
 
-[^1]: here's the problem, optimizers aren't sentient enough to be able to tell which parameters in your model are relevant or not (although MCMC is a great tool for you to figure that out), so if you just drop a bunch of parameters that may not be relevent, the optimizer may easily fall for problems like getting stuck due to correlations, getting stuck at local minimums, give you a solution that doesn't work anymore once you drop unnecessary terms, etc. 
+[^1]: the problem is that optimizers aren't sentient enough to be able to tell which parameters in the model are relevant or not (although MCMC is a great tool for you to figure that out), so if you just drop a bunch of parameters that may not be relevent, the optimizer may easily fall for problems like getting stuck due to correlations, getting stuck at local minimums, give you a solution that doesn't work anymore once you drop unnecessary terms, etc. 
 
 $$ \ddot{x} -k \sin{(x)}\cos{(x)} + g \sin{(x)} = 0 $$
 
