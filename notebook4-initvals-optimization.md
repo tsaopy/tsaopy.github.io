@@ -35,15 +35,15 @@ b1_prior = tsaopy.tools.normal_prior(0.0,10.0)
 b3_prior = tsaopy.tools.normal_prior(0.0,10.0)
     
 # parameters
-x0 = tsaopy.parameters.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.5,'v0',1,v0_prior)
-b1 = tsaopy.parameters.FittingParameter(0.0,'b',1,b1_prior)
-b3 = tsaopy.parameters.FittingParameter(0.0,'b',3,b3_prior)
+x0 = tsaopy.parameters.Fitting(1.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.5,'v0',1,v0_prior)
+b1 = tsaopy.parameters.Fitting(0.0,'b',1,b1_prior)
+b3 = tsaopy.parameters.Fitting(0.0,'b',3,b3_prior)
 
 parameters = [x0,v0,b1,b3]
 
 # model 2
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 ```
 
@@ -74,16 +74,16 @@ b1_prior = tsaopy.tools.normal_prior(-0.32,0.2)
 b3_prior = tsaopy.tools.normal_prior(0.26,0.2)
     
 # parameters
-x0 = tsaopy.parameters.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.44,'v0',1,v0_prior)
-b1 = tsaopy.parameters.FittingParameter(-0.32,'b',1,b1_prior)
-b3 = tsaopy.parameters.FittingParameter(0.26,'b',3,b3_prior)
+x0 = tsaopy.parameters.Fitting(1.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.44,'v0',1,v0_prior)
+b1 = tsaopy.parameters.Fitting(-0.32,'b',1,b1_prior)
+b3 = tsaopy.parameters.Fitting(0.26,'b',3,b3_prior)
 
 parameters = [x0,v0,b1,b3]
 
 # model 2
 
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(300, 500, 500)
@@ -108,15 +108,15 @@ b1_prior = tsaopy.tools.normal_prior(0.0,10.0)
 b3_prior = tsaopy.tools.normal_prior(0.0,10.0)
     
 # parameters
-x0 = tsaopy.parameters.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.5,'v0',1,v0_prior)
-b1 = tsaopy.parameters.FittingParameter(0.0,'b',1,b1_prior)
-b3 = tsaopy.parameters.FittingParameter(0.0,'b',3,b3_prior)
+x0 = tsaopy.parameters.Fitting(1.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.5,'v0',1,v0_prior)
+b1 = tsaopy.parameters.Fitting(0.0,'b',1,b1_prior)
+b3 = tsaopy.parameters.Fitting(0.0,'b',3,b3_prior)
 
 parameters = [x0,v0,b1,b3]
 
 # model 2
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 ```
 

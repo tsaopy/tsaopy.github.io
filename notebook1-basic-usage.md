@@ -141,14 +141,14 @@ $$ \ddot{x} + a_1\dot{x} + b_1x = 0\quad; \qquad x_0=1 \qquad v_0=0 $$
 
 We ended up with the original model that we used for the simulation, and some readers may say "well it's obviously going to work if you know the right model beforehand and choose that one", and while this is true, it is also true that we didn't pick this model because we knew the solution beforehand, but because it is the simplest model that one can infer from the plot. If you are still unconvinced by this, hang on, we'll see some more examples later on that may change your mind. That being said, let's move on.
 
-The next thing we need is to define our parameters, for that we will be defining some parameter objects implemented speciffically in `tsaopy`. `tsaopy` works with two parameter classes `FixedParameter` and `FittingParameter`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a type, and an index. I'll talk more about those last two later on. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter. 
+The next thing we need is to define our parameters, for that we will be defining some parameter objects implemented speciffically in `tsaopy`. `tsaopy` works with two parameter classes `Fixed` and `Fitting`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a type, and an index. I'll talk more about those last two later on. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter. 
 
 Defining parameters will be something like this
 
 ```
 import tsaopy
-p_fixed = tsaopy.parameters.FixedParameter(1.0,'a',1)
-p_variable = tsaopy.parameters.FittingParameter(1.0,'a',1,p_prior)
+p_fixed = tsaopy.parameters.Fixed(1.0,'a',1)
+p_variable = tsaopy.parameters.Fitting(1.0,'a',1,p_prior)
 ```
 When calling the parameter classes, these are the arguments
 
@@ -175,17 +175,17 @@ We know that $x_0$ and $v_0$ are roughly 1 and 0 respectively, so we just take a
 
 ```
 # parameters
-x0 = tsaopy.parameters.FittingParameter(1.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.0,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(0.0, 'a', 1, a1_prior)
-b1 = tsaopy.parameters.FittingParameter(0.5,'b',1,b1_prior)
+x0 = tsaopy.parameters.Fitting(1.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.0,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(0.0, 'a', 1, a1_prior)
+b1 = tsaopy.parameters.Fitting(0.5,'b',1,b1_prior)
 
 parameters = [x0,v0,a1,b1]
 ```
 notice that I also saved them on a list. So now we have our model, our data, and our priors, and we wraped it as required by `tsaopy`. The next step is building the `tsaopy` model object which will condense everything in a single object. We call it with 
 
 ```
-model1 = tsaopy.models.Model(parameters,data_t,data_x,data_x_sigma)
+model1 = tsaopy.models.PModel(parameters,data_t,data_x,data_x_sigma)
 ```
 
 This object will have some QOL methods such as `model.plot_measurements()` to plot your data and check that it was correctly loaded, `model.update_initvals(p0)` which allows you to enter a new set of initial values in case you want to, and others which will probably be described in a future API. During the development of the notebooks I will be mentioning the most useful ones anyways. 
@@ -251,5 +251,5 @@ model1.plot_simulation(solutions)
 2. Run more chains with different values for the data uncertainty and check what you get.
 3. Run more chains with different sets of fixed initial conditions and check what you get. 
 4. Try reducing the length of the burn in phase to find the minimum length for which the chain has converged.
-5. Run a chain, and use the results as priors and initial values for a new chain (you should use the bend.normal_prior(x0,sigma) object for the new priors). Check that this will allow you to run a shorter burn in phase in the new chain.
+5. Run a chain, and use the results as priors and initial values for a new chain (you should use the tsaopy.tools.normal_prior(x0,sigma) object for the new priors). Check that this will allow you to run a shorter burn in phase in the new chain.
 6. Run a chain with more free parameters and check the corner plots for correlations. Is the chain converging as easily as before? What value are the free parameters converging to? Note: I added the $a_2$ and $b_2$ terms and with 200 walkers now it takes roughly 500 steps for the chain to converge. 

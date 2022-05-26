@@ -35,13 +35,13 @@ p_prior = tsaopy.tools.uniform_prior(-np.pi,np.pi)
 And then we set up the parameters as
 
 ```
-x0 = tsaopy.parameters.FittingParameter(-100.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(100.0,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(0.0, 'a', 1, a1_prior)
-b1 = tsaopy.parameters.FittingParameter(0.0,'b',1,b1_prior)
-f = tsaopy.parameters.FittingParameter(5000.0,'f',1,f_prior)
-w = tsaopy.parameters.FittingParameter(10.0,'f',2,w_prior)
-p = tsaopy.parameters.FittingParameter(0.0,'f',3,p_prior)
+x0 = tsaopy.parameters.Fitting(-100.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(100.0,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(0.0, 'a', 1, a1_prior)
+b1 = tsaopy.parameters.Fitting(0.0,'b',1,b1_prior)
+f = tsaopy.parameters.Fitting(5000.0,'f',1,f_prior)
+w = tsaopy.parameters.Fitting(10.0,'f',2,w_prior)
+p = tsaopy.parameters.Fitting(0.0,'f',3,p_prior)
 
 parameters = [x0,v0,a1,b1,f,w,p]
 ```
@@ -49,7 +49,7 @@ parameters = [x0,v0,a1,b1,f,w,p]
 Now I'll set up the model and start a chain. We have 7 parameters and very noisy data so I will start with a number of walkers on the larger side. As usual, we don't have a clue of what to expect from the chain convergence rate so it's better to use a short burn in so we can see what happens
 
 ```
-model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+model1 = tsaopy.models.PModel(parameters,data_t,data_x,data_x_sigma)
 sampler,_,_,_ = model1.setup_sampler(500, 100, 1000)
 
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
@@ -78,18 +78,18 @@ f_prior = tsaopy.tools.uniform_prior(0.0,50000.0)
 w_prior = tsaopy.tools.normal_prior(9.5,1.0)
 p_prior = tsaopy.tools.normal_prior(0.75,0.3)
 
-x0 = tsaopy.parameters.FittingParameter(-160.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(1550.0,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(2.0, 'a', 1, a1_prior)
-b1 = tsaopy.parameters.FittingParameter(90.0,'b',1,b1_prior)
-f = tsaopy.parameters.FittingParameter(5900.0,'f',1,f_prior)
-w = tsaopy.parameters.FittingParameter(9.4,'f',2,w_prior)
-p = tsaopy.parameters.FittingParameter(0.75,'f',3,p_prior)
+x0 = tsaopy.parameters.Fitting(-160.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(1550.0,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(2.0, 'a', 1, a1_prior)
+b1 = tsaopy.parameters.Fitting(90.0,'b',1,b1_prior)
+f = tsaopy.parameters.Fitting(5900.0,'f',1,f_prior)
+w = tsaopy.parameters.Fitting(9.4,'f',2,w_prior)
+p = tsaopy.parameters.Fitting(0.75,'f',3,p_prior)
 
 parameters = [x0,v0,a1,b1,f,w,p]
 
 # model
-model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+model1 = tsaopy.models.PModel(parameters,data_t,data_x,data_x_sigma)
 sampler,_,_,_ = model1.setup_sampler(500, 1000, 500)
 
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
@@ -111,18 +111,18 @@ f_prior = tsaopy.tools.normal_prior(12000.0,1000.0)
 w_prior = tsaopy.tools.normal_prior(9.40,0.01)
 p_prior = tsaopy.tools.normal_prior(0.63,0.31)
 
-x0 = tsaopy.parameters.FittingParameter(-148.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(1920.0,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(6.0, 'a', 1, a1_prior)
-b1 = tsaopy.parameters.FittingParameter(90.0,'b',1,b1_prior)
-f = tsaopy.parameters.FittingParameter(12000.0,'f',1,f_prior)
-w = tsaopy.parameters.FittingParameter(9.40,'f',2,w_prior)
-p = tsaopy.parameters.FittingParameter(0.63,'f',3,p_prior)
+x0 = tsaopy.parameters.Fitting(-148.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(1920.0,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(6.0, 'a', 1, a1_prior)
+b1 = tsaopy.parameters.Fitting(90.0,'b',1,b1_prior)
+f = tsaopy.parameters.Fitting(12000.0,'f',1,f_prior)
+w = tsaopy.parameters.Fitting(9.40,'f',2,w_prior)
+p = tsaopy.parameters.Fitting(0.63,'f',3,p_prior)
 
 parameters = [x0,v0,a1,b1,f,w,p]
 
 # model
-model1 = bend.Model(parameters,data_t,data_x,data_x_sigma)
+model1 = tsaopy.models.PModel(parameters,data_t,data_x,data_x_sigma)
 sampler,_,_,_ = model1.setup_sampler(500, 1500, 500)
 
 samples, flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
@@ -136,7 +136,7 @@ And we get a good final result for the classical driven oscillator model. Let's 
 
 ```
 tsaopy.tools.traceplots(samples,label_list)
-bend.autocplots(flat_samples,label_list)
+tsaopy.tools.autocplots(flat_samples,label_list)
 ```
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3/nb3_pic7.png" width="900">
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb3/nb3_pic8.png" width="900">

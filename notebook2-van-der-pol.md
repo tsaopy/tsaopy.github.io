@@ -40,23 +40,23 @@ Then I will define the parameter objects and the list of parameters as follows
 
 ```
 # parameters
-x0 = tsaopy.parameters.FittingParameter(2.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(-0.3,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(0.0, 'a', 1, a1_prior)
-a2 = tsaopy.parameters.FittingParameter(0.0, 'a', 2, a2_prior)
-b1 = tsaopy.parameters.FittingParameter(0.0,'b',1,b1_prior)
-b2 = tsaopy.parameters.FittingParameter(0.0,'b',2,b2_prior)
-c11 = tsaopy.parameters.FittingParameter(0.0,'c',(1,1),c11_prior)
-c12 = tsaopy.parameters.FittingParameter(0.0,'c',(1,2),c12_prior)
-c21 = tsaopy.parameters.FittingParameter(0.0,'c',(2,1),c21_prior)
-c22 = tsaopy.parameters.FittingParameter(0.0,'c',(2,2),c22_prior)
+x0 = tsaopy.parameters.Fitting(2.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(-0.3,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(0.0, 'a', 1, a1_prior)
+a2 = tsaopy.parameters.Fitting(0.0, 'a', 2, a2_prior)
+b1 = tsaopy.parameters.Fitting(0.0,'b',1,b1_prior)
+b2 = tsaopy.parameters.Fitting(0.0,'b',2,b2_prior)
+c11 = tsaopy.parameters.Fitting(0.0,'c',(1,1),c11_prior)
+c12 = tsaopy.parameters.Fitting(0.0,'c',(1,2),c12_prior)
+c21 = tsaopy.parameters.Fitting(0.0,'c',(2,1),c21_prior)
+c22 = tsaopy.parameters.Fitting(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
 Now we can build our model object. `tsaopy` comes with a second type of model which also fits parameters to $v(t)$ measurements. We set it up like this
 
 ```
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 ```
 
@@ -118,16 +118,16 @@ c21_prior = tsaopy.tools.normal_prior(1.6,1.5)
 c22_prior = tsaopy.tools.normal_prior(0.0,1.0)
 
 # parameters
-x0 = tsaopy.parameters.FittingParameter(1.9,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.3,'v0',1,v0_prior)
-a1 = tsaopy.parameters.FittingParameter(-1.9, 'a', 1, a1_prior)
-a2 = tsaopy.parameters.FittingParameter(0.25, 'a', 2, a2_prior)
-b1 = tsaopy.parameters.FittingParameter(0.9,'b',1,b1_prior)
-b2 = tsaopy.parameters.FittingParameter(0.0,'b',2,b2_prior)
-c11 = tsaopy.parameters.FittingParameter(0.0,'c',(1,1),c11_prior)
-c12 = tsaopy.parameters.FittingParameter(0.0,'c',(1,2),c12_prior)
-c21 = tsaopy.parameters.FittingParameter(1.6,'c',(2,1),c21_prior)
-c22 = tsaopy.parameters.FittingParameter(0.0,'c',(2,2),c22_prior)
+x0 = tsaopy.parameters.Fitting(1.9,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.3,'v0',1,v0_prior)
+a1 = tsaopy.parameters.Fitting(-1.9, 'a', 1, a1_prior)
+a2 = tsaopy.parameters.Fitting(0.25, 'a', 2, a2_prior)
+b1 = tsaopy.parameters.Fitting(0.9,'b',1,b1_prior)
+b2 = tsaopy.parameters.Fitting(0.0,'b',2,b2_prior)
+c11 = tsaopy.parameters.Fitting(0.0,'c',(1,1),c11_prior)
+c12 = tsaopy.parameters.Fitting(0.0,'c',(1,2),c12_prior)
+c21 = tsaopy.parameters.Fitting(1.6,'c',(2,1),c21_prior)
+c22 = tsaopy.parameters.Fitting(0.0,'c',(2,2),c22_prior)
 
 parameters = [x0,v0,a1,a2,b1,b2,c11,c12,c21,c22]
 ```
@@ -136,7 +136,7 @@ Notice that some parameters had a posterior like $0.07\pm0.15$. A posterior like
 And now we build the model again, and run another chain
 
 ```
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(1000, 50, 1000)
@@ -155,7 +155,7 @@ I'll reduce walkers a bit since we have simplified the model, and will use a bur
 ```
 parameters = [x0,v0,a1,a2,b1,c21]
 
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
@@ -170,7 +170,7 @@ Now we got a set of posteriors that look from a chain that has indeed converged.
 ```
 parameters = [x0,v0,a1,b1,c21]
 
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
@@ -186,12 +186,12 @@ Unexpectedly I found some noisy behavior for the $x_0$ and $v_0$ posteriors, so 
 x0_prior = tsaopy.tools.uniform_prior(1.8,2.2)
 v0_prior = tsaopy.tools.uniform_prior(-0.9,0.9)
 
-x0 = tsaopy.parameters.FittingParameter(2.0,'x0',1,x0_prior)
-v0 = tsaopy.parameters.FittingParameter(0.0,'v0',1,v0_prior)
+x0 = tsaopy.parameters.Fitting(2.0,'x0',1,x0_prior)
+v0 = tsaopy.parameters.Fitting(0.0,'v0',1,v0_prior)
 
 parameters = [x0,v0,a1,b1,c21]
 
-model2 = tsaopy.models.VelocityModel(parameters,data_t,data_x,data_v,
+model2 = tsaopy.models.PVModel(parameters,data_t,data_x,data_v,
                             data_x_sigma,data_v_sigma)
 
 sampler,_,_,_ = model2.setup_sampler(500, 1000, 500)
