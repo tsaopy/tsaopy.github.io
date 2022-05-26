@@ -62,7 +62,7 @@ tsaopy.tools.traceplots(samples,label_list)
 
 And then say "well it's taking roughly 300 steps to start converging to some peaks which now we know their value"[^2]
 
-[^2]: remember that the easiest way to calculate those peaks is dropping the samples from the first 300 steps and then taking the means of the remaning samples, like this `peaks = [np.mean(flat_samples[300*300:,_]) for _ in range(len(parameters))]`.
+[^2]: remember that the red line in a corner plot marks the mean, not the mode. The peak is centered at the mode.
 
 So we update priors and start a new chain like this 
 
