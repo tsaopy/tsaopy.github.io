@@ -62,7 +62,7 @@ tsaopy.tools.traceplots(samples,label_list)
 
 And then say "well it's taking roughly 300 steps to start converging to some peaks which now we know their value"[^2]
 
-[^2]: remember that the red line in a corner plot marks the mean, not the mode. The peak is centered at the mode.
+[^2]: remember that the red line in a corner plot marks the mean, and the peak is centered at the mode which is not necessarily the same as the mean.
 
 So we update priors and start a new chain like this 
 
