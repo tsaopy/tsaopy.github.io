@@ -46,13 +46,13 @@ If you have any problems during installation please make an issue in the Github 
 
 ### Test installation
 
-After running `pip install tsaopy` try opening a Python console and run `import tsaopy`. It may take a few seconds the first time you import `tsaopy` (some backend modules are built the first time is imported). If you get any errors then something went wrong and you may report the issue.
+**Remember to check that you are running the console in the same enviroment that you installed TSAOpy.**
 
-REMEMBER TO CHECK YOU ARE RUNNING THE CONSOLE ON THE SAME ENVIROMENT THAT YOU INSTALLED TSAOpy.
+After running `pip install tsaopy` try opening a Python console and run `import tsaopy`. It may take a few seconds (some backend modules are built the first time you import `tsaopy`). If you get any errors then something went wrong and you may report the issue.
 
 If you can import `tsaopy` succesfully try running the basic test script. Go to the project's repository test folder and either
 
-- Download 'basictest.py' and run in from the Linux terminal with `python basictest.py`, or
+- Download 'basictest.py' and run it from the Linux terminal with `python basictest.py`, or
 - Copy the contents of the file and run them on a Python console.
 
 If everything is working properly you should get something like this displayed
