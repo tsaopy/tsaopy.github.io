@@ -2,7 +2,7 @@
 layout: homepage
 ---
 
-# Welcome to TSAOpy
+# Welcome to TSAOpy's site
 
 Time Series by Anharmonic Oscillators is a Python library developed to fit user defined differential equations (with the form of anharmonic oscillators) to time series data that show oscillating behaviour. 
 
@@ -10,7 +10,7 @@ Time Series by Anharmonic Oscillators is a Python library developed to fit user 
 
 Let's assume we have a set of $(t,x(t))$ points making up a time series such as the following
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="600">
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/ex_timeseries.png" width="500">
 
 This library will allow you to model the dynamics of the $x(t)$ function as satisfying a differential equation of the form
 
@@ -40,9 +40,24 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 At this point `tsaopy` should be working, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works and begin fitting some models. 
 
-### Note 1: the first time you import TSAOpy the backend will build some necessary modules and run some other auxiliary scripts. If you have any problems please let me know by opening an issue.
+### Note: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you just install things in a new conda enviroment, and all the dependencies including Python itself are up to date. 
 
-### Note 2: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you just install things in a new conda enviroment. 
+If you have any problems during installation please make an issue in the Github repo with all the information you can gather.
+
+### Test installation
+
+After running `pip install tsaopy` try opening a Python console and run `import tsaopy`. It may take a few seconds the first time you import `tsaopy` (some backend modules are built the first time is imported). If you get any errors then something went wrong and you may report the issue.
+
+REMEMBER TO CHECK YOU ARE RUNNING THE CONSOLE ON THE SAME ENVIROMENT THAT YOU INSTALLED TSAOpy.
+
+If you can import `tsaopy` succesfully try running the basic test script. Go to the project's repository test folder and either
+
+- Download 'basictest.py' and run in from the Linux terminal with `python basictest.py`, or
+- Copy the contents of the file and run them on a Python console.
+
+If everything is working properly you should get something like this displayed
+
+<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/mainpage_sample_pic.png" width="400">
 
 ## Referencing TSAOpy
 
