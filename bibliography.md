@@ -5,6 +5,8 @@ permalink: /bibliography/
 
 # Bibliography & other sources
 
+Keep in mind that this is a work in progress and the list may be modified.
+
 ## ODEs, Non Linear Dynamics, Anharmonic Oscillators
 
 - B. R. Smith Jr., "The quadratically damped oscillator: A case study of a non-linear equation of motion", American Journal of Physics 80, 816-824 (2012) https://doi.org/10.1119/1.4729440
