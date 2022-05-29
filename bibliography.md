@@ -17,6 +17,8 @@ Keep in mind that this is a work in progress and the list may be modified.
 
 - Kovacic, I., & Brennan, M. J. (Eds.). (2011). The Duffing Equation. Wiley. https://doi.org/10.1002/9780470977859
 
+- Kouznetsov, D., Bisson, J.-F., Li, J., & Ueda, K. (2007). Self-pulsing laser as oscillator Toda: approximations through elementary functions. In Journal of Physics A: Mathematical and Theoretical (Vol. 40, Issue 9, pp. 2107–2124). IOP Publishing. https://doi.org/10.1088/1751-8113/40/9/016 
+
 - Oyedeji, K. (2005). An analysis of a nonlinear elastic force van der Pol oscillator equation. Journal of Sound and Vibration, 281(1-2), 417–422. doi:10.1016/j.jsv.2004.03.040
 
 ## ODEs and Non Linear Dynamics generalities
