@@ -23,6 +23,10 @@ Keep in mind that this is a work in progress and the list may be modified.
 
 - Jordan, D., & Smith, P. (2007). Nonlinear ordinary differential equations (4th ed.). Oxford University Press.
 
+## Time Series
+
+- Schelter, B., Winterhalder, M., & Timmer, J. (Eds.). (2006). Handbook of Time Series Analysis. Wiley. https://doi.org/10.1002/9783527609970 
+
 ## MCMC and Bayesian Inference
 
 - The official `emcee` documentation. [Link](https://emcee.readthedocs.io/)
