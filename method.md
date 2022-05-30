@@ -15,7 +15,9 @@ We also proposed that the $x(t)$ function satisfies a differential equation of t
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
 
-Now I'll make some remarks about the models.
+subject to the initial conditions $x(t=0)=x_0$ and $v(t=0)=v_0$. One think to also keep in mind is that here $x(t)$ is not the actual position of the oscillator, but rather it's distance to the origin of coordinates. So if the equilibrium position is not equal to zero then this approach will fail. In order to fix that we assume that we can switch between **position** from the lab frame of reference and **distance to the equilibrium position**, as if you set the zero at the equilibrium point, as $X(t) = X_{eq} + x(t)$.
+
+Now we'll make some remarks about the models.
 
 The terms proportional to $x$ can be associated with the potential energy, we may think of them as a polynomial expansion of the force caused by the potential, as if the potential has a series expansion and we truncated it at some degree.
 
@@ -41,4 +43,3 @@ When we set up the MCMC sampler we will have to specify three values, which we c
 These are explained in `emcee` docs but, summing up, walkers are the number of chains that we are running at the same time. So, if we have 10 walkers, at each step we are proposing 10 new samples, if we have 50 walkers we propose 50 new samples at each step and so on. 
 
 Now, burn in and production steps are the number of steps that the sampler will do at burn in stage and production stage, respectively. Ideally, during burn in stage the sampler will be drawing samples while exploring the possible values for your parameters until it finds a region where the likelihood is at a maximum, and we are accepting a lot of the newly drawn samples. In the production stage, assuming the chain has converged, we will simply be drawing samples that will belong to the posterior distribution we were looking for, and we will run it for as long as we need to get the number of samples we want. 
-
