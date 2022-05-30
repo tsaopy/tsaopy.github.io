@@ -108,11 +108,11 @@ Now we are set up and we can save the data for testing `tsaopy`. I'll do it with
 np.savetxt('experiment_data.txt', [[t[_], x[_], v[_]] for _ in range(n_out)])
 ```
 
-## Fitting the model with `TSAOpy`
+## Fitting the model with TSAOpy
 
 Now let's forget about everything we did above. Imagine you just finished running some experiment, and you ended up with some time series that now you want to analyze. 
 
-The first thing we need to do is to load the data. Ideally your data will be a `numpy` array, however if you want to push your luck native lists and tuples should work. To load the data I'm using 
+The first thing we need to do is to load the data. Ideally your data will be a `numpy` array, however native lists and tuples should work. To load the data I'm using 
 
 ```
 import numpy as np
@@ -133,15 +133,13 @@ plt.show()
 
 <img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/nb1/nb1_pic3.png" width="700">
 
-Now we need to know the uncertainty of our $x$ measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way to do it in your lab, save a unique value of uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for all measurements or an array with a unique value for each point. In this case we will just use a rough estimate for all points and just define `data_x_sigma = 0.15`. What I tipically do is inspecting the plot, go to a zone where there are a lot of points gathered, and see how much the value of $x$ varies in a small $\Delta t$ interval.
+Now we need to know the uncertainty of our $x$ measurements. You have two options, the simplest one is just use one value for the entire set of measurements. The other option is, if you have some way to do it in your lab, save a unique value of uncertainty for each point. So you will define an uncertainty variable that is either a number representative of the uncertainty for all measurements or an array with a unique value for each point. In this case we will just use a rough estimate for all points and just define `data_x_sigma = 0.15`.
 
 Before we move ahead we have to decide which will be our model. Inspecting the measurement plots one sees that we have something that looks like a sinusoidal wave whose amplitud decays over time. We can also see from the graph that $x_0\approx 1$, and that since we are near an amplitude maximum near the start, then $v_0\approx 0$. Naturally in this case we will be proposing
 
 $$ \ddot{x} + a_1\dot{x} + b_1x = 0\quad; \qquad x_0=1 \qquad v_0=0 $$ 
 
-We ended up with the original model that we used for the simulation, and some readers may say "well it's obviously going to work if you know the right model beforehand and choose that one", and while this is true, it is also true that we didn't pick this model because we knew the solution beforehand, but because it is the simplest model that one can infer from the plot. If you are still unconvinced by this, hang on, we'll see some more examples later on that may change your mind. That being said, let's move on.
-
-The next thing we need is to define our parameters, for that we will be defining some parameter objects implemented speciffically in `tsaopy`. `tsaopy` works with two parameter classes `Fixed` and `Fitting`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a type, and an index. I'll talk more about those last two later on. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter. 
+The next thing we need is to define our `tsaopy` parameter objects. `tsaopy` works with two parameter classes `Fixed` and `Fitting`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a ptype, and an index. I'll talk more about those last two later on. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter. 
 
 Defining parameters will be something like this
 
@@ -152,12 +150,12 @@ p_variable = tsaopy.parameters.Fitting(1.0,'a',1,p_prior)
 ```
 When calling the parameter classes, these are the arguments
 
-1. The value. In fixed parameters this is the value we assume correct and will ALWAYS be used in simulations. In fitting parameters it will be the initial value and will be updated as the MCMC chain runs. We will tipically set the value for fitting parameters as 0, unless it's $x_0$ or $v_0$ for which we may use the first values of the time series. Another exception will be $b_1$, which corresponds to the usual harmonic potential, the linear potential term. We usually assume it's a positive number so we may set it up as 1, or some other positive value that one may infer from the plot. 
-2. The type. The next argument is the parameter type which will always be a string. It's value is 'x0' and 'v0' for $x_0$ and $v_0$ respectively, 'a' for the damping terms, 'b' for the potential terms, 'c' for the mixed terms, and 'f' for the external force parameters. Don't mess these up or you will get tons of errors. 
-3. The index. Indexes will be integers assigned as follows:
-    1. It's always 1 for 'x0' and 'v0' parameters.
+1. The value. In fixed parameters this is the value we assume correct and will ALWAYS be used in simulations. In fitting parameters it will be the initial value and will be updated as the MCMC chain runs. 
+2. The type. The next argument is the parameter ptype which will always be a string. It's value is 'x0' and 'v0' for $x_0$ and $v_0$ respectively, 'a' for the damping terms, 'b' for the potential terms, 'c' for the mixed terms, and 'f' for the external force parameters. Don't mess these up or you will get tons of errors. 
+3. The index. Index is set as None as default, but must be set for 'a', 'b', 'c', and 'f' parameters or you will get errors. The general rules are:
+    1. No need to change it from the default None for 'ep', 'x0', and 'v0' parameters.
     2. For parameters 'a' and 'b' it will be the order of the term. Example, for the term $b_1x$ it will be 1, and for the term $a_3\dot{x}^3$ it will be 3.
-    3. For parameters 'c' it will be a pair of indices in the form of a touple. The first value will be the order of the position factor, and the second value will be the order of the velocity factor. Example, if the term is $c_{21}x^2\dot{c}$ the indices will be (2,1), and if the term is $c_{23}x^2\dot{c}^3$ the indices will be (2,3).
+    3. For parameters 'c' it will be a pair of indices in the form of a touple. The first value will be the order of the position factor, and the second value will be the order of the velocity factor. Example, if the term is $c_{21}x^2\dot{x}$ the indices will be (2,1), and if the term is $c_{13}x\dot{x}^3$ the indices will be (1,3).
     4. Finally for the external or driving force parameters we use 1 for $F_0$, 2 for $\omega$, and 3 for $\phi$. 
 
 A somewhat obvious remark at this point should be that in all models we should have at least 2 parameters corresponding to the initial conditions, and at least one term in the ODE, otherwise we will always get straight lines as a result. 
