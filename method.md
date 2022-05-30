@@ -15,7 +15,7 @@ We also proposed that the $x(t)$ function satisfies a differential equation of t
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
 
-subject to the initial conditions $x(t=0)=x_0$ and $v(t=0)=v_0$. One think to also keep in mind is that here $x(t)$ is not the actual position of the oscillator, but rather it's distance to the origin of coordinates. So if the equilibrium position is not equal to zero then this approach will fail. In order to fix that we assume that we can switch between **position** from the lab frame of reference and **distance to the equilibrium position**, as if you set the zero at the equilibrium point, as $X(t) = X_{eq} + x(t)$. For all intents and purposes assume that the function that goes into the ODE is $x(t)$ and we get $X(t)$ back by adding $X_{eq}$.
+subject to the initial conditions $x(t=0)=x_0$ and $v(t=0)=v_0$. One think to also keep in mind is that here $x(t)$ is not the actual position of the oscillator, but rather it's the distance to the equilibrium position. So if the equilibrium position is not equal to zero then this approach will fail. In order to fix that we assume that we can switch between **position** from the lab frame of reference and **distance to the equilibrium position**, as if you set the zero at the equilibrium point, as $X(t) = X_{eq} + x(t)$. For all intents and purposes assume that the function that goes into the ODE is $x(t) and we get $X(t)$ back by adding $X_{eq}$.
 
 Now we'll make some remarks about the models.
 
