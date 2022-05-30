@@ -17,11 +17,11 @@ $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{
 
 subject to the initial conditions $x(t=0)=x_0$ and $v(t=0)=v_0$. One think to also keep in mind is that in the ODE $x(t)$ is not the actual position of the oscillator, but rather it's the distance to the equilibrium position. So if the equilibrium position is not equal to zero then this approach will fail. In order to fix that we assume that we can switch between **position** from the lab frame of reference and **distance to the equilibrium position**, as if you set the zero at the equilibrium point, as $X(t) = X_{eq} + x(t)$. For all intents and purposes assume that the function that goes into the ODE is $x(t)$ and we get $X(t)$ back by adding $X_{eq}$.
 
-Now we'll make some remarks about the models.
+Now we'll make some more remarks about the models.
 
 The terms proportional to $x$ can be associated with the potential energy, we may think of them as a polynomial expansion of the force caused by the potential, as if the potential has a series expansion and we truncated it at some degree.
 
-The same applies to the $\dot{x}$ terms which we associate to a damping or drag force. Notice that these terms are written as $\dot{x}\mid\dot{x}\mid ^{n-1}$ instead of $\dot{x}^n$. The purpose of this tweak is that the absolute value of the damping force will always be proportional to some power of the absolute value of the velocity, and will have a direction opposite to the velocity, as we'd tipically expect from a drag force. 
+The same goes for the $\dot{x}$ terms which we associate to a damping or drag force. Notice that these terms are written as $\dot{x}\mid\dot{x}\mid ^{n-1}$ instead of $\dot{x}^n$. The purpose of this tweak is that the absolute value of the damping force will always be proportional to some power of the absolute value of the velocity, and will have a direction opposite to the velocity, as we'd tipically expect from a drag force. 
 
 We included the possibility of adding a sinusoidal driving force to the model. It is not possible to add driving forces with a different law at the moment. 
 
