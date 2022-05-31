@@ -37,4 +37,6 @@ More details are given in the following sections.
 
 ## TSAOpy parameters
 
+`tsaopy` has two parameter classes, `Fixed` and `Fitting`. Fixed parameters will have a value (which is assumed as correct and not subject to fitting), a ptype, and an index. Fitting parameters will have those same attributes, and will also have another attribute called prior, which is the probability distribution that represents our prior knowledge about that parameter.
 
+`tsaopy` comes with built in classes to easily set up callable PDFs
