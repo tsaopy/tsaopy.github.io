@@ -45,10 +45,7 @@ Here are two examples of setting up priors. Suppose we have an object, and we wa
 
 With that knowledge we can set up a prior PDF to express what we now, specifically it will be a uniform distribution with the form:
 
-$$ p(m) = \begin{cases}
-c \qquad \text{if }0<m<M \\
-0 \qquad \text{otherwise}
-\end{cases} $$
+$$ p(m) = \begin{cases} c \qquad \text{if }0<m<M \\ 0 \qquad \text{otherwise} \end{cases} $$
 
 ### Some specifics about the MCMC sampler
 
