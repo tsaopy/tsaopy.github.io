@@ -30,13 +30,27 @@ It's also not possible to set up relations between each parameter, such as $b_1 
 
 ## The MCMC fitting
 
-MCMC is a method to find a posterior distribution for a set of parameters, given some previous knowledge (in the form of prior distributions) about the parameters, and new observations which are subject to the model. An in depth explanation is given in the official [emcee documentation](https://emcee.readthedocs.io/en/stable/tutorials/line/).
-
-Eg: you had some parameter that you knew it value was most likely between 1 and 10, that's your prior knowledge and you can write it in the form of a uniform probability distribution with ends 1 and 10. Then you gather some more observational data, and you want to update what you know about that parameter taking into account this new data. The MCMC method then will update the prior probability distribution that you had for that parameter (uniform from 1 to 10), and will give you a posterior probability distribution that better fits your data, for this case it could be something like a normal distribution centered at 5 with standard deviation 1. 
+MCMC is a method to find a posterior distribution for a set of parameters, given some previous knowledge about the parameters (in the form of prior probability distributions), and new observations which are subject to the model. An in depth explanation is given in the official [emcee documentation](https://emcee.readthedocs.io/en/stable/tutorials/line/).
 
 So, in order to apply the MCMC method we need three things, a model, a prior probability distribution for each parameter of the model, and a set of observations to which we'll fit the model. 
 
-### Some specifics about using the MCMC method
+### More about priors
+
+When approaching MCMC for the first time the concepts of priors and posteriors might not be very clear. When we talk about those two, the mathematical objects which describe them are probability density functions, such as the normal (aka Gaussian) that might be familiar. So both priors and posteriors are PDFs, but the prior is the PDF that represented what we knew about the parameter before applying the MCMC method, and the posterior is the PDF that represents our knowledge about the parameter after MCMC, it's "the result" of solving the MCMC problem.
+
+Here are two examples of setting up priors. Suppose we have an object, and we want to express what we know about its mass. Before weighing it we know the mass of a regular object must be a positive finite number, so:
+
+1. It must be greater than zero.
+2. It must be lower than some upper bound $M$.
+
+With that knowledge we can set up a prior PDF to express what we now, specifically it will be a uniform distribution with the form:
+
+$$ p(m) = \begin{cases}
+c \qquad \text{if }0<m<M \\
+0 \qquad \text{otherwise}
+\end{cases} $$
+
+### Some specifics about the MCMC sampler
 
 When we set up the MCMC sampler we will have to specify three values, which we call walkers, burn in steps, and production steps.
 
