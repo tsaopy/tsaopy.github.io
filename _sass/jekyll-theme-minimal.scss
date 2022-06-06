@@ -118,10 +118,11 @@ kbd {
   vertical-align: middle;
 }
 
-lheader {
+header {
   width:300px;
   float:left;
   position:fixed;
+  margin-left:0px;
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
