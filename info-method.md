@@ -28,17 +28,17 @@ We included the possibility of adding a sinusoidal driving force to the model. I
 It's also not possible to set up relations between each parameter, such as $b_1 = 4 a_1$. Each parameter will be treated as independent from the others (you may however, find correlations after getting the results of the fitting). 
 
 
-## The MCMC fitting
+## MCMC fitting
 
-MCMC is a method to find a posterior distribution for a set of parameters, given some previous knowledge about the parameters (in the form of prior probability distributions), and new observations which are subject to the model. An in depth explanation is given in the official [emcee documentation](https://emcee.readthedocs.io/en/stable/tutorials/line/).
+MCMC is a method to find a posterior distribution for a set of parameters, given some previous knowledge about the parameters (in the form of prior probability distributions), and new observations which are subject to the model. An in depth explanation is given in von Toussaint (2011). Another option to read about the fundamentals of MCMC is the [emcee documentation](https://emcee.readthedocs.io/), and the papers they cite.
 
-So, in order to apply the MCMC method we need three things, a model, a prior probability distribution for each parameter of the model, and a set of observations to which we'll fit the model. 
+### Comment about priors, posteriors, PDFs etc
 
-### More about priors
+When approaching MCMC for the first time the concepts of priors and posteriors might not be very clear. When we talk about those two, the mathematical objects which describe them are probability density functions, such as the normal (aka Gaussian) distribution that most should be familiar with. So both priors and posteriors are PDFs, but the prior is the PDF that represents what we knew about the parameter before applying the MCMC, and the posterior is the PDF that represents the knowledge about the parameter after updating our understanding with MCMC, it's "the result" of solving the MCMC problem.
 
-When approaching MCMC for the first time the concepts of priors and posteriors might not be very clear. When we talk about those two, the mathematical objects which describe them are probability density functions, such as the normal (aka Gaussian) that might be familiar. So both priors and posteriors are PDFs, but the prior is the PDF that represented what we knew about the parameter before applying the MCMC method, and the posterior is the PDF that represents our knowledge about the parameter after MCMC, it's "the result" of solving the MCMC problem.
+Here is a basic example of setting up a prior.
 
-Here are two examples of setting up priors. Suppose we have an object, and we want to express what we know about its mass. Before weighing it we know the mass of a regular object must be a positive finite number, so:
+Suppose we have an object, and we want to express what we know about its mass. Before weighing it, we know the mass of a regular object must be a positive finite number, so:
 
 1. It must be greater than zero.
 2. It must be lower than some upper bound $M$.
@@ -50,15 +50,18 @@ c \qquad \text{if }0<m<M \\
 0 \qquad \text{otherwise}
 \end{cases} $$
 
-where $c$ is some constant, since don't know a priori which value between $0$ and $M$ is most likely. Normalizing the PDF one gets that $c=1/M$.
+where $c$ is some constant, since don't know a priori which value between $0$ and $M$ is most likely. Normalizing the PDF one gets that $c=1/M$. And this would be the prior we have just from basic assumptions about the parameter mass.
 
+### Running an MCMC chain
 
+When we set up the MCMC sampler we will have to specify three values of the chain we are running, which we call walkers, burn in steps, and production steps.
 
+These are explained in `emcee` docs but, summing up, walkers are the number of chains that we are running at the same time. So, if we have 10 walkers, at each step we are proposing 10 new samples, if we have 50 walkers we propose 50 new samples at each step and so on. We tipically want the number of walkers to be around the hundreds, and increase the number as we increase the model complexity. In general, a higher number of walkers helps the chain converge in fewer steps and avoid getting stuck in local minimums, at the expense of more computing time per step.
 
-### Some specifics about the MCMC sampler
+Burn in and production steps are the number of steps that the sampler will do at burn in stage and production stage, respectively. Samples generated during burn in phase are discarded, and the results of the burn in phase are used as initial values when starting production stage. Samples generated during production stage are the ones that the sampler saves and that we use for posterior analysis.
 
-When we set up the MCMC sampler we will have to specify three values, which we call walkers, burn in steps, and production steps.
+Ideally, during burn in stage the sampler will be drawing samples while exploring the possible values for the parameters until it finds a region where the likelihood is at a maximum. In the production stage, assuming the chain has converged, we will simply be drawing samples that will belong to the posterior distribution we were looking for, and we will run it for as long as we need to get the number of samples we want. 
 
-These are explained in `emcee` docs but, summing up, walkers are the number of chains that we are running at the same time. So, if we have 10 walkers, at each step we are proposing 10 new samples, if we have 50 walkers we propose 50 new samples at each step and so on. 
+Some typical strategies are
 
-Now, burn in and production steps are the number of steps that the sampler will do at burn in stage and production stage, respectively. Ideally, during burn in stage the sampler will be drawing samples while exploring the possible values for your parameters until it finds a region where the likelihood is at a maximum, and we are accepting a lot of the newly drawn samples. In the production stage, assuming the chain has converged, we will simply be drawing samples that will belong to the posterior distribution we were looking for, and we will run it for as long as we need to get the number of samples we want. 
+* Running a short burn in, so we save the samples generated while the sampler is exploring the space, which allows us to see where the sampler is moving.
