@@ -129,7 +129,7 @@ rheader {
   width:300px;
   float:left;
   position:fixed;
-  left:950px;
+  right:10%;
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
@@ -196,8 +196,7 @@ strong {
 section {
   width:650px;
   float:left;
-  margin-left:275px;
-  margin-right:25px;
+  left:50%;
   padding-bottom:50px;
 }
 
@@ -216,7 +215,7 @@ footer {
   width:250px;
   float:left;
   position:fixed;
-  bottom:50px;
+  bottom:5%;
   -webkit-font-smoothing:subpixel-antialiased;
 }
 
