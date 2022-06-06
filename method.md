@@ -1,9 +1,9 @@
 ---
 layout: sidepage
-permalink: /method/
+permalink: /methodology/
 ---
 
-# Method
+# Methodology
 
 ## The differential equation
 
