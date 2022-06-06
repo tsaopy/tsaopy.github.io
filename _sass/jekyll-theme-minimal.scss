@@ -215,8 +215,22 @@ footer {
   width:250px;
   float:left;
   position:fixed;
-  bottom:50px;
+  bottom:30px;
   -webkit-font-smoothing:subpixel-antialiased;
+}
+
+@media print, screen and (max-width: 1360px) {
+
+  footer {
+    bottom:30px;
+  }
+  
+  section {
+    width:600px;
+    margin-left:280px;
+    padding-bottom:30px;
+  }
+
 }
 
 @media print, screen and (max-width: 960px) {
