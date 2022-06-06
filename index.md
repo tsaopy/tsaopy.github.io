@@ -16,9 +16,9 @@ This library will allow you to model the dynamics of the $x(t)$ function as sati
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
 
-along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once you define your model by choosing which terms  in the ODE you will consider, the program will fit the model to the data finding the most likely values for each parameter (including initial conditions). This is done using the MCMC method, implemented on the `emcee` library. 
+along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once you define your model by choosing which terms  in the ODE you will consider, the program will fit the model to the data finding the most likely values for each parameter (including initial conditions). The fitting is done using the MCMC method, implemented in the `emcee` library. 
 
-A more detailed explanation can be found at [method page](https://tsaopy.github.io/method/).
+More details are given in [methodology](https://tsaopy.github.io/methodology/).
 
 ## Why doing this?
 
@@ -32,15 +32,15 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 - In order to make `tsaopy` work you should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-- You will need the Python dependencies `numpy`, `matplotlib`, `emcee`, and `corner`. 
+- You will need the Python dependencies `numpy`, `scipy`, `matplotlib`, `emcee`, and `corner`. 
 
-- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have `gfortran` installed. If it's not, then `sudo apt-get install gfortran` should do the trick. 
+- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have a Fortran compiler, such as`gfortran`, installed and properly pathed. If it's not, then `sudo apt-get install gfortran` should install the compiler. 
 
-- Now you can install `tsaopy` using `pip install tsaopy`. 
+- With this you can install `tsaopy` using `pip install tsaopy`. 
 
 At this point `tsaopy` should be working, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works and begin fitting some models. 
 
-### Note: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you just install things in a new conda enviroment, and all the dependencies including Python itself are up to date. 
+### Note: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you install things in a new conda enviroment, and all the dependencies including Python itself are up to date. 
 
 If you have any problems during installation please make an issue in the Github repo with all the information you can gather.
 
