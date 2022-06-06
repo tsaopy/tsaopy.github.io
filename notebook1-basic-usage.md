@@ -5,6 +5,8 @@ permalink: /basic-usage/
 
 # Notebook 1: Basic Usage
 
+{:toc}
+
 ## Making some data
 
 In this first notebook we will define a simple model, make a simulation with it, add some noise to the data, and see how to recover the original model using `tsaopy`.
