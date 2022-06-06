@@ -8,6 +8,6 @@ permalink: /tsaopy-api/
 In the meantime you can get the API locally by running
 
 ```
-pip install pdoc
+pip install pdoc3
 pdoc --http localhost:8080 -c tsaopy
 ```
