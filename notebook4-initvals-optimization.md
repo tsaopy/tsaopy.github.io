@@ -1,5 +1,5 @@
 ---
-layout: notebook
+layout: sidepage
 permalink: /initvals-optimization/
 ---
 
