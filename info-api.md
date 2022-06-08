@@ -1,4 +1,4 @@
 ---
-layout: index
+layout: api-index
 permalink: /api/
 ---
