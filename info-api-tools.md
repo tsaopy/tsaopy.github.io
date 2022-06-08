@@ -1,4 +1,4 @@
 ---
 layout: tools
-permalink: /api/tools/
+permalink: /api/tools.html
 ---
