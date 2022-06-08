@@ -4,7 +4,7 @@
 
 <%def name="mobile()" filter="minify_css">
   :root {
-    --highlight-color: #fe9;
+    --highlight-color: #649;
   }
   .flex {
     display: flex !important;
@@ -76,12 +76,12 @@
     padding: .2em 0;
   }
   a {
-    color: #058;
+    color: #86b;
     text-decoration: none;
     transition: color .3s ease-in-out;
   }
   a:hover {
-    color: #e82;
+    color: #649;
   }
   .title code {
     font-weight: bold;
@@ -90,7 +90,7 @@
     margin-top: 2em;
   }
   .ident {
-    color: #900;
+    color: #529;
   }
   pre code {
     background: #f8f8f8;
