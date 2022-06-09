@@ -1,3 +1,4 @@
+![pic5](https://user-images.githubusercontent.com/94293518/172951470-a38c6c21-d55c-467c-8877-9c5c4aa06480.png)
 ---
 layout: sidepage
 permalink: /basic-usage/
@@ -188,8 +189,21 @@ New traceplots suggest that the samples may belong to a converged chain. Let's p
 ```
 tsaopy.tools.autocplots(flat_samples,labels)
 ```
+![pic5](https://user-images.githubusercontent.com/94293518/172951503-ce32945a-a1ac-4fa2-9eb9-fa558477c929.png)
+
 
 On the other hand, autocorrelation plots suggest that the chain may be too short, so we run another chain with a longer production phase
 
 ```
+sampler = mymodel.setup_sampler(100,300,1000)
+samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+tsaopy.tools.traceplots(samples,labels)
+tsaopy.tools.autocplots(flat_samples,labels)
 ```
+![pic6](https://user-images.githubusercontent.com/94293518/172951684-afb8b098-27c9-4901-9821-dfbb7b77d005.png)
+![pic7](https://user-images.githubusercontent.com/94293518/172951708-5982b02c-0144-4a38-95d9-859ab24fe0a6.png)
+
+
+And after convincing ourselves that the chain has converged we show the results in cornerplots
+
+![pic8](https://user-images.githubusercontent.com/94293518/172951737-ab98334b-1717-4b4a-b4ea-7a62f874e271.png)
