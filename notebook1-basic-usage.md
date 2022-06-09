@@ -1,4 +1,3 @@
-![pic5](https://user-images.githubusercontent.com/94293518/172951470-a38c6c21-d55c-467c-8877-9c5c4aa06480.png)
 ---
 layout: sidepage
 permalink: /basic-usage/
