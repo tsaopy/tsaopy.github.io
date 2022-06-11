@@ -176,3 +176,112 @@ tsaopy.tools.traceplots(samples,labels)
 ![pic2](https://user-images.githubusercontent.com/94293518/173155550-b5742802-2502-49f9-b435-eb9b372c5b09.png)
 
 And now with a set of initial values much closer to the posterior means, the chain takes about 50 steps to approach convergence vs 250 in the previous case.
+
+## Fitting to $v(t)$ measurements
+
+In this section we will be showing how to fit the model to both $x(t)$ and $v(t)$ measurements. Notice that $v(t)=\dot{x}(t)$ exactly, so there can't be a scale factor between both measurements, it is absolutely necessary to do proper units conversions.
+
+In order to do this fitting we define parameters just as usual, and instead of using `PModel` we use `PVModel` where we also have to supply the $v(t)$ measurements and uncertainty.
+
+```
+import tsaopy
+
+# import data
+
+t_data,x_data,v_data = t,x,v
+x_data_unc,v_data_unc = 0.2,0.2
+
+# define priors
+
+x0_prior = tsaopy.tools.uniform_prior(0.7,1.3)
+v0_prior = tsaopy.tools.normal_prior(0,10)
+a1_prior = tsaopy.tools.normal_prior(0,10)
+b1_prior = tsaopy.tools.normal_prior(0,10)
+
+# define tsaopy parameters
+
+x0 = tsaopy.parameters.Fitting(1,'x0',x0_prior)
+v0 = tsaopy.parameters.Fitting(0,'v0',v0_prior)
+a1 = tsaopy.parameters.Fitting(0,'a',a1_prior,1)
+b1 = tsaopy.parameters.Fitting(0,'b',b1_prior,1)
+
+parameters = [x0,v0,a1,b1]
+
+# define tsaopy model
+
+mymodel = tsaopy.models.PVModel(parameters,t_data,x_data,v_data,
+                                x_data_unc,v_data_unc)
+```
+
+To run chains we do the exact same procedure
+
+```
+sampler = mymodel.setup_sampler(100,20,300)
+samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+labels = mymodel.params_labels
+tsaopy.tools.traceplots(samples,labels)
+```
+![pic3](https://user-images.githubusercontent.com/94293518/173164288-b168d9f2-f326-4ad2-9674-3a2c8e65810b.png)
+
+```
+sampler = mymodel.setup_sampler(100,300,500)
+samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+tsaopy.tools.traceplots(samples,labels)
+tsaopy.tools.autocplots(flat_samples,labels)
+tsaopy.tools.cornerplots(flat_samples,labels)
+```
+![pic4](https://user-images.githubusercontent.com/94293518/173164312-885fcca7-8745-47ce-8340-39624e2e4172.png)
+![pic5](https://user-images.githubusercontent.com/94293518/173164319-6997a971-d014-414c-80f9-d2d22b5650d0.png)
+![pic6](https://user-images.githubusercontent.com/94293518/173164321-b7f56664-b941-4f4a-a1dc-d33e4b80cdaa.png)
+
+## Fitting to data with underestimated uncertainty
+
+A particular situation we may come across is when we can't trust the error bars of our measurements and we suspect the uncertainty might be higher than our estimate. In that case we do the following substitution
+
+$$ \sigma_i \rightarrow s_i^2 = \sigma_i^2 + f_x^2 x_i^2 $$
+
+we are assuming that the square of the uncertainty for the $i$ measurement is underestimated by an $f_x$ ammount squared times the measurement squared. Notice that the same $f_x$ is assumed for all measurements. This is best used when we suspect that the underestimated uncertainty is proportional to the magnitude of the measurement **and it's better paired together with an initial values optimization**. 
+
+With this assumption the logarithmic likelihood is calculated differently and we **should** arrive to a gaussian posterior with a wider SD which **should** account for the underestimation of the measurements' uncertainty. More details can be found in `emcee`'s documentation and the sources they cite, [such as these notes from Hogg et al. (2010)](https://arxiv.org/abs/1008.4686).
+
+This has already been implemented in `tsaopy`, and the end used should only write an extra parameter with `ptype='log_fx'`
+
+```
+import tsaopy
+
+# import data
+
+t_data,x_data = t,x +  0.5 * abs(x) * np.random.uniform(-1,1)
+x_data_unc = 0.1
+
+# define priors
+
+x0_prior = tsaopy.tools.uniform_prior(0.7,1.3)
+v0_prior = tsaopy.tools.normal_prior(0,10)
+a1_prior = tsaopy.tools.normal_prior(0,10)
+b1_prior = tsaopy.tools.normal_prior(0,10)
+logfx_prior = tsaopy.tools.uniform_prior(-10,1)
+
+# define tsaopy parameters
+
+x0 = tsaopy.parameters.Fitting(1,'x0',x0_prior)
+v0 = tsaopy.parameters.Fitting(0,'v0',v0_prior)
+a1 = tsaopy.parameters.Fitting(0,'a',a1_prior,1)
+b1 = tsaopy.parameters.Fitting(0,'b',b1_prior,1)
+logfx = tsaopy.parameters.Fitting(-3,'log_fx',logfx_prior)
+
+parameters = [x0,v0,a1,b1,logfx]
+
+# define tsaopy model
+
+mymodel = tsaopy.models.PModel(parameters,t_data,x_data,x_data_unc)
+sampler = mymodel.setup_sampler(100,300,300)
+samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
+labels = mymodel.params_labels
+tsaopy.tools.traceplots(samples,labels)
+tsaopy.tools.cornerplots(flat_samples,labels)
+```
+
+![pic7](https://user-images.githubusercontent.com/94293518/173164369-85737765-0dc5-4e52-8dbe-a7d9fefe6daf.png)
+![pic8](https://user-images.githubusercontent.com/94293518/173164374-689a1937-f737-4a8e-b87c-2f0caa6a2c5f.png)
+
