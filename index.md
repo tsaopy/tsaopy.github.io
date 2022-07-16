@@ -34,7 +34,7 @@ Running this analysis will allow you to find an ODE that your time series roughl
 
 - You will need the Python dependencies `numpy`, `scipy`, `matplotlib`, `emcee`, and `corner`. 
 
-- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have a Fortran compiler, such as`gfortran`, installed and properly pathed. If it's not, then `sudo apt-get install gfortran` should install the compiler. 
+- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that you have a Fortran compiler, such as `gfortran`, installed and properly pathed. If it's not, then `sudo apt-get install gfortran` should install the compiler. 
 
 - With this you can install `tsaopy` using `pip install tsaopy`. 
 
