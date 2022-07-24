@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>tsaopy.events API documentation</title>
+<meta name="description" content="tsaopy Events submodule." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#dc7}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#714dbb;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#dda26f}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#87124d}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML" integrity="sha256-kZafAc6mZvK3W3v1pHOcUix30OHQN6pU/NO2oFkqZVw=" crossorigin></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>tsaopy.events</code></h1>
+</header>
+<section id="section-intro">
+<p>tsaopy Events submodule.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;tsaopy Events submodule.&#34;&#34;&#34;
+import numpy as np
+from tsaopy._f2pyauxmod import simulation, simulationv
+
+
+#           Aux stuff, raises etc
+class EventInitException(Exception):
+    &#34;&#34;&#34;Custom exception for Event instance init.&#34;&#34;&#34;
+
+    def __init__(self, rtext):
+        msg = rtext + (&#39; Exception ocurred while trying to instance a tsaopy &#39;
+                       &#39;Event object.&#39;)
+        super().__init__(msg)
+
+
+def _ll(pred, data, sigma):
+    return -.5 * np.sum(((pred - data) / sigma) ** 2)
+
+
+def _ll_logf(pred, data, sigma, logf):
+    s2 = sigma ** 2 + pred ** 2 * np.exp(2 * logf)
+    return -.5 * np.sum((pred - data) ** 2 / s2 + np.log(s2))
+
+
+#           tsaopy scripts
+class Event:
+    &#34;&#34;&#34;
+    tsaopy Event class. Used to later instance tsaopy Model objects.
+
+    The idea behind the Event class is to make it straightforward to fit the
+    same equation of motion to different sets of measurements at the same time.
+
+    Suppose we observed the same system several times with different initial
+    conditions. Then we will set up an Event instace for each of our experiment
+    runs. We will group them all together later when creating a Model class
+    instance. With this Model instance we will be fitting all the different
+    sets of measurements with the same equation of motion, but different
+    initial conditions, equilibrium points, etc.
+    &#34;&#34;&#34;
+
+    def __init__(self, params, t_data, x_data, x_sigma,
+                 v_data=None, v_sigma=None):
+        &#34;&#34;&#34;
+        Parameters
+        ----------
+        params : dict
+            dictionary containing the parameters relevant in the event. It&#39;s
+            necessary to always include x0 and v0. Optionally one can use ep
+            for the equilibrium point, and log_fx and log_fv for the f term in
+            the uncertainty (see docs for more info).
+
+            Each parameter in the dict should be defined with its key (&#39;x0,
+            &#39;v0&#39;, &#39;ep&#39;, &#39;log_fx&#39;, &#39;log_fv&#39;) and the value should be the prior
+            for that parameter.
+        t_data : array
+            array containing the time values. Values must be evenly spread.
+        x_data : array
+            array containing the position measurements. Must be of the same
+            length as t_data.
+        x_sigma : float or array
+            uncertainty of the measurements. Can be a float with a unique value
+            for all measurements, or an array of the same shape as x_data with
+            a unique value for each value of x_data.
+        v_data : array, optional
+            array containing the velocity measurements. Must be of the same
+            length as t_data.
+        v_sigma : float or array, optional
+            uncertainty of the measurements. Can be a float with a unique value
+            for all measurements, or an array of the same shape as v_data with
+            a unique value for each value of v_data. Necessary if v_data is
+            being used.
+
+        Examples
+        --------
+            import numpy as np
+            import tsaopy
+            import quickemcee as qmc
+
+            t = np.linspace(0,10,101)
+            x = np.cos(t) + np.random.normal(.0, .3, 101) # data with noise
+            x_noise = .3
+
+            x0_prior = qmc.utils.normal_prior(1.0, 10.0)
+            v0_prior = qmc.utils.normal_prior(.0, 10.0)
+
+            params_dict = {
+                           &#39;x0&#39;: x0_prior,
+                           &#39;v0&#39;: v0_prior
+                           }
+
+            event1 = tsaopy.events.Event(params_dict, t, x, x_noise)
+        &#34;&#34;&#34;
+        #           TO DO HERE: improve error handling ...
+        # make sure that x0 and v0 are in params
+        try:
+            if &#39;x0&#39; not in params:
+                raise EventInitException(&#39;no x0 param when building Event.&#39;)
+            if &#39;v0&#39; not in params:
+                raise EventInitException(&#39;no v0 param when building Event.&#39;)
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify x0 and v0 keys were incl&#34;
+                                     &#34;uded in params dict.&#34;) from exception
+
+        # test if priors don&#39;t return a positive float when called
+        for param in params:
+            try:
+                x, p = np.random.normal(.0, 100.0), params[param]
+                if not np.isfinite(p(x)):
+                    raise ValueError(&#34;prior for a param return nan or inf when&#34;
+                                     &#34; called with a random float.&#34;)
+                if p(x) &lt; .0:
+                    raise ValueError(&#34;prior for a param returned a negative va&#34;
+                                     &#34;lue when called with a random float.&#34;)
+            except Exception as exception:
+                raise EventInitException(&#34;couldn&#39;t verify that a random float &#34;
+                                         &#34;returns a positive value for some &#34;
+                                         &#34;parameter prior.&#34;) from exception
+
+        # do check for v data usage
+        if v_data is not None:
+            if v_sigma is None:
+                raise EventInitException(&#34;v_data is being used but v_sigma is &#34;
+                                         &#34;missing.&#34;)
+            self.using_v_data = True
+        else:
+            self.using_v_data = False
+
+        # check x and t have the same lengths, x and v same shape
+        try:
+            if not len(t_data) == len(x_data):
+                raise ValueError(&#39;x_data and t_data have different lengths.&#39;)
+            if self.using_v_data:
+                if not x_data.shape == v_data.shape:
+                    raise ValueError(&#39;x_data and v_data have different shapes.&#39;
+                                     )
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify that all input arrays &#34;
+                                     &#34;have compatible shapes.&#34;) from exception
+
+        # check arrays have finite float values
+        try:
+            if not np.isfinite(x_data).all():
+                raise ValueError(&#39;x_data has non finite values.&#39;)
+            if not np.isfinite(t_data).all():
+                raise ValueError(&#39;t_data has non finite values.&#39;)
+            if self.using_v_data:
+                if not np.isfinite(v_data).all():
+                    raise ValueError(&#39;v_data has non finite values.&#39;)
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify that all values in input&#34;
+                                     &#34; arrays are finite numbers.&#34;) \
+                                                            from exception
+
+        #       Define core attributes ~~~~
+        self.ndim = len(params)
+        self.tsplit = 2
+        self.datalen = len(t_data)
+        self.dt = (t_data[-1] - t_data[0]) / (self.datalen - 1)
+
+        # attribute params
+        self.params = params
+
+        # attibute priors
+        self.priors = [params[&#39;x0&#39;],
+                       params[&#39;v0&#39;]]
+
+        # do checks for ep
+        if &#39;ep&#39; in params:
+            self.using_ep = True
+            self.priors.append(params[&#39;ep&#39;])
+        else:
+            self.using_ep = False
+
+        # do checks for fx
+        if &#39;log_fx&#39; in params:
+            self.using_logfx = True
+            self.priors.append(params[&#39;log_fx&#39;])
+        else:
+            self.using_logfx = False
+
+        # do checks for fv
+        if &#39;log_fv&#39; in params:
+            # necessary check
+            if not self.using_v_data:
+                raise EventInitException(&#34;log_fv is in params but there is no &#34;
+                                         &#34;v data.&#34;)
+            self.using_logfv = True
+            self.priors.append(params[&#39;log_fv&#39;])
+        else:
+            self.using_logfv = False
+
+        # save observations &amp; sigma data
+        self.t_data = t_data
+        self.x_data = x_data
+        self.x_sigma = x_sigma
+        if self.using_v_data:
+            self.v_data = v_data
+            self.v_sigma = v_sigma
+
+    def _predict(self, A, B, F, C, x0v0, ep):
+        &#34;&#34;&#34;Compute tsaopy prediction using coefs and iniconds.&#34;&#34;&#34;
+        use_ep, use_v = self.using_ep, self.using_v_data
+        tsplit = self.tsplit
+        dt, datalen = self.dt / tsplit, self.datalen * tsplit
+
+        na, nb = len(A), len(B)
+        cn, cm = C.shape
+
+        if not use_ep and not use_v:
+            return simulation(x0v0, A, B, C, F,
+                              dt, datalen, na, nb, cn, cm)[::tsplit]
+        if use_ep and not use_v:
+            return simulation(x0v0, A, B, C, F,
+                              dt, datalen, na, nb, cn,
+                              cm)[::tsplit] + ep
+        if not use_ep and use_v:
+            return simulationv(x0v0, A, B, C, F,
+                               dt, datalen, na, nb, cn, cm)[::tsplit]
+        if use_ep and use_v:
+            arr = np.zeros((self.datalen, 2))
+            arr[:, 0] += ep
+            return simulationv(x0v0, A, B, C, F,
+                               dt, datalen, na, nb, cn, cm)[::tsplit] + arr
+
+    def _log_prior(self, event_coords):
+        &#34;&#34;&#34;Compute log prior for event parameters.&#34;&#34;&#34;
+        result = 1
+        for i, p in enumerate(self.priors):
+            prob = p(event_coords[i])
+            if prob &lt;= .0:
+                return -np.inf
+            result *= prob
+        return np.log(result)
+
+    def _log_likelihood(self, A, B, F, C, x0v0,
+                        ep, log_fx, log_fv):
+        &#34;&#34;&#34;Compute log likelihood for event parameters and ODE coefs arrays.&#34;&#34;&#34;
+        pred = self._predict(A, B, F, C, x0v0, ep)
+
+        # discard diverging simulations
+        if not np.isfinite(pred).all():
+            return -np.inf
+
+        use_v, use_fx, use_fv = (self.using_v_data, self.using_logfx,
+                                 self.using_logfv)
+
+        # not using v data cases
+        if not use_v and not use_fx:
+            return _ll(pred, self.x_data, self.x_sigma)
+        elif not use_v and use_fx:
+            return _ll_logf(pred, self.x_data, self.x_sigma, log_fx)
+
+        predx, predv = pred[:, 0], pred[:, 1]
+        # using v data cases
+        if use_v and not use_fx and not use_fv:
+            return (_ll(predx, self.x_data, self.x_sigma)
+                    + _ll(predv, self.v_data, self.v_sigma))
+        elif use_v and use_fx and not use_fv:
+            return (_ll_logf(predx, self.x_data, self.x_sigma, log_fx)
+                    + _ll(predv, self.v_data, self.v_sigma))
+        elif use_v and not use_fx and use_fv:
+            return (_ll(predx, self.x_data, self.x_sigma)
+                    + _ll_logf(predv, self.v_data, self.v_sigma, log_fv))
+        elif use_v and use_fx and use_fv:
+            return (_ll_logf(predx, self.x_data, self.x_sigma, log_fx)
+                    + _ll_logf(predv, self.v_data, self.v_sigma, log_fv))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="tsaopy.events.Event"><code class="flex name class">
+<span>class <span class="ident">Event</span></span>
+<span>(</span><span>params, t_data, x_data, x_sigma, v_data=None, v_sigma=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>tsaopy Event class. Used to later instance tsaopy Model objects.</p>
+<p>The idea behind the Event class is to make it straightforward to fit the
+same equation of motion to different sets of measurements at the same time.</p>
+<p>Suppose we observed the same system several times with different initial
+conditions. Then we will set up an Event instace for each of our experiment
+runs. We will group them all together later when creating a Model class
+instance. With this Model instance we will be fitting all the different
+sets of measurements with the same equation of motion, but different
+initial conditions, equilibrium points, etc.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>params</code></strong> :&ensp;<code>dict</code></dt>
+<dd>
+<p>dictionary containing the parameters relevant in the event. It's
+necessary to always include x0 and v0. Optionally one can use ep
+for the equilibrium point, and log_fx and log_fv for the f term in
+the uncertainty (see docs for more info).</p>
+<p>Each parameter in the dict should be defined with its key ('x0,
+'v0', 'ep', 'log_fx', 'log_fv') and the value should be the prior
+for that parameter.</p>
+</dd>
+<dt><strong><code>t_data</code></strong> :&ensp;<code>array</code></dt>
+<dd>array containing the time values. Values must be evenly spread.</dd>
+<dt><strong><code>x_data</code></strong> :&ensp;<code>array</code></dt>
+<dd>array containing the position measurements. Must be of the same
+length as t_data.</dd>
+<dt><strong><code>x_sigma</code></strong> :&ensp;<code>float</code> or <code>array</code></dt>
+<dd>uncertainty of the measurements. Can be a float with a unique value
+for all measurements, or an array of the same shape as x_data with
+a unique value for each value of x_data.</dd>
+<dt><strong><code>v_data</code></strong> :&ensp;<code>array</code>, optional</dt>
+<dd>array containing the velocity measurements. Must be of the same
+length as t_data.</dd>
+<dt><strong><code>v_sigma</code></strong> :&ensp;<code>float</code> or <code>array</code>, optional</dt>
+<dd>uncertainty of the measurements. Can be a float with a unique value
+for all measurements, or an array of the same shape as v_data with
+a unique value for each value of v_data. Necessary if v_data is
+being used.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code>import numpy as np
+import tsaopy
+import quickemcee as qmc
+
+t = np.linspace(0,10,101)
+x = np.cos(t) + np.random.normal(.0, .3, 101) # data with noise
+x_noise = .3
+
+x0_prior = qmc.utils.normal_prior(1.0, 10.0)
+v0_prior = qmc.utils.normal_prior(.0, 10.0)
+
+params_dict = {
+               'x0': x0_prior,
+               'v0': v0_prior
+               }
+
+event1 = tsaopy.events.Event(params_dict, t, x, x_noise)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Event:
+    &#34;&#34;&#34;
+    tsaopy Event class. Used to later instance tsaopy Model objects.
+
+    The idea behind the Event class is to make it straightforward to fit the
+    same equation of motion to different sets of measurements at the same time.
+
+    Suppose we observed the same system several times with different initial
+    conditions. Then we will set up an Event instace for each of our experiment
+    runs. We will group them all together later when creating a Model class
+    instance. With this Model instance we will be fitting all the different
+    sets of measurements with the same equation of motion, but different
+    initial conditions, equilibrium points, etc.
+    &#34;&#34;&#34;
+
+    def __init__(self, params, t_data, x_data, x_sigma,
+                 v_data=None, v_sigma=None):
+        &#34;&#34;&#34;
+        Parameters
+        ----------
+        params : dict
+            dictionary containing the parameters relevant in the event. It&#39;s
+            necessary to always include x0 and v0. Optionally one can use ep
+            for the equilibrium point, and log_fx and log_fv for the f term in
+            the uncertainty (see docs for more info).
+
+            Each parameter in the dict should be defined with its key (&#39;x0,
+            &#39;v0&#39;, &#39;ep&#39;, &#39;log_fx&#39;, &#39;log_fv&#39;) and the value should be the prior
+            for that parameter.
+        t_data : array
+            array containing the time values. Values must be evenly spread.
+        x_data : array
+            array containing the position measurements. Must be of the same
+            length as t_data.
+        x_sigma : float or array
+            uncertainty of the measurements. Can be a float with a unique value
+            for all measurements, or an array of the same shape as x_data with
+            a unique value for each value of x_data.
+        v_data : array, optional
+            array containing the velocity measurements. Must be of the same
+            length as t_data.
+        v_sigma : float or array, optional
+            uncertainty of the measurements. Can be a float with a unique value
+            for all measurements, or an array of the same shape as v_data with
+            a unique value for each value of v_data. Necessary if v_data is
+            being used.
+
+        Examples
+        --------
+            import numpy as np
+            import tsaopy
+            import quickemcee as qmc
+
+            t = np.linspace(0,10,101)
+            x = np.cos(t) + np.random.normal(.0, .3, 101) # data with noise
+            x_noise = .3
+
+            x0_prior = qmc.utils.normal_prior(1.0, 10.0)
+            v0_prior = qmc.utils.normal_prior(.0, 10.0)
+
+            params_dict = {
+                           &#39;x0&#39;: x0_prior,
+                           &#39;v0&#39;: v0_prior
+                           }
+
+            event1 = tsaopy.events.Event(params_dict, t, x, x_noise)
+        &#34;&#34;&#34;
+        #           TO DO HERE: improve error handling ...
+        # make sure that x0 and v0 are in params
+        try:
+            if &#39;x0&#39; not in params:
+                raise EventInitException(&#39;no x0 param when building Event.&#39;)
+            if &#39;v0&#39; not in params:
+                raise EventInitException(&#39;no v0 param when building Event.&#39;)
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify x0 and v0 keys were incl&#34;
+                                     &#34;uded in params dict.&#34;) from exception
+
+        # test if priors don&#39;t return a positive float when called
+        for param in params:
+            try:
+                x, p = np.random.normal(.0, 100.0), params[param]
+                if not np.isfinite(p(x)):
+                    raise ValueError(&#34;prior for a param return nan or inf when&#34;
+                                     &#34; called with a random float.&#34;)
+                if p(x) &lt; .0:
+                    raise ValueError(&#34;prior for a param returned a negative va&#34;
+                                     &#34;lue when called with a random float.&#34;)
+            except Exception as exception:
+                raise EventInitException(&#34;couldn&#39;t verify that a random float &#34;
+                                         &#34;returns a positive value for some &#34;
+                                         &#34;parameter prior.&#34;) from exception
+
+        # do check for v data usage
+        if v_data is not None:
+            if v_sigma is None:
+                raise EventInitException(&#34;v_data is being used but v_sigma is &#34;
+                                         &#34;missing.&#34;)
+            self.using_v_data = True
+        else:
+            self.using_v_data = False
+
+        # check x and t have the same lengths, x and v same shape
+        try:
+            if not len(t_data) == len(x_data):
+                raise ValueError(&#39;x_data and t_data have different lengths.&#39;)
+            if self.using_v_data:
+                if not x_data.shape == v_data.shape:
+                    raise ValueError(&#39;x_data and v_data have different shapes.&#39;
+                                     )
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify that all input arrays &#34;
+                                     &#34;have compatible shapes.&#34;) from exception
+
+        # check arrays have finite float values
+        try:
+            if not np.isfinite(x_data).all():
+                raise ValueError(&#39;x_data has non finite values.&#39;)
+            if not np.isfinite(t_data).all():
+                raise ValueError(&#39;t_data has non finite values.&#39;)
+            if self.using_v_data:
+                if not np.isfinite(v_data).all():
+                    raise ValueError(&#39;v_data has non finite values.&#39;)
+        except Exception as exception:
+            raise EventInitException(&#34;couldn&#39;t verify that all values in input&#34;
+                                     &#34; arrays are finite numbers.&#34;) \
+                                                            from exception
+
+        #       Define core attributes ~~~~
+        self.ndim = len(params)
+        self.tsplit = 2
+        self.datalen = len(t_data)
+        self.dt = (t_data[-1] - t_data[0]) / (self.datalen - 1)
+
+        # attribute params
+        self.params = params
+
+        # attibute priors
+        self.priors = [params[&#39;x0&#39;],
+                       params[&#39;v0&#39;]]
+
+        # do checks for ep
+        if &#39;ep&#39; in params:
+            self.using_ep = True
+            self.priors.append(params[&#39;ep&#39;])
+        else:
+            self.using_ep = False
+
+        # do checks for fx
+        if &#39;log_fx&#39; in params:
+            self.using_logfx = True
+            self.priors.append(params[&#39;log_fx&#39;])
+        else:
+            self.using_logfx = False
+
+        # do checks for fv
+        if &#39;log_fv&#39; in params:
+            # necessary check
+            if not self.using_v_data:
+                raise EventInitException(&#34;log_fv is in params but there is no &#34;
+                                         &#34;v data.&#34;)
+            self.using_logfv = True
+            self.priors.append(params[&#39;log_fv&#39;])
+        else:
+            self.using_logfv = False
+
+        # save observations &amp; sigma data
+        self.t_data = t_data
+        self.x_data = x_data
+        self.x_sigma = x_sigma
+        if self.using_v_data:
+            self.v_data = v_data
+            self.v_sigma = v_sigma
+
+    def _predict(self, A, B, F, C, x0v0, ep):
+        &#34;&#34;&#34;Compute tsaopy prediction using coefs and iniconds.&#34;&#34;&#34;
+        use_ep, use_v = self.using_ep, self.using_v_data
+        tsplit = self.tsplit
+        dt, datalen = self.dt / tsplit, self.datalen * tsplit
+
+        na, nb = len(A), len(B)
+        cn, cm = C.shape
+
+        if not use_ep and not use_v:
+            return simulation(x0v0, A, B, C, F,
+                              dt, datalen, na, nb, cn, cm)[::tsplit]
+        if use_ep and not use_v:
+            return simulation(x0v0, A, B, C, F,
+                              dt, datalen, na, nb, cn,
+                              cm)[::tsplit] + ep
+        if not use_ep and use_v:
+            return simulationv(x0v0, A, B, C, F,
+                               dt, datalen, na, nb, cn, cm)[::tsplit]
+        if use_ep and use_v:
+            arr = np.zeros((self.datalen, 2))
+            arr[:, 0] += ep
+            return simulationv(x0v0, A, B, C, F,
+                               dt, datalen, na, nb, cn, cm)[::tsplit] + arr
+
+    def _log_prior(self, event_coords):
+        &#34;&#34;&#34;Compute log prior for event parameters.&#34;&#34;&#34;
+        result = 1
+        for i, p in enumerate(self.priors):
+            prob = p(event_coords[i])
+            if prob &lt;= .0:
+                return -np.inf
+            result *= prob
+        return np.log(result)
+
+    def _log_likelihood(self, A, B, F, C, x0v0,
+                        ep, log_fx, log_fv):
+        &#34;&#34;&#34;Compute log likelihood for event parameters and ODE coefs arrays.&#34;&#34;&#34;
+        pred = self._predict(A, B, F, C, x0v0, ep)
+
+        # discard diverging simulations
+        if not np.isfinite(pred).all():
+            return -np.inf
+
+        use_v, use_fx, use_fv = (self.using_v_data, self.using_logfx,
+                                 self.using_logfv)
+
+        # not using v data cases
+        if not use_v and not use_fx:
+            return _ll(pred, self.x_data, self.x_sigma)
+        elif not use_v and use_fx:
+            return _ll_logf(pred, self.x_data, self.x_sigma, log_fx)
+
+        predx, predv = pred[:, 0], pred[:, 1]
+        # using v data cases
+        if use_v and not use_fx and not use_fv:
+            return (_ll(predx, self.x_data, self.x_sigma)
+                    + _ll(predv, self.v_data, self.v_sigma))
+        elif use_v and use_fx and not use_fv:
+            return (_ll_logf(predx, self.x_data, self.x_sigma, log_fx)
+                    + _ll(predv, self.v_data, self.v_sigma))
+        elif use_v and not use_fx and use_fv:
+            return (_ll(predx, self.x_data, self.x_sigma)
+                    + _ll_logf(predv, self.v_data, self.v_sigma, log_fv))
+        elif use_v and use_fx and use_fv:
+            return (_ll_logf(predx, self.x_data, self.x_sigma, log_fx)
+                    + _ll_logf(predv, self.v_data, self.v_sigma, log_fv))</code></pre>
+</details>
+</dd>
+<dt id="tsaopy.events.EventInitException"><code class="flex name class">
+<span>class <span class="ident">EventInitException</span></span>
+<span>(</span><span>rtext)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Custom exception for Event instance init.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EventInitException(Exception):
+    &#34;&#34;&#34;Custom exception for Event instance init.&#34;&#34;&#34;
+
+    def __init__(self, rtext):
+        msg = rtext + (&#39; Exception ocurred while trying to instance a tsaopy &#39;
+                       &#39;Event object.&#39;)
+        super().__init__(msg)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<h3>Return to the project's <a href="https://tsaopy.github.io/">homepage</a></h3
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="tsaopy" href="index.html">tsaopy</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="tsaopy.events.Event" href="#tsaopy.events.Event">Event</a></code></h4>
+</li>
+<li>
+<h4><code><a title="tsaopy.events.EventInitException" href="#tsaopy.events.EventInitException">EventInitException</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
