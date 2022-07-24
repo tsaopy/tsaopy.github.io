@@ -142,7 +142,7 @@ x0_prior = qmc.utils.normal_prior(.0, 10.0)
 v0_prior = qmc.utils.normal_prior(.0, 10.0)
 ```
 
-## Set up tsaopy objects
+## Set up TSAOpy objects
 
 With the data and the priors we set up a `tsaopy` 'Event' object, which summarizes the information about the measurements and the initial conditions.
 
