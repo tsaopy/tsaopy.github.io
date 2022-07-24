@@ -21,23 +21,27 @@
           <li><a href="https://doi.org/10.5281/zenodo.6569848">Project <strong>DOI</strong></a></li>
         </ul>
         
-        <h3> Resources </h3>
+        <h3 class="lsbu"> Resources </h3> 
+        <h5 class="lsbl"> Information </h5>
+        <ul>
+          <li><a href="{{ "/bibliography/" | absolute_url }}"> Bibliography</a></li>
+        </ul>
+        <h5 class="lsbl"> Notebooks and examples </h5>
         <ul>
           <li><a href="{{ "/basic-usage/" | absolute_url }}"> Basic Usage</a></li>
-          <li><a href="{{ "/example-page/" | absolute_url }}"> Example page</a></li>
+          <li><a href="{{ "/basic-usage/" | absolute_url }}"> Basic Usage</a></li>
         </ul>
       </header>
+
       <section>
-
       {{ content }}
-
       </section>
 
       <rsidebar>
       <h3>Table of contents </h3> 
       {% include toc.html html=content %}
       </rsidebar>
- 
+      
       <footer>
         <p>This project is being developed and maintained by <a href="https://github.com/sofia-scz">Sofia A. Scozziero</a>.</p>
       </footer>
