@@ -4,7 +4,7 @@
 
 <%def name="mobile()" filter="minify_css">
   :root {
-    --highlight-color: #dc7;
+    --highlight-color: #ec6;
   }
   .flex {
     display: flex !important;
@@ -84,12 +84,12 @@
   }
 
   a {
-    color: #714dbb;
+    color: #66c;
     text-decoration: none;
     transition: color .3s ease-in-out;
   }
   a:hover {
-    color: #dda26f;
+    color: #c96;
   }
 
   .title code {
@@ -99,7 +99,7 @@
     margin-top: 2em;
   }
   .ident {
-    color: #87124d;
+    color: #906;
   }
 
   pre code {
@@ -280,18 +280,18 @@
     .admonition.note,
     .admonition.info,
     .admonition.important {
-      background: #aef;
+      background: #ccf;
     }
     .admonition.todo,
     .admonition.versionadded,
     .admonition.tip,
     .admonition.hint {
-      background: #dfd;
+      background: #cfc;
     }
     .admonition.warning,
     .admonition.versionchanged,
     .admonition.deprecated {
-      background: #fd4;
+      background: #fc3;
     }
     .admonition.error,
     .admonition.danger,
