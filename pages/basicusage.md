@@ -5,13 +5,13 @@ permalink: /basic-usage/
 
 Interactive version of the notebook at Google Colab [here](https://colab.research.google.com/drive/1Ed-LWcUAaPfMktbDX57c9tdV_v8XbyE3?usp=sharing).
 
-# Notebook 1: Basic Usage
+# Basic usage
 
-In this first notebook we will define a simple model, make a simulation with it, add some noise to the data, and see how to recover the original model using `tsaopy`.
+In this notebook we will define a simple model, make a simulation with it, add some noise to the data, and see how to recover the original model using `tsaopy`.
 
-## Making some data
+# Making some data
 
-We want to make some data by simulating the following model
+We want to make some data by solving the ODE
 
 $$ \ddot{x} + a_1\dot{x} + b_1x = 0\quad; \qquad x_0=1 \qquad v_0=0 \qquad a_1=0.3 \qquad b_1=1 $$
 
@@ -28,181 +28,259 @@ def rk4(f,x,dx):
     k4 = dx*f(x+k3)
     return x + (k1+k4+2*k2+2*k3)/6
 
-def solve_ivp(f,x0,t0tf,dt):
-    P = x0
-    t,tf = t0tf
-    x,v = P
-    result = [[t,x,v]]
+def solve_ivp(f, x0, t0tf, dt):
+    t, tf = t0tf
+    x, v = x0
+    result = [[t, x, v]]
     while t < tf:
-        P = rk4(f,P,dt)
+        x, v = rk4(f, (x, v), dt)
         t = t + dt
-        x,v = P
-        result.append([t,x,v])
+        result.append([t, x, v])
     return np.array(result)
 ```
 
-Then we can run the simulation as
+Then we run the simulation as
 
 ```
 # simulation
-a1,b1 = 0.3,1.0
-deriv = lambda X : np.array([  X[1],  -a1*X[1]-b1*X[0]  ])
+a1, b1 = .3, 1.0
+deriv = lambda X : np.array([X[1],
+                            -a1*X[1]-b1*X[0]])
 
 X0 = np.array([1.0,0.0])
 
-result = solve_ivp(deriv,X0,(0,30),0.01)
+result = solve_ivp(deriv, X0, (0, 30.0), .01)
 
 t,x,v = result[:,0],result[:,1],result[:,2]
 ```
-We'll add another block to fix the length of the arrays to a given number we want
+We add another block to fix the length of the arrays to a given number we want
 
 ```
 # fix time series length
 n_data = len(t)
 n_out = 1000
-step = n_data//n_out
+step = n_data // n_out
 
 x, v, t = x[::step], v[::step], t[::step]
 while len(t) > n_out:
     x, v, t = x[:-1], v[:-1], t[:-1]
 ```
 
-Now, let's plot what we have so far
+We plot what we have so far
 
 ```
 import matplotlib.pyplot as plt
 
 # plot
-plt.figure(figsize=(7, 5), dpi=100)
+plt.figure(dpi=100)
 plt.plot(t, x, color = 'tab:red', label='position')
 plt.plot(t, v, color='tab:purple', label='velocity')
 plt.legend()
 plt.show()
 ```
-![pic1](https://user-images.githubusercontent.com/94293518/172937595-3294ca14-e1d2-4b06-8dac-9d781dfebc9c.png)
+![index](https://user-images.githubusercontent.com/94293518/180663961-3b2d5902-8a72-4855-b30f-aa7209ae205c.png)
 
-Next we will add noise to the data and plot it
+Next we add noise to the data and plot it
 
 ```
 # aux noise function
 np.random.seed(205)
 u_noise, n_noise = 2, 1
-noise = lambda : np.random.uniform(-u_noise,u_noise) +\
-    np.random.normal(0,n_noise)
+noise = lambda: np.random.uniform(-u_noise, u_noise) +\
+    np.random.normal(0, n_noise)
 
 # add noise
 for i in range(n_out):
-    x[i] = x[i] + noise() * 0.05
-    v[i] = v[i] + noise() * 0.05
+    x[i] = x[i] + noise() * .05
+    v[i] = v[i] + noise() * .05
     
 # plot
-plt.figure(figsize=(7, 5), dpi=100)
+plt.figure(dpi=100)
 plt.plot(t, x, color = 'tab:red', label='position')
 plt.plot(t, v, color='tab:purple', label='velocity')
 plt.legend()
 plt.show()
 ```
-![pic2](https://user-images.githubusercontent.com/94293518/172937829-cc86c714-5fb7-4336-858c-018689d7d6ac.png)
+![index](https://user-images.githubusercontent.com/94293518/180663985-6e819aa4-8158-4b88-a2ae-a7e2d52e7084.png)
 
-## Fitting the model with `tsaopy`
+# Fitting the model with TSAOpy
 
-Now that we have our data, we will try to recover the original equation.
+Now that we have our mock data, we will try to recover the original equation. We are assuming the model we used earlier to generate the data is correct, but now we pretend to not know the values of the parameters $x_0$, $v_0$, $a_1$, and $b_1$, an we want to find them by fitting the model to the data.
 
-The first thing needed to set up our `tsaopy` model is importing the data, including both the measurements and the uncertainty.
+## Importing data
+
+The first thing needed to set up our `tsaopy` model is importing the data, including both the measurements and their uncertainty.
 
 ```
 # import data
 
 # if we haven't generated the data here
-# we would be importing it from the source
+# we import it from the source
 
-t_data,x_data = t,x
+t_data, x_data = t, x
 ```
-We need to define the uncertainty of the $x(t)$ measurements. It can be either a single number representing the uncertainty of all measurements or an array of the same length as `x_data` with an uncertainty value for each value of $x$. In this case we will use a baseline for all masurements.
+To define the uncertainty of the measurements, it can be either a single number representing the uncertainty of all measurements or an array of the same shape as `x_data` with an uncertainty value for each value of x in the array. In this case we will use a single number for all masurements.
 
 ```
 # define uncertainty
 
-x_data_unc = 0.2
+x_data_unc = .2
 ```
 
-Next thing we need is to define the parameters for the model. Defining `tsaopy` parameter objects will allow `tsaopy` to build the ODE and everything needed for the fitting. The parameters we are considering for this model are $x_0$, $v_0$ (since we are solving an ODE initial conditions are always required), and the coefficients from the ODE $a_1$ and $b_1$. 
+## Set up some priors
 
-MCMC needs priors for each parameter, we can set them up easily with the prior classes defined in `tsaopy.tools`. For $x_0$ we will assume its value is between $0.7$ and $1.3$ and use a uniform prior. For $v_0$, $a_1$, and $b_1$ we will define gaussian priors centered at 0.
+The next thing we need is to set up priors for the parameters to fit.
+
+We will start by setting up the prior for $x_0$ and $v_0$. Since we are pretending to not know anything about their values, we will just use normal distributions centered at $0$ with a large SD.
 
 ```
 # define priors
 
-x0_prior = tsaopy.tools.uniform_prior(0.7,1.3)
-v0_prior = tsaopy.tools.normal_prior(0,10)
-a1_prior = tsaopy.tools.normal_prior(0,10)
-b1_prior = tsaopy.tools.normal_prior(0,10)
+import quickemcee as qmc
+
+x0_prior = qmc.utils.normal_prior(.0, 10.0)
+v0_prior = qmc.utils.normal_prior(.0, 10.0)
 ```
 
-With the priors defined we can define `tsaopy` parameters. 
+## Set up tsaopy objects
+
+With the data and the priors we set up a `tsaopy` 'Event' object, which summarizes the information about the measurements and the initial conditions.
 
 ```
-# define tsaopy parameters
+# define tsaopy event
 
-x0 = tsaopy.parameters.Fitting(1,'x0',x0_prior)
-v0 = tsaopy.parameters.Fitting(0,'v0',v0_prior)
-a1 = tsaopy.parameters.Fitting(0,'a',a1_prior,1)
-b1 = tsaopy.parameters.Fitting(0,'b',b1_prior,1)
+import tsaopy
 
-parameters = [x0,v0,a1,b1]
+# this dictionary takes the variable names x0 and v0 as keys
+# and each key has the prior for that parameter as its value
+event_dict = {'x0': x0_prior,
+              'v0': v0_prior}
+
+event = tsaopy.events.Event(params=event_dict, t_data=t_data, x_data=x_data,
+                            x_sigma=x_data_unc)
 ```
 
-With the parameters and the data we can set up the `tsaopy` model object as
+Similarly, we now make a dictionary for the ODE coefficients, but now the values for each key will be a list which contains a touple for each coefficient. The touple for each coefficient has its index as first element and its prior as second element.
 
 ```
-mymodel = tsaopy.models.PModel(parameters,t_data,x_data,x_data_unc)
+a1_prior = qmc.utils.normal_prior(.0, 10.0)
+b1_prior = qmc.utils.normal_prior(.0, 10.0)
+
+ode_dict = {'a': [(1, a1_prior)],
+            'b': [(1, b1_prior)]}
 ```
 
-Now we can start running MCMC chains with it. Let's start by running a test chain, we will use 100 walkers, and will have a shorter burn in, so we can see how the sampler explores the space. 
+Now we can build the `tsaopy` 'Model' object, which will automatically set up everything for running MCMC. It takes as arguments the `ode_dict` dictionary, and a list containing `tsaopy` 'Event' objects. The purpose is to allow the user to fit different sets of measurements that may have different initial conditions, equilibrium points, etc. 
+
+In this case we will only use the one we defined earlier however.
 
 ```
-sampler = mymodel.setup_sampler(100,20,300)
+tsaopymodel = tsaopy.models.Model(ode_coefs=ode_dict, events=[event])
 ```
 
-Now let's extract the results and make traceplots
+## Optimize the initial values
+
+Before running MCMC, we will optimize the initial values of the chain by optimizing the negative logarithmic likelihood function.
 
 ```
-samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
-labels = mymodel.params_labels
-tsaopy.tools.traceplots(samples,labels)
+def neg_ll(coords):
+  return - tsaopymodel._log_likelihood(coords)
+
+from scipy.optimize import minimize
+
+sol = minimize(neg_ll, x0=np.zeros(4))
+
+if sol.success:
+  x0 = sol.x
+else:
+  print("The external optimizer didn't converge.")
 ```
-![pic3](https://user-images.githubusercontent.com/94293518/172950111-79208438-852f-4976-9565-b0704967b637.png)
 
-We can see from the traceplot that the chain looks like it has converged in about 300 steps. Let's do another run with a 300 steps burn in, so we can store samples for the result in the production phase.
+## Run MCMC chains
 
-```
-sampler = mymodel.setup_sampler(100,300,300)
-samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
-tsaopy.tools.traceplots(samples,labels)
-```
-
-![pic4](https://user-images.githubusercontent.com/94293518/172951087-4a79c4e6-1ace-4f47-9928-f4e6397ef79f.png)
-
-New traceplots suggest that the samples may belong to a converged chain. Let's plot the autocorrelation functions to double check
-
-```
-tsaopy.tools.autocplots(flat_samples,labels)
-```
-![pic5](https://user-images.githubusercontent.com/94293518/172951503-ce32945a-a1ac-4fa2-9eb9-fa558477c929.png)
-
-
-On the other hand, autocorrelation plots suggest that the chain may be too short, so we run another chain with a longer production phase
+Now we can start running MCMC chains by setting up a `quickemcee` 'Model' object with it(this is done in one line, don't worry). Let's start running a test chain, we will use 100 walkers, and a short burn in so we can see how the sampler explores the space. 
 
 ```
-sampler = mymodel.setup_sampler(100,300,1000)
-samples,flat_samples = sampler.get_chain(), sampler.get_chain(flat=True)
-tsaopy.tools.traceplots(samples,labels)
-tsaopy.tools.autocplots(flat_samples,labels)
+mcmcmodel = tsaopymodel.setup_mcmc_model()
+mcmcsampler = mcmcmodel.run_chain(100, 10, 100,
+                                  init_x=x0)
 ```
-![pic6](https://user-images.githubusercontent.com/94293518/172951684-afb8b098-27c9-4901-9821-dfbb7b77d005.png)
-![pic7](https://user-images.githubusercontent.com/94293518/172951708-5982b02c-0144-4a38-95d9-859ab24fe0a6.png)
+```
+>>>Running burn-in...
+>>>100%|██████████| 10/10 [00:00<00:00, 24.77it/s]
+>>>Running production...
+>>>100%|██████████| 100/100 [00:07<00:00, 13.04it/s]
+```
 
+## Analyze results
 
-And after convincing ourselves that the chain has converged we show the results in cornerplots
+Now let's extract the results
 
-![pic8](https://user-images.githubusercontent.com/94293518/172951737-ab98334b-1717-4b4a-b4ea-7a62f874e271.png)
+```
+samples,flat_samples = mcmcsampler.get_chain(), mcmcsampler.get_chain(flat=True)
+labels = tsaopymodel.paramslabels
+```
+
+And make traceplots
+
+```
+# traceplots
+qmc.utils.traceplots(samples, labels)
+```
+![index](https://user-images.githubusercontent.com/94293518/180664284-61a01bf0-6095-442d-aa4f-2312cce58495.png)
+
+We see that a burn in of about 100 steps might be enough for the chain to converge, so we run another chain.
+
+```
+mcmcmodel = tsaopymodel.setup_mcmc_model()
+mcmcsampler = mcmcmodel.run_chain(100, 100, 100,
+                                  init_x=x0)
+samples,flat_samples = mcmcsampler.get_chain(), mcmcsampler.get_chain(flat=True)
+```
+```
+>>>Running burn-in...
+>>>100%|██████████| 100/100 [00:10<00:00,  9.41it/s]
+>>>Running production...
+>>>100%|██████████| 100/100 [00:03<00:00, 25.31it/s]
+```
+And re do the traceplots
+```
+# traceplots
+qmc.utils.traceplots(samples, labels)
+```
+![index](https://user-images.githubusercontent.com/94293518/180664333-f932b9e4-19fe-419c-8c58-82518533cc10.png)
+
+The chain looks converged now, so we make autocorrelation plots.
+
+```
+# autocplots
+qmc.utils.autocplots(flat_samples, labels)
+```
+![index](https://user-images.githubusercontent.com/94293518/180664349-2fba4d42-0c44-4e0e-a00e-f7b7aff9f45e.png)
+
+Here we see that we could use more samples, so we re do the chain with a longer production phase and re do the autocorrelation plots.
+
+```
+mcmcmodel = tsaopymodel.setup_mcmc_model()
+mcmcsampler = mcmcmodel.run_chain(100, 100, 500,
+                                  init_x=x0, workers=2)
+samples,flat_samples = mcmcsampler.get_chain(), mcmcsampler.get_chain(flat=True)
+
+# autocplots
+qmc.utils.autocplots(flat_samples, labels)
+```
+```
+>>>Running burn-in...
+>>>100%|██████████| 100/100 [00:04<00:00, 21.78it/s]
+>>>Running production...
+>>>100%|██████████| 500/500 [00:20<00:00, 23.87it/s]
+```
+![index](https://user-images.githubusercontent.com/94293518/180664382-1aea0e43-5414-4696-a056-447970e537ed.png)
+
+Finally we show the resulting posteriors in cornerplots.
+
+```
+# cornerplots
+qmc.utils.cornerplots(flat_samples, labels)
+```
+![index](https://user-images.githubusercontent.com/94293518/180664395-6e83f29a-903a-4eac-963f-ec33d2048116.png)
