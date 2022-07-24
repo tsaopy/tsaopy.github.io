@@ -13,28 +13,33 @@
     <div class="wrapper">
       <header>
         <h1><a href="{{ "/" | absolute_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        <center><img src="https://avatars.githubusercontent.com/u/105753409" alt="Logo" height="170" /></center>
 
-        {% if site.logo %}
-          <img src="{{site.logo | relative_url}}" alt="Logo" />
-        {% endif %}
-      
+        <ul class="downloads">
+          <li><a href="{{ site.github.repository_url }}">View On <strong>GitHub</strong></a></li>
+          <li><a href="{{ "/api/" | absolute_url }}">Read <strong>API Docs</strong></a></li>
+          <li><a href="https://doi.org/10.5281/zenodo.6569848">Project <strong>DOI</strong></a></li>
+        </ul>
+        
+        <h3> Resources </h3>
+        <ul>
+          <li><a href="{{ "/basic-usage/" | absolute_url }}"> Basic Usage</a></li>
+          <li><a href="{{ "/example-page/" | absolute_url }}"> Example page</a></li>
+        </ul>
       </header>
       <section>
 
       {{ content }}
 
       </section>
-      
+
       <rsidebar>
-    
       <h3>Table of contents </h3> 
       {% include toc.html html=content %}
-      
       </rsidebar>
-          
+ 
       <footer>
-        <p>This project is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
-        <p><small>Hosted on GitHub Pages</small></p>
+        <p>This project is being developed and maintained by <a href="https://github.com/sofia-scz">Sofia A. Scozziero</a>.</p>
       </footer>
     </div>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
