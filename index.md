@@ -67,7 +67,7 @@ We have a Zenodo DOI set up for the repository for the time being
 
 And this is [my personal ORCID](https://orcid.org/0000-0002-1007-8229)
 
-I recommend the following Bibtex citation
+The following Bibtex citation is recommended
 
 ```
 @software{tsaopy,
@@ -81,4 +81,4 @@ I recommend the following Bibtex citation
 }
 ```
 
-I will probably write an article or something of the sort in the near future. 
+There will probably be an article or something of the sort in the near future. 
