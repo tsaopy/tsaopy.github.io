@@ -14,7 +14,7 @@ Let's assume we have sets of points making up time series such as the following
 
 This library will allow the user to model the dynamics of an $x(t)$ function satisfying a differential equation of the form
 
-$$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F_0 \sin{(\omega t + \phi)} $$
+$$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F(t) $$
 
 along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once the model is defined by choosing which terms  in the ODE will be considered, the program will fit the model to the datasets finding the most likely values for each parameter (including initial conditions). The fitting is done using the MCMC method, implemented in the `emcee` library. 
 
