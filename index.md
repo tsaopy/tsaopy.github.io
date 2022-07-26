@@ -16,7 +16,7 @@ This library will allow the user to model the dynamics of an $x(t)$ function sat
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F(t) $$
 
-along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once the model is defined by choosing which terms  in the ODE will be considered, the program will fit the model to the datasets finding the most likely values for each parameter (including initial conditions). The fitting is done using the MCMC method, implemented in the `emcee` library. 
+along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once the model is defined by adding the $F(t)$ function and choosing which terms  in the ODE will be considered, the program will fit the model to the datasets finding the most likely values for each parameter (including initial conditions). The fitting is done using the MCMC method, implemented in the `emcee` library. 
 
 More details are given in [methodology](https://tsaopy.github.io/methodology/).
 
