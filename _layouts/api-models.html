@@ -44,16 +44,16 @@ class ModelInitException(Exception):
 
 
 #           tsaopy scripts
-class Model:
+class BaseModel:
     &#34;&#34;&#34;
-    tsaopy Model class.
+    tsaopy BaseModel class.
 
     This object condenses all necessary variables to set up the ODE according
     to the parameters provided plus the MCMC configuration to do the fitting.
 
     &#34;&#34;&#34;
 
-    def __init__(self, ode_coefs, events):
+    def __init__(self, ode_coefs, events, driving_force=None):
         r&#34;&#34;&#34;
         Parameters
         ----------
@@ -72,13 +72,18 @@ class Model:
 
             * the order of the term for &#39;a&#39; and &#39;b&#39; coefs. Eg: in \(b_2x^2\)
             the index of \(b_2\) coef is 2.
-            * for &#39;f&#39; coefs, \(F_0\) is 1, \(\omega\) is 2, and \(\phi\) is 3.
+            * for &#39;f&#39; coefs pass the index of each element in f_coords array
+            starting at 1.
             * for &#39;c&#39; coefs use a touple with two indices for the order of each
             factor. Eg: in \(c_{21}x^2\dot{x}\) index is (2, 1).
         events : list
             list containing all tsaopy Event objects to which the model will be
             fitted. Even if only one Event is used, pass it inside a list.
-
+        driving_force : callable, optional
+            A callable to compute the driving force. It must take two arguments
+            , first a float for the time variable, and then an array with all
+            the parameters other than the time variable. The default is
+            None(uses \(F(t)=0\)).
 
         Examples
         --------
@@ -149,19 +154,6 @@ class Model:
             self.bdim = 0
             self.blen = 0
 
-        # f vector
-        if &#39;f&#39; not in ode_coefs:
-            self.using_f = False
-        elif &#39;f&#39; in ode_coefs:
-            if not len(ode_coefs[&#39;f&#39;]) == 3:
-                raise ModelInitException(&#34;f key provided in ode_coefs dict but&#34;
-                                         &#34; its value&#39;s length is not 3.&#34;)
-            self.using_f = True
-            fcoefs = ode_coefs[&#39;f&#39;]
-            fcoefs.sort()
-            self.odecoefs += fcoefs
-            self.paramslabels += [r&#39;F_0&#39;, r&#39;\omega&#39;, r&#39;\phi&#39;]
-
         # C matrix
         if &#39;c&#39; in ode_coefs:
             ccoefs = ode_coefs[&#39;c&#39;]
@@ -177,6 +169,26 @@ class Model:
             self.cind = []
             self.cdim = 0
             self.cn, self.cm = 0, 0
+
+        # f ~ driving force
+        if &#39;f&#39; not in ode_coefs and driving_force is None:
+            self.using_f = False
+            self.fdim = 0
+        elif &#39;f&#39; not in ode_coefs and driving_force is not None:
+            raise ModelInitException(&#34;driving_force was passed but there is &#34;
+                                     &#34;no f key in ode_coefs.&#34;)
+        elif &#39;f&#39; in ode_coefs and driving_force is None:
+            raise ModelInitException(&#34;f key was passed in ode_coefs but &#34;
+                                     &#34;driving_force is None.&#34;)
+        elif &#39;f&#39; in ode_coefs and driving_force is not None:
+            self.using_f = True
+            self.df_function = driving_force
+            fcoefs = ode_coefs[&#39;f&#39;]
+            fcoefs.sort()
+            self.fdim = len(fcoefs)
+            self.odecoefs += fcoefs
+            self.paramslabels += [&#39;f&#39; + str(i)
+                                  for i in range(1, self.fdim + 1)]
 
         self.odecoefs_ndim = len(self.odecoefs)
         self.odepriors = [c[-1] for c in self.odecoefs]
@@ -199,38 +211,43 @@ class Model:
         for e in events:
             self.ndim += e.ndim
 
-    def _ode_arrays(self, ode_coefs):
+    def _ode_arrays(self, abc_coefs):
         alen, blen, cn, cm = self.alen, self.blen, self.cn, self.cm
         aind, bind, cind = self.aind, self.bind, self.cind
         adim, bdim = self.adim, self.bdim
-        A, B, F, C = (np.zeros(alen), np.zeros(blen), np.zeros(3),
-                      np.zeros((cn, cm)))
+        A, B, C = (np.zeros(alen), np.zeros(blen), np.zeros((cn, cm)))
 
         for i, ind in enumerate(aind):
-            A[ind-1] = ode_coefs[i]
+            A[ind-1] = abc_coefs[i]
         last_n = adim
 
         for i, ind in enumerate(bind):
-            B[ind-1] = ode_coefs[i + last_n]
+            B[ind-1] = abc_coefs[i + last_n]
         last_n += bdim
-
-        if self.using_f:
-            F = ode_coefs[last_n: last_n + 3]
-            last_n += 3
 
         for i, ind in enumerate(cind):
             n, m = ind
-            C[n - 1, m - 1] = ode_coefs[i + last_n]
+            C[n - 1, m - 1] = abc_coefs[i + last_n]
 
-        return A, B, F, C
+        return A, B, C
+
+    def _df_array(self, event, f_params):
+        Flen = 2 * (event.datalen - 1) * event.tsplit + 1
+        if self.using_f:
+            event_t = np.linspace(event.t_data[0], event.t_data[-1], Flen)
+            return self.df_function(event_t, f_params)
+        elif not self.using_f:
+            return np.zeros(Flen)
 
     def _log_likelihood(self, coords):
         &#34;&#34;&#34;Compute log likelihood.&#34;&#34;&#34;
-        odecoefs_ndim = self.odecoefs_ndim
-        ode_coefs, event_params = (coords[:odecoefs_ndim],
-                                   coords[odecoefs_ndim:])
+        abc_dim = self.adim + self.bdim + self.cdim
+        f_dim = self.fdim
+        abc_coefs, f_params, event_params = (coords[:abc_dim],
+                                             coords[abc_dim: abc_dim + f_dim],
+                                             coords[abc_dim + f_dim:])
 
-        A, B, F, C = self._ode_arrays(ode_coefs)
+        A, B, C = self._ode_arrays(abc_coefs)
 
         last_n = 0
         result = .0
@@ -254,7 +271,9 @@ class Model:
             else:
                 logfv = None
 
-            result += event._log_likelihood(A, B, F, C, x0v0,
+            F = self._df_array(event, f_params)
+
+            result += event._log_likelihood(A, B, C, F, x0v0,
                                             ep, logfx, logfv)
 
         return result
@@ -329,28 +348,27 @@ class Model:
             array of the same shape as the x_data attribute in the i-eth event.
 
         &#34;&#34;&#34;
-        odecoefs_ndim = self.odecoefs_ndim
-        ode_coefs, event_params = (coords[:odecoefs_ndim],
-                                   coords[odecoefs_ndim:])
+        abc_dim = self.adim + self.bdim + self.cdim
+        f_dim = self.fdim
+        abc_coefs, f_params, event_params = (coords[:abc_dim],
+                                             coords[abc_dim: abc_dim + f_dim],
+                                             coords[abc_dim + f_dim:])
 
-        A, B, F, C = self._ode_arrays(ode_coefs)
+        A, B, C = self._ode_arrays(abc_coefs)
 
         last_n = 0
-        # iterate over events
+        # iterate over all events
         for j, event in enumerate(self.events):
-            x0v0 = event_params[last_n:last_n + 2]
-            last_n += 2
-            if event.using_ep:
-                ep = event_params[last_n]
-                last_n += 1
-            else:
-                ep = None
-            if event.using_logfx:
-                last_n += 1
-            if event.using_logfv:
-                last_n += 1
-            if j == i-1:
-                return event._predict(A, B, F, C, x0v0, ep)</code></pre>
+            if not j == i-1:
+                last_n += event.ndim
+            elif j == i-1:
+                x0v0, ep = event_params[last_n:last_n + 2], None
+                last_n += 2
+                if event.using_ep:
+                    ep = event_params[last_n]
+                    last_n += 1
+                F = self._df_array(event, f_params)
+                return event._predict(A, B, C, F, x0v0, ep)</code></pre>
 </details>
 </section>
 <section>
@@ -362,12 +380,12 @@ class Model:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="tsaopy.models.Model"><code class="flex name class">
-<span>class <span class="ident">Model</span></span>
-<span>(</span><span>ode_coefs, events)</span>
+<dt id="tsaopy.models.BaseModel"><code class="flex name class">
+<span>class <span class="ident">BaseModel</span></span>
+<span>(</span><span>ode_coefs, events, driving_force=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>tsaopy Model class.</p>
+<div class="desc"><p>tsaopy BaseModel class.</p>
 <p>This object condenses all necessary variables to set up the ODE according
 to the parameters provided plus the MCMC configuration to do the fitting.</p>
 <h2 id="parameters">Parameters</h2>
@@ -385,7 +403,8 @@ touples with the index and the prior for each coefficient.</p>
 <ul>
 <li>the order of the term for 'a' and 'b' coefs. Eg: in <span><span class="MathJax_Preview">b_2x^2</span><script type="math/tex">b_2x^2</script></span>
 the index of <span><span class="MathJax_Preview">b_2</span><script type="math/tex">b_2</script></span> coef is 2.</li>
-<li>for 'f' coefs, <span><span class="MathJax_Preview">F_0</span><script type="math/tex">F_0</script></span> is 1, <span><span class="MathJax_Preview">\omega</span><script type="math/tex">\omega</script></span> is 2, and <span><span class="MathJax_Preview">\phi</span><script type="math/tex">\phi</script></span> is 3.</li>
+<li>for 'f' coefs pass the index of each element in f_coords array
+starting at 1.</li>
 <li>for 'c' coefs use a touple with two indices for the order of each
 factor. Eg: in <span><span class="MathJax_Preview">c_{21}x^2\dot{x}</span><script type="math/tex">c_{21}x^2\dot{x}</script></span> index is (2, 1).</li>
 </ul>
@@ -393,6 +412,11 @@ factor. Eg: in <span><span class="MathJax_Preview">c_{21}x^2\dot{x}</span><scrip
 <dt><strong><code>events</code></strong> :&ensp;<code>list</code></dt>
 <dd>list containing all tsaopy Event objects to which the model will be
 fitted. Even if only one Event is used, pass it inside a list.</dd>
+<dt><strong><code>driving_force</code></strong> :&ensp;<code>callable</code>, optional</dt>
+<dd>A callable to compute the driving force. It must take two arguments
+, first a float for the time variable, and then an array with all
+the parameters other than the time variable. The default is
+None(uses <span><span class="MathJax_Preview">F(t)=0</span><script type="math/tex">F(t)=0</script></span>).</dd>
 </dl>
 <h2 id="examples">Examples</h2>
 <pre><code>event1 = tsaopy.events.Event(params1, t1, x1, x1_sigma)
@@ -413,16 +437,16 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Model:
+<pre><code class="python">class BaseModel:
     &#34;&#34;&#34;
-    tsaopy Model class.
+    tsaopy BaseModel class.
 
     This object condenses all necessary variables to set up the ODE according
     to the parameters provided plus the MCMC configuration to do the fitting.
 
     &#34;&#34;&#34;
 
-    def __init__(self, ode_coefs, events):
+    def __init__(self, ode_coefs, events, driving_force=None):
         r&#34;&#34;&#34;
         Parameters
         ----------
@@ -441,13 +465,18 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
 
             * the order of the term for &#39;a&#39; and &#39;b&#39; coefs. Eg: in \(b_2x^2\)
             the index of \(b_2\) coef is 2.
-            * for &#39;f&#39; coefs, \(F_0\) is 1, \(\omega\) is 2, and \(\phi\) is 3.
+            * for &#39;f&#39; coefs pass the index of each element in f_coords array
+            starting at 1.
             * for &#39;c&#39; coefs use a touple with two indices for the order of each
             factor. Eg: in \(c_{21}x^2\dot{x}\) index is (2, 1).
         events : list
             list containing all tsaopy Event objects to which the model will be
             fitted. Even if only one Event is used, pass it inside a list.
-
+        driving_force : callable, optional
+            A callable to compute the driving force. It must take two arguments
+            , first a float for the time variable, and then an array with all
+            the parameters other than the time variable. The default is
+            None(uses \(F(t)=0\)).
 
         Examples
         --------
@@ -518,19 +547,6 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
             self.bdim = 0
             self.blen = 0
 
-        # f vector
-        if &#39;f&#39; not in ode_coefs:
-            self.using_f = False
-        elif &#39;f&#39; in ode_coefs:
-            if not len(ode_coefs[&#39;f&#39;]) == 3:
-                raise ModelInitException(&#34;f key provided in ode_coefs dict but&#34;
-                                         &#34; its value&#39;s length is not 3.&#34;)
-            self.using_f = True
-            fcoefs = ode_coefs[&#39;f&#39;]
-            fcoefs.sort()
-            self.odecoefs += fcoefs
-            self.paramslabels += [r&#39;F_0&#39;, r&#39;\omega&#39;, r&#39;\phi&#39;]
-
         # C matrix
         if &#39;c&#39; in ode_coefs:
             ccoefs = ode_coefs[&#39;c&#39;]
@@ -546,6 +562,26 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
             self.cind = []
             self.cdim = 0
             self.cn, self.cm = 0, 0
+
+        # f ~ driving force
+        if &#39;f&#39; not in ode_coefs and driving_force is None:
+            self.using_f = False
+            self.fdim = 0
+        elif &#39;f&#39; not in ode_coefs and driving_force is not None:
+            raise ModelInitException(&#34;driving_force was passed but there is &#34;
+                                     &#34;no f key in ode_coefs.&#34;)
+        elif &#39;f&#39; in ode_coefs and driving_force is None:
+            raise ModelInitException(&#34;f key was passed in ode_coefs but &#34;
+                                     &#34;driving_force is None.&#34;)
+        elif &#39;f&#39; in ode_coefs and driving_force is not None:
+            self.using_f = True
+            self.df_function = driving_force
+            fcoefs = ode_coefs[&#39;f&#39;]
+            fcoefs.sort()
+            self.fdim = len(fcoefs)
+            self.odecoefs += fcoefs
+            self.paramslabels += [&#39;f&#39; + str(i)
+                                  for i in range(1, self.fdim + 1)]
 
         self.odecoefs_ndim = len(self.odecoefs)
         self.odepriors = [c[-1] for c in self.odecoefs]
@@ -568,38 +604,43 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
         for e in events:
             self.ndim += e.ndim
 
-    def _ode_arrays(self, ode_coefs):
+    def _ode_arrays(self, abc_coefs):
         alen, blen, cn, cm = self.alen, self.blen, self.cn, self.cm
         aind, bind, cind = self.aind, self.bind, self.cind
         adim, bdim = self.adim, self.bdim
-        A, B, F, C = (np.zeros(alen), np.zeros(blen), np.zeros(3),
-                      np.zeros((cn, cm)))
+        A, B, C = (np.zeros(alen), np.zeros(blen), np.zeros((cn, cm)))
 
         for i, ind in enumerate(aind):
-            A[ind-1] = ode_coefs[i]
+            A[ind-1] = abc_coefs[i]
         last_n = adim
 
         for i, ind in enumerate(bind):
-            B[ind-1] = ode_coefs[i + last_n]
+            B[ind-1] = abc_coefs[i + last_n]
         last_n += bdim
-
-        if self.using_f:
-            F = ode_coefs[last_n: last_n + 3]
-            last_n += 3
 
         for i, ind in enumerate(cind):
             n, m = ind
-            C[n - 1, m - 1] = ode_coefs[i + last_n]
+            C[n - 1, m - 1] = abc_coefs[i + last_n]
 
-        return A, B, F, C
+        return A, B, C
+
+    def _df_array(self, event, f_params):
+        Flen = 2 * (event.datalen - 1) * event.tsplit + 1
+        if self.using_f:
+            event_t = np.linspace(event.t_data[0], event.t_data[-1], Flen)
+            return self.df_function(event_t, f_params)
+        elif not self.using_f:
+            return np.zeros(Flen)
 
     def _log_likelihood(self, coords):
         &#34;&#34;&#34;Compute log likelihood.&#34;&#34;&#34;
-        odecoefs_ndim = self.odecoefs_ndim
-        ode_coefs, event_params = (coords[:odecoefs_ndim],
-                                   coords[odecoefs_ndim:])
+        abc_dim = self.adim + self.bdim + self.cdim
+        f_dim = self.fdim
+        abc_coefs, f_params, event_params = (coords[:abc_dim],
+                                             coords[abc_dim: abc_dim + f_dim],
+                                             coords[abc_dim + f_dim:])
 
-        A, B, F, C = self._ode_arrays(ode_coefs)
+        A, B, C = self._ode_arrays(abc_coefs)
 
         last_n = 0
         result = .0
@@ -623,7 +664,9 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
             else:
                 logfv = None
 
-            result += event._log_likelihood(A, B, F, C, x0v0,
+            F = self._df_array(event, f_params)
+
+            result += event._log_likelihood(A, B, C, F, x0v0,
                                             ep, logfx, logfv)
 
         return result
@@ -698,32 +741,31 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
             array of the same shape as the x_data attribute in the i-eth event.
 
         &#34;&#34;&#34;
-        odecoefs_ndim = self.odecoefs_ndim
-        ode_coefs, event_params = (coords[:odecoefs_ndim],
-                                   coords[odecoefs_ndim:])
+        abc_dim = self.adim + self.bdim + self.cdim
+        f_dim = self.fdim
+        abc_coefs, f_params, event_params = (coords[:abc_dim],
+                                             coords[abc_dim: abc_dim + f_dim],
+                                             coords[abc_dim + f_dim:])
 
-        A, B, F, C = self._ode_arrays(ode_coefs)
+        A, B, C = self._ode_arrays(abc_coefs)
 
         last_n = 0
-        # iterate over events
+        # iterate over all events
         for j, event in enumerate(self.events):
-            x0v0 = event_params[last_n:last_n + 2]
-            last_n += 2
-            if event.using_ep:
-                ep = event_params[last_n]
-                last_n += 1
-            else:
-                ep = None
-            if event.using_logfx:
-                last_n += 1
-            if event.using_logfv:
-                last_n += 1
-            if j == i-1:
-                return event._predict(A, B, F, C, x0v0, ep)</code></pre>
+            if not j == i-1:
+                last_n += event.ndim
+            elif j == i-1:
+                x0v0, ep = event_params[last_n:last_n + 2], None
+                last_n += 2
+                if event.using_ep:
+                    ep = event_params[last_n]
+                    last_n += 1
+                F = self._df_array(event, f_params)
+                return event._predict(A, B, C, F, x0v0, ep)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="tsaopy.models.Model.event_predict"><code class="name flex">
+<dt id="tsaopy.models.BaseModel.event_predict"><code class="name flex">
 <span>def <span class="ident">event_predict</span></span>(<span>self, i, coords)</span>
 </code></dt>
 <dd>
@@ -772,31 +814,30 @@ for each model, total number of parameters to fit).</dd>
         array of the same shape as the x_data attribute in the i-eth event.
 
     &#34;&#34;&#34;
-    odecoefs_ndim = self.odecoefs_ndim
-    ode_coefs, event_params = (coords[:odecoefs_ndim],
-                               coords[odecoefs_ndim:])
+    abc_dim = self.adim + self.bdim + self.cdim
+    f_dim = self.fdim
+    abc_coefs, f_params, event_params = (coords[:abc_dim],
+                                         coords[abc_dim: abc_dim + f_dim],
+                                         coords[abc_dim + f_dim:])
 
-    A, B, F, C = self._ode_arrays(ode_coefs)
+    A, B, C = self._ode_arrays(abc_coefs)
 
     last_n = 0
-    # iterate over events
+    # iterate over all events
     for j, event in enumerate(self.events):
-        x0v0 = event_params[last_n:last_n + 2]
-        last_n += 2
-        if event.using_ep:
-            ep = event_params[last_n]
-            last_n += 1
-        else:
-            ep = None
-        if event.using_logfx:
-            last_n += 1
-        if event.using_logfv:
-            last_n += 1
-        if j == i-1:
-            return event._predict(A, B, F, C, x0v0, ep)</code></pre>
+        if not j == i-1:
+            last_n += event.ndim
+        elif j == i-1:
+            x0v0, ep = event_params[last_n:last_n + 2], None
+            last_n += 2
+            if event.using_ep:
+                ep = event_params[last_n]
+                last_n += 1
+            F = self._df_array(event, f_params)
+            return event._predict(A, B, C, F, x0v0, ep)</code></pre>
 </details>
 </dd>
-<dt id="tsaopy.models.Model.setup_mcmc_model"><code class="name flex">
+<dt id="tsaopy.models.BaseModel.setup_mcmc_model"><code class="name flex">
 <span>def <span class="ident">setup_mcmc_model</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -879,10 +920,10 @@ sampler = qmcmodel.run_chain(100, 50, 100)
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="tsaopy.models.Model" href="#tsaopy.models.Model">Model</a></code></h4>
+<h4><code><a title="tsaopy.models.BaseModel" href="#tsaopy.models.BaseModel">BaseModel</a></code></h4>
 <ul class="">
-<li><code><a title="tsaopy.models.Model.event_predict" href="#tsaopy.models.Model.event_predict">event_predict</a></code></li>
-<li><code><a title="tsaopy.models.Model.setup_mcmc_model" href="#tsaopy.models.Model.setup_mcmc_model">setup_mcmc_model</a></code></li>
+<li><code><a title="tsaopy.models.BaseModel.event_predict" href="#tsaopy.models.BaseModel.event_predict">event_predict</a></code></li>
+<li><code><a title="tsaopy.models.BaseModel.setup_mcmc_model" href="#tsaopy.models.BaseModel.setup_mcmc_model">setup_mcmc_model</a></code></li>
 </ul>
 </li>
 <li>
