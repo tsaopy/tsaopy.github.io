@@ -7,6 +7,12 @@ permalink: /bibliography/
 
 Keep in mind that this is a work in progress and the list may be modified.
 
+
+## ODEs and Non Linear Dynamics generalities
+
+- Jordan, D., & Smith, P. (2007). Nonlinear ordinary differential equations (4th ed.). Oxford University Press.
+
+
 ## Anharmonic Oscillators specifics
 
 - B. R. Smith Jr., "The quadratically damped oscillator: A case study of a non-linear equation of motion", American Journal of Physics 80, 816-824 (2012) https://doi.org/10.1119/1.4729440
@@ -25,13 +31,11 @@ Keep in mind that this is a work in progress and the list may be modified.
 
 - Oyedeji, K. (2005). An analysis of a nonlinear elastic force van der Pol oscillator equation. Journal of Sound and Vibration, 281(1-2), 417–422. doi:10.1016/j.jsv.2004.03.040
 
-## ODEs and Non Linear Dynamics generalities
-
-- Jordan, D., & Smith, P. (2007). Nonlinear ordinary differential equations (4th ed.). Oxford University Press.
 
 ## Time Series
 
 - Schelter, B., Winterhalder, M., & Timmer, J. (Eds.). (2006). Handbook of Time Series Analysis. Wiley. https://doi.org/10.1002/9783527609970 
+
 
 ## MCMC and Bayesian Inference
 
