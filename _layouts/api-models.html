@@ -97,9 +97,14 @@ class BaseModel:
                                 &#39;f&#39;: [(1, F_prior), (2, w_prior),
                                       (3, p_prior)],
                                 &#39;c&#39;: [((2, 1), c21_prior)]}
+ 
+            def dforce(t, f_params):
+                F, w, p = f_params
+                return F*np.sin(w*t + p)
 
             model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
-                                         events=[event1, event2, event3])
+                                         events=[event1, event2, event3],
+                                         driving_force=dforce)
         &#34;&#34;&#34;
         # run tests
         for i in ode_coefs:
@@ -193,16 +198,15 @@ class BaseModel:
         self.odecoefs_ndim = len(self.odecoefs)
         self.odepriors = [c[-1] for c in self.odecoefs]
 
-        # finish param labels &amp; ini guess
+        # finish param labels
         for i, event in enumerate(events):
             self.paramslabels += [str(i+1) + &#39; - &#39; + s
                                   for s in [&#39;x0&#39;, &#39;v0&#39;]]
             if event.using_ep:
                 self.paramslabels.append(str(i+1) + &#39; - ep&#39;)
-            if event.using_logfx:
-                self.paramslabels.append(str(i+1) + &#39; - log_fx&#39;)
-            if event.using_logfv:
-                self.paramslabels.append(str(i+1) + &#39; - log_fv&#39;)
+            if event.custom_ll_params:
+                self.paramslabels += [str(i+1) + &#39; - &#39; + _ for _ in
+                                      event.custom_ll_params_labels]
 
         # store events and final data
         self.events = events
@@ -260,22 +264,16 @@ class BaseModel:
                 last_n += 1
             else:
                 ep = None
-            if event.using_logfx:
-                logfx = event_params[last_n]
-                last_n += 1
+            if event.custom_ll_params:
+                ll_params = event_params[last_n:last_n + event.cllp_ndim]
+                last_n += event.cllp_ndim
             else:
-                logfx = None
-            if event.using_logfv:
-                logfv = event_params[last_n]
-                last_n += 1
-            else:
-                logfv = None
+                ll_params = None
 
             F = self._df_array(event, f_params)
 
             result += event._log_likelihood(A, B, C, F, x0v0,
-                                            ep, logfx, logfv)
-
+                                            ep, ll_params)
         return result
 
     def _log_prior(self, coords):
@@ -368,7 +366,34 @@ class BaseModel:
                     ep = event_params[last_n]
                     last_n += 1
                 F = self._df_array(event, f_params)
-                return event._predict(A, B, C, F, x0v0, ep)</code></pre>
+                return event._predict(A, B, C, F, x0v0, ep)
+
+    def neg_ll(self, coords):
+        &#34;&#34;&#34;
+        Compute the negative logarithmic likelihood.
+
+        Compute the negative logarithmic likelihood for a set of parameter
+        values for the defined model. This is best used when optimizing the
+        initial values with an external optimizer.
+
+        Parameters
+        ----------
+        coords : array
+            values for each parameter. The elements must be passed in the same
+            order than the parameters arg that was passed when initializing the
+            model.
+
+        Returns
+        -------
+        float
+            value of `neg_ll` for the given parameter values.
+
+        Examples
+        -------
+            f_to_minimize = my_model.neg_ll
+            external_function_minimizer(f_to_minimize, *args)
+        &#34;&#34;&#34;
+        return -self._log_likelihood(coords)</code></pre>
 </details>
 </section>
 <section>
@@ -430,8 +455,13 @@ model1_ode_coefs = {'a': [(1, a1_prior), (2, a2_prior)],
                           (3, p_prior)],
                     'c': [((2, 1), c21_prior)]}
 
+def dforce(t, f_params):
+    F, w, p = f_params
+    return F*np.sin(w*t + p)
+
 model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
-                             events=[event1, event2, event3])
+                             events=[event1, event2, event3],
+                             driving_force=dforce)
 </code></pre></div>
 <details class="source">
 <summary>
@@ -490,9 +520,14 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
                                 &#39;f&#39;: [(1, F_prior), (2, w_prior),
                                       (3, p_prior)],
                                 &#39;c&#39;: [((2, 1), c21_prior)]}
+ 
+            def dforce(t, f_params):
+                F, w, p = f_params
+                return F*np.sin(w*t + p)
 
             model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
-                                         events=[event1, event2, event3])
+                                         events=[event1, event2, event3],
+                                         driving_force=dforce)
         &#34;&#34;&#34;
         # run tests
         for i in ode_coefs:
@@ -586,16 +621,15 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
         self.odecoefs_ndim = len(self.odecoefs)
         self.odepriors = [c[-1] for c in self.odecoefs]
 
-        # finish param labels &amp; ini guess
+        # finish param labels
         for i, event in enumerate(events):
             self.paramslabels += [str(i+1) + &#39; - &#39; + s
                                   for s in [&#39;x0&#39;, &#39;v0&#39;]]
             if event.using_ep:
                 self.paramslabels.append(str(i+1) + &#39; - ep&#39;)
-            if event.using_logfx:
-                self.paramslabels.append(str(i+1) + &#39; - log_fx&#39;)
-            if event.using_logfv:
-                self.paramslabels.append(str(i+1) + &#39; - log_fv&#39;)
+            if event.custom_ll_params:
+                self.paramslabels += [str(i+1) + &#39; - &#39; + _ for _ in
+                                      event.custom_ll_params_labels]
 
         # store events and final data
         self.events = events
@@ -653,22 +687,16 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
                 last_n += 1
             else:
                 ep = None
-            if event.using_logfx:
-                logfx = event_params[last_n]
-                last_n += 1
+            if event.custom_ll_params:
+                ll_params = event_params[last_n:last_n + event.cllp_ndim]
+                last_n += event.cllp_ndim
             else:
-                logfx = None
-            if event.using_logfv:
-                logfv = event_params[last_n]
-                last_n += 1
-            else:
-                logfv = None
+                ll_params = None
 
             F = self._df_array(event, f_params)
 
             result += event._log_likelihood(A, B, C, F, x0v0,
-                                            ep, logfx, logfv)
-
+                                            ep, ll_params)
         return result
 
     def _log_prior(self, coords):
@@ -761,7 +789,34 @@ model1 = tsaopy.models.Model(ode_coefs=model1_ode_coefs,
                     ep = event_params[last_n]
                     last_n += 1
                 F = self._df_array(event, f_params)
-                return event._predict(A, B, C, F, x0v0, ep)</code></pre>
+                return event._predict(A, B, C, F, x0v0, ep)
+
+    def neg_ll(self, coords):
+        &#34;&#34;&#34;
+        Compute the negative logarithmic likelihood.
+
+        Compute the negative logarithmic likelihood for a set of parameter
+        values for the defined model. This is best used when optimizing the
+        initial values with an external optimizer.
+
+        Parameters
+        ----------
+        coords : array
+            values for each parameter. The elements must be passed in the same
+            order than the parameters arg that was passed when initializing the
+            model.
+
+        Returns
+        -------
+        float
+            value of `neg_ll` for the given parameter values.
+
+        Examples
+        -------
+            f_to_minimize = my_model.neg_ll
+            external_function_minimizer(f_to_minimize, *args)
+        &#34;&#34;&#34;
+        return -self._log_likelihood(coords)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -835,6 +890,62 @@ for each model, total number of parameters to fit).</dd>
                 last_n += 1
             F = self._df_array(event, f_params)
             return event._predict(A, B, C, F, x0v0, ep)</code></pre>
+</details>
+</dd>
+<dt id="tsaopy.models.BaseModel.neg_ll"><code class="name flex">
+<span>def <span class="ident">neg_ll</span></span>(<span>self, coords)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute the negative logarithmic likelihood.</p>
+<p>Compute the negative logarithmic likelihood for a set of parameter
+values for the defined model. This is best used when optimizing the
+initial values with an external optimizer.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>coords</code></strong> :&ensp;<code>array</code></dt>
+<dd>values for each parameter. The elements must be passed in the same
+order than the parameters arg that was passed when initializing the
+model.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>value of <code>neg_ll</code> for the given parameter values.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code>f_to_minimize = my_model.neg_ll
+external_function_minimizer(f_to_minimize, *args)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def neg_ll(self, coords):
+    &#34;&#34;&#34;
+    Compute the negative logarithmic likelihood.
+
+    Compute the negative logarithmic likelihood for a set of parameter
+    values for the defined model. This is best used when optimizing the
+    initial values with an external optimizer.
+
+    Parameters
+    ----------
+    coords : array
+        values for each parameter. The elements must be passed in the same
+        order than the parameters arg that was passed when initializing the
+        model.
+
+    Returns
+    -------
+    float
+        value of `neg_ll` for the given parameter values.
+
+    Examples
+    -------
+        f_to_minimize = my_model.neg_ll
+        external_function_minimizer(f_to_minimize, *args)
+    &#34;&#34;&#34;
+    return -self._log_likelihood(coords)</code></pre>
 </details>
 </dd>
 <dt id="tsaopy.models.BaseModel.setup_mcmc_model"><code class="name flex">
@@ -923,6 +1034,7 @@ sampler = qmcmodel.run_chain(100, 50, 100)
 <h4><code><a title="tsaopy.models.BaseModel" href="#tsaopy.models.BaseModel">BaseModel</a></code></h4>
 <ul class="">
 <li><code><a title="tsaopy.models.BaseModel.event_predict" href="#tsaopy.models.BaseModel.event_predict">event_predict</a></code></li>
+<li><code><a title="tsaopy.models.BaseModel.neg_ll" href="#tsaopy.models.BaseModel.neg_ll">neg_ll</a></code></li>
 <li><code><a title="tsaopy.models.BaseModel.setup_mcmc_model" href="#tsaopy.models.BaseModel.setup_mcmc_model">setup_mcmc_model</a></code></li>
 </ul>
 </li>
