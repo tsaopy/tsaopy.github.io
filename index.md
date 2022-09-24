@@ -53,7 +53,8 @@ If you can import `tsaopy` succesfully try running the basic test script. Go to 
 
 If everything is working properly something like this should be displayed
 
-<img src="https://raw.githubusercontent.com/tsaopy/tsaopy.github.io/main/assets/mainpage_sample_pic.png" width="400">
+![index](https://user-images.githubusercontent.com/94293518/192122736-f272aa9b-5106-41be-bb1c-b4c560181531.png)
+
 
 ## Referencing TSAOpy
 
