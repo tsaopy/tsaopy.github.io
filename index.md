@@ -12,13 +12,11 @@ Let's assume we have sets of points making up time series such as the following
 
 ![index](https://user-images.githubusercontent.com/94293518/180660624-b9c43ffd-2f0f-48b3-96b8-bac9a13a1f91.png)
 
-This library will allow the user to model the dynamics of an $x(t)$ function satisfying a differential equation of the form
+This library will allow the user to model the dynamics of the $x(t)$ function with a differential equation of the form
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F(t) $$
 
-along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. Once the model is defined by adding the $F(t)$ function and choosing which terms  in the ODE will be considered, the program will fit the model to the datasets finding the most likely values for each parameter (including initial conditions). The fitting is done using the MCMC method, implemented in the `emcee` library. 
-
-More details are given in [methodology](https://tsaopy.github.io/methodology/).
+along with initial conditions $x(t=0)=x_0$ and $\dot{x}(t=0)=v_0$ required to solve the ODE numerically. The program will fit the model to the datasets finding the most likely values for each parameters. The fitting is done using a maximum likelihood estimation, and the MCMC method, implemented in the `emcee` library, is used to find a posterior distribution for the parameters. 
 
 ## Why doing this?
 
@@ -32,23 +30,21 @@ Running this analysis allows one to find an ODE that a(or a set of) time series 
 
 - In order to make `tsaopy` work one should first be using a Linux PC, specifically it's being developed and tested on Ubuntu 20+ systems. Windows won't work, and we haven't tried it on macOS.
 
-- Necessary Python dependencies are `numpy`, and another package I developed(largely to serve as a base for newer versions of `tsaopy`) which is `quickemcee`, which also depends on `scipy`, `matplotlib`, `emcee`, and `corner`. 
+- Necessary Python dependencies are `numpy`, and another package I developed(largely to serve as a base for `tsaopy`) which is `quickemcee`, which also depends on `scipy`, `matplotlib`, `emcee`, and `corner`. 
 
-- `tsaopy` uses a Fortran module in its backend. In order to build this module it is necessary that there is a Fortran compiler, such as `gfortran`, installed and properly pathed. If it's not, then `sudo apt-get install gfortran` should install the compiler. 
+- `tsaopy` uses a Fortran submodule in its backend. In order to build it, it's necessary that there's a Fortran compiler, such as `gfortran`, installed and properly pathed. If there isn't, then `sudo apt-get install gfortran` should install a compiler. 
 
 - With this now it's possible to install `tsaopy` using `pip install tsaopy`. 
 
-At this point `tsaopy` should be installed, and you may head to the [basic usage](https://tsaopy.github.io/basic-usage/) notebook to check how everything works. 
+At this point `tsaopy` should be installed.
 
-### Note: some users may run into trouble if path variables for certain numpy submodules are not properly defined, and I can't help with that. However, it should work out of the box if you install things in a new conda enviroment, and all the dependencies including Python itself are up to date. 
+### Note: some users may run into trouble if path variables for certain numpy submodules are not properly set up, and I can't help with that. However, it should work out of the box if you install things in a new conda enviroment, and all the dependencies including Python itself are up to date. 
 
 If you have any problems during installation please make an issue in the Github repo with all the information you can gather.
 
 ### Test installation
 
-**Remember to check that you are running the console in the same enviroment that you installed TSAOpy.**
-
-After running `pip install tsaopy` try opening a Python console and run `import tsaopy`. It may take a few seconds (some backend modules are built the first time you import `tsaopy`). Should any errors arise, please report the issue.
+After running `pip install tsaopy` try opening a Python console and run `import tsaopy`. It may take a few seconds (the backend submodules are compiled the first time you import `tsaopy`). Should any errors arise, please report the issue.
 
 If you can import `tsaopy` succesfully try running the basic test script. Go to the project's repository test folder and either
 
@@ -81,4 +77,4 @@ The following Bibtex citation is recommended
 }
 ```
 
-There will probably be an article or something of the sort in the near future. 
+There will probably be an article or something of the sorts in the near future. 
