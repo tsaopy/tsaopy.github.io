@@ -1,6 +1,0 @@
----
-layout: sidepage
-permalink: /methodology/
----
-
-
