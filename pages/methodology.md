@@ -3,6 +3,8 @@ layout: sidepage
 permalink: /methodology/
 ---
 
+# Methodology
+
 ## The model
 
 In `tsaopy` we assume that the time series can be modelled as a function $x(t)$ that satisfies a differential equation of the form
@@ -21,4 +23,10 @@ By proposing a set of parameter values and initial conditions we can compute a t
 
 Once we compute a trajectory with the proposed parameter values ($\theta$), we can compare the simulated data points($f_\theta$) with the real measurements($Y$) with an error or cost function. By default `tsaopy` uses the 'negative logarithmic likelihood' of the measurements given the proposed parameters
 
-$ - \log{p(Y|\theta)} = \frac{1}{2}\sum_{i}\frac{(f_{\theta, i}-Y_i)^2}{\sigma_i^2}$
+$$ - \log{p(Y|\theta)} = \frac{1}{2}\sum_{i}\frac{(f_{\theta, i}-Y_i)^2}{\sigma_i^2} $$
+
+minimizing this function is equivalent to performing a maximum likelihood estimation (MLE).
+
+## Finding the posterior distribution with MCMC
+
+After MLE, we use the MCMC implementhe posterior distribution of the parameters. 
