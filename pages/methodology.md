@@ -29,4 +29,7 @@ minimizing this function is equivalent to performing a maximum likelihood estima
 
 ## Finding the posterior distribution with MCMC
 
-After MLE, we use the MCMC implementation `emcee`, to find the posterior distribution of the parameters. 
+After MLE, we use the MCMC implementation `emcee` to find the posterior distribution of the parameters. This allows us to
+
+* find a value as well as error bars for each parameter
+* analyze correlations between parameters
