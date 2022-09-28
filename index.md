@@ -34,7 +34,7 @@ Running this analysis allows one to find a differential equation (DE) that a (or
 
 At this point `tsaopy` should be installed.
 
-### Note: some users may run into trouble if path variables for certain numpy submodules are not properly set up. However, it should work out of the box if you install everything conda enviroment, and all the dependencies including Python itself are up to date. 
+### Note: some users may run into trouble if path variables for certain numpy submodules are not properly set up. However, it should work out of the box if you install everything in a new conda enviroment, and all the dependencies including Python itself are up to date. 
 
 If you have any problems during installation please make an issue in the Github repo with all the information you can gather.
 
