@@ -18,8 +18,8 @@ This library will allow us to propose a differential equation for the $x(t)$ fun
 
 Running this analysis allows one to find a differential equation (DE) that a (or a set of) time series roughly obeys. Some interesting things that can be done with the DE are
  
-1. Modelling of damping forces or potentials. One may associate each term of the ODE with a certain term of the polynomial expansion of a potential or damping force, and thus getting approximations of the behaviour of your system's potential or drag effects.
-2. Non linear dynamics analysis. Finding the ODE that the system obeys allows using some theoretical tools such as plotting phase portraits and phase space trajectories, finding limit  cylces, analyzing stability, energy conservation, etc.
+1. Modelling of damping forces or potentials. One may associate each term of the DE with a certain term of the polynomial expansion of a potential or damping force, and thus getting approximations of the behaviour of your system's potential or drag effects.
+2. Non linear dynamics analysis. Finding the DE that the system obeys allows using some theoretical tools such as plotting phase portraits and phase space trajectories, finding limit cycles, analyzing stability, energy conservation, etc.
 
 
 ## Set Up
