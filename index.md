@@ -8,11 +8,11 @@ Time Series by Anharmonic Oscillators is a Python library developed to fit user 
 
 ## What it does
 
-Let's assume we have sets of points making up time series such as the following
+Assume we have sets of points making up time series such as the following
 
 ![index](https://user-images.githubusercontent.com/94293518/180660624-b9c43ffd-2f0f-48b3-96b8-bac9a13a1f91.png)
 
-This library will allow the user to model the dynamics of the $x(t)$ function with a differential equation of the form
+This library will allow us to model the dynamics of the $x(t)$ function with a differential equation of the form
 
 $$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F(t) $$
 
