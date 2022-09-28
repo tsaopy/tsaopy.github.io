@@ -25,8 +25,8 @@ Once we compute a trajectory with the proposed parameter values ($\theta$), we c
 
 $$ - \log{p(Y|\theta)} = \frac{1}{2}\sum_{i}\frac{(f_{\theta, i}-Y_i)^2}{\sigma_i^2} $$
 
-minimizing this function is equivalent to performing a maximum likelihood estimation (MLE). he function can be minimized with any multivariate minimizer such as `minimize` from  `scipy.optimize`.
+minimizing this function is equivalent to performing a maximum likelihood estimation (MLE). The function can be minimized with any multivariate minimizer such as `minimize` from  `scipy.optimize`.
 
 ## Finding the posterior distribution with MCMC
 
-After MLE, we use the MCMC implementhe posterior distribution of the parameters. 
+After MLE, we use the MCMC implementation `emcee`, to find the posterior distribution of the parameters. 
