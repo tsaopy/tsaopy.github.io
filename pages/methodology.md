@@ -5,6 +5,16 @@ permalink: /methodology/
 
 ## The model
 
-In `tsaopy` we assume that the time series can be modelled as a function $x(t)$ that satisfies an equation of the form
+In `tsaopy` we assume that the time series can be modelled as a function $x(t)$ that satisfies a differential equation of the form
+
+$$ \ddot{x} + \sum_n a_n \dot{x}|\dot{x}|^{n-1} + \sum_m b_m x^m + \sum_{ij} c_{ij} x^i\dot{x}^j = F(t, \mathfrak{f}_1, \dotsc, \mathfrak{f}_{N_f}) $$
+
+and we want to find the $a_n$, $b_n$, $c_{ij}$, $\mathfrak{f}_n$ values that best fit our time series data.
 
 ## Computing trajectories
+
+By proposing a set of parameter values and initial conditions we can compute a trajectory.
+
+* We use Runge-Kutta implemented in Fortran and wrapped to be called from on with `numpy.f2py`.
+
+## 
